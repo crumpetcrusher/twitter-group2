@@ -7,7 +7,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.xml.xpath.*;
-import org.w3c.dom.*;
 
 import org.xml.sax.InputSource;
 
@@ -87,7 +86,6 @@ public class Tweeter
     	setUserXMLTimelineURL("http://api.twitter.com/1/statuses/user_timeline.xml?user_id=" + userID);
     	
     	populateTweeterFromXML(userXMLInfoURL);
-    	populateTweetsFromXML(userXMLTimelineURL);
     }
     
 
@@ -97,7 +95,7 @@ public class Tweeter
      * Populates the rest of a tweeter object with data from the XML feed
      * 
      * @author Scott Smiesko
-     * @param xmlFeed
+     * @param xmlFile
      */
     public void populateTweeterFromXML(String xmlFile)
     {
@@ -115,6 +113,9 @@ public class Tweeter
 			}
 			else
 			{
+				/**
+				 * Set the attributes for our user
+				 */
 				realName = xpath.evaluate("/user/name", source);
 				screenName = xpath.evaluate("/user/screen_name", source);
 				userLocation = xpath.evaluate("/user/location", source);
@@ -134,15 +135,21 @@ public class Tweeter
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
     }
     
+    /**
+     * Populates our array of "userTweets" for each tweeter object created;
+     * Not implemented yet.
+     * 
+     * @param xmlFile - parsed and added to Tweeet
+     */
     public void populateTweetsFromXML(String xmlFile)
     {
-    	System.out.println("almost there");
+    	System.out.println("Populating Tweets has not yet been implemented..");
     }
+
 	/**
-     * This sets the URL for the XML feed unique to the person.
+     * This sets the URL for the XML feed with user information
      *
      * @author Scott Smiesko
      * @param newUserXMLInfoURL
@@ -154,7 +161,7 @@ public class Tweeter
     }
     
     /**
-     * This gets the URL for the XML feed unique to the person.
+     * This gets the URL for the XML feed with user information.
      *
      * @author Scott Smiesko
      * @return {@code userXMLFeed} - the URL to the users own XML feed
@@ -164,10 +171,19 @@ public class Tweeter
     	return userXMLInfoURL;
     }
     
+    /**
+     * This sets the URL for the XML feed with user tweets
+     * @param newUserXMLTimelineURL
+     */
     public void setUserXMLTimelineURL(String newUserXMLTimelineURL)
     {
     	userXMLTimelineURL = newUserXMLTimelineURL;
     }
+    
+    /**
+     * This sets the URL for the XML feed with user timeline
+     * @return userXMLTimelineURL;
+     */
     
     public String getUserXMLTimelineURL()
     {
@@ -430,7 +446,7 @@ public class Tweeter
     }
     
     /**
-     * This returns the attributes of a Tweeter
+     * This returns all attributes of a Tweeter
      * 
      * @author Scott Smiesko
      * @return {@code userInfo} - appended string of all Tweeter attributes
