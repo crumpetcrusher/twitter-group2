@@ -1,92 +1,178 @@
 package Twitter;
+
 import java.util.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import javax.imageio.ImageIO;
+import javax.xml.xpath.*;
+import org.w3c.dom.*;
+
+import org.xml.sax.InputSource;
+
 
 /**
  * This is the user object.
- * <dl>
- * <dt>Pre-defined Objects:
- * 		<dd>{@link Tweeter#Test_Tweeter_1 Test_User_1}
- * </dl>
  * 
  * @author Rick
  * @version 2/2/2009
  * 
+ * @author Scott Smiesko
+ * @version 2/24/2009
+ * 
  */
 public class Tweeter
 {
-	
-	//Pre-defined Class
-	
-	/**
-	 * This is a test Tweeter for testing.
-	 * <dl>
-	 * <dt>Pre-defined Variables:
-	 * 		<dd>{@link Tweeter#id id} = 123456
-	 * 		<dd>{@link Tweeter#user_name user_name} = "Hatta"
-	 *  	<dd>{@link Tweeter#name name} = "The Mad Hatter"
-	 *  	<dd>{@link Tweeter#picture picture} = null
-	 * </dl>
-	 */
-	public static final Tweeter Test_Tweeter_1 = new Tweeter(123456, "Hatta", "The Mad Hatter", null);
-	
 	//Class Variables
 	
+	/**
+	 * Stores the users info XML feed url
+	 */
+	private String userXMLInfoURL = null;
+	/**
+	 * Stores the users timeline XML feed url
+	 */
+	private String userXMLTimelineURL = null;
     /**
      * Stores the users unique id.
      */
-    private int id = -1;
+    private String userID = null;
     /**
-     * Stores the users user name
+     * Stores the real name of the user
      */
-    private String user_name = null;
+    private String realName = null;
     /**
-     * Stores the name of the user
+     * Stores the users screen name
      */
-    private String name = null;
+    private String screenName = null;
+    /**
+     * Stores the users location
+     */
+    private String userLocation = null;
+    /**
+     * Stores the users description
+     */
+    private String userDescription = null;
+    /**
+     * Stores the users home page
+     */
+    private String userHomePage = null;
+    /**
+     * Stores the users verification status
+     */
+    private String verifiedUser = null;
     /**
      * Stores the tweeter's profile picture.
      */
-    private BufferedImage picture = null;
+    private BufferedImage userPicture = null;
     /**
      * Stores the tweeter's tweets.
      */
-    private ArrayList<Tweet> tweets = new ArrayList<Tweet>();
+    private ArrayList<Tweet> userTweets = new ArrayList<Tweet>();
 
     //Constructors
     
     /**
-     * This is a constructor method that will take all user inputs.
-     *
-     * @author Rick Humes
-     * @param userID Person's unique id.
-     * @param userName Person's username.
-     * @param name Person's name.
-     * @param picture Person's profile picture.
+     * Constructor method that requires a UserID.  
+     *  uses the userID to get the twitter Info XML File of that user
+     * 
+     * @author Scott Smiesko
+     * @param {@code newUserID}
      */
-    public Tweeter(int userID, String userName, String name, BufferedImage picture)
+    public Tweeter(String newUserID)
     {
-    	try
-    	{
-	    	this.setUserID(userID);
-	    	this.setUserName(userName);
-	    	this.setName(name);
-	    	this.setPicture(picture);
-    	}
-    	catch(Exception e)
-    	{
-    		System.out.println(e.getMessage());
-    	}
+    	setUserID(newUserID);
+    	setUserXMLInfoURL("http://api.twitter.com/1/users/show.xml?user_id=" + userID);
+    	setUserXMLTimelineURL("http://api.twitter.com/1/statuses/user_timeline.xml?user_id=" + userID);
+    	
+    	populateTweeterFromXML(userXMLInfoURL);
+    	populateTweetsFromXML(userXMLTimelineURL);
+    }
+    
+
+    // Methods
+
+    /**
+     * Populates the rest of a tweeter object with data from the XML feed
+     * 
+     * @author Scott Smiesko
+     * @param xmlFeed
+     */
+    public void populateTweeterFromXML(String xmlFile)
+    {
+    	
+    	XPath xpath = XPathFactory.newInstance().newXPath();
+    	InputSource source = new InputSource (xmlFile);
+    	
+    	System.out.println("Grabbing XML from Twitter.. be patient");
+    	
+    	try {
+			String result = xpath.evaluate("/user/protected", source);
+			if (result == "false")
+			{
+				System.out.println("User feed is locked, bummer");
+			}
+			else
+			{
+				realName = xpath.evaluate("/user/name", source);
+				screenName = xpath.evaluate("/user/screen_name", source);
+				userLocation = xpath.evaluate("/user/location", source);
+				userDescription = xpath.evaluate("/user/description", source);
+				userPicture = ImageIO.read(new URL(xpath.evaluate("/user/profile_image_url", source)));
+				userHomePage = xpath.evaluate("/user/url", source);
+				verifiedUser = xpath.evaluate("/user/verified", source);
+			}
+		} catch (XPathExpressionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			userPicture = null;
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+    }
+    
+    public void populateTweetsFromXML(String xmlFile)
+    {
+    	System.out.println("almost there");
+    }
+	/**
+     * This sets the URL for the XML feed unique to the person.
+     *
+     * @author Scott Smiesko
+     * @param newUserXMLInfoURL
+     * 
+     */
+    public void setUserXMLInfoURL(String newUserXMLInfoURL)
+    {
+    	userXMLInfoURL= newUserXMLInfoURL; 
     }
     
     /**
-     * Sole constructor. Use this if you wish to add information later.
+     * This gets the URL for the XML feed unique to the person.
+     *
+     * @author Scott Smiesko
+     * @return {@code userXMLFeed} - the URL to the users own XML feed
      */
-    public Tweeter()
+    public String getUserXMLInfoURL()
     {
+    	return userXMLInfoURL;
     }
-
-    //Methods
+    
+    public void setUserXMLTimelineURL(String newUserXMLTimelineURL)
+    {
+    	userXMLTimelineURL = newUserXMLTimelineURL;
+    }
+    
+    public String getUserXMLTimelineURL()
+    {
+    	return userXMLTimelineURL;
+    }
     
     /**
      * This gets the person's unique id.
@@ -94,9 +180,9 @@ public class Tweeter
      * @author Rick Humes
      * @return userID Person's unique id.
      */
-    public int getUserID()
+    public String getUserID()
     {
-        return this.id;
+        return userID;
     }
 
     /**
@@ -106,19 +192,9 @@ public class Tweeter
      * @param userID Peron's unique id.
      * @return boolean Whether or not the unique id was set successfully.
      */
-    public boolean setUserID(int userID)
+    public void setUserID(String newUserID)
     {
-    	boolean value = false;
-    	try
-    	{
-	        this.id = userID;
-	        value = true;
-    	}
-    	catch(Exception e)
-    	{
-    		System.out.println(e.getMessage());
-    	}
-    	return value;
+    	userID = newUserID;
     }
     
     /**
@@ -127,31 +203,21 @@ public class Tweeter
      * @author Rick Humes
      * @return userName Person's username
      */
-    public String getUserName()
+    public String getScreenName()
     {
-        return this.user_name;
+        return screenName;
     }
 
     /**
-     * This sets the person's username.
+     * This sets the person's screenName.
      *
      * @author Rick Humes
      * @param userName Peron's username.
      * @return boolean Whether or not the username was set successfully.
      */
-    public boolean setUserName(String userName)
+    public void setScreenName(String newScreenName)
     {
-    	boolean value = false;
-    	try
-    	{
-	        this.user_name = userName;
-	        value = true;
-    	}
-    	catch(Exception e)
-    	{
-    		System.out.println(e.getMessage());
-    	}
-    	return value;
+    	screenName = newScreenName;
     }
 
     /**
@@ -160,8 +226,9 @@ public class Tweeter
      * @author Rick Humes
      * @return name Person's name.
      */
-	public String getName() {
-		return name;
+	public String getRealName() 
+	{
+		return realName;
 	}
 	
     /**
@@ -171,19 +238,9 @@ public class Tweeter
      * @param name Peron's name.
      * @return boolean Whether or not the name was set successfully.
      */
-    public boolean setName(String name) 
+    public void setRealName(String newRealName) 
     {
-    	boolean value = false;
-    	try
-    	{
-    		this.name = name;
-    		value = true;
-    	}
-    	catch(Exception e)
-    	{
-    		System.out.println(e.getMessage());
-    	}
-    	return value;
+    	realName = newRealName;
 	}
 
     /**
@@ -195,7 +252,7 @@ public class Tweeter
      */
     public BufferedImage getPicture()
     {
-        return this.picture;
+        return userPicture;
     }
 
     /**
@@ -205,19 +262,9 @@ public class Tweeter
      * @param picture Peron's profile picture.
      * @return boolean Whether or not the profile picture was set successfully.
      */
-    public boolean setPicture(BufferedImage picture)
+    public void setPicture(BufferedImage newUserPicture)
     {
-    	boolean value = false;
-    	try
-    	{
-	        this.picture = picture;
-	        value = true;
-    	}
-    	catch(Exception e)
-    	{
-    		System.out.println(e.getMessage());
-    	}
-    	return value;
+    	userPicture = newUserPicture;
     }
     
     /**
@@ -228,20 +275,27 @@ public class Tweeter
      * @see Tweet
      * @return boolean Whether or not the tweet was added successfully.
      */
-    public boolean addTweet(Tweet tweet)
+    public void addTweet(Tweet newTweet)
     {
-    	boolean value = false;
-    	try
-    	{
-    		tweets.add(tweet);
-    		value = true;
-		}
-		catch(Exception e)
-		{
-			System.out.println("Error: " + e.getMessage());
-		}
-		return value;
+
+    	userTweets.add(newTweet);
+
     }
+    
+    /**
+     * 
+     * Gets every tweet
+     * 
+     * @author Scott Smiesko
+     * @param null
+     * @return every tweet
+     * @see Tweet
+     */
+    public ArrayList<Tweet> getTweets()
+    {
+    	return userTweets;
+    }
+    
     
     /**
 
@@ -252,20 +306,16 @@ public class Tweeter
      * @return The requested tweet. May be <code>null</code>.
      * @see Tweet
      */
-    public Tweet getTweet(int id)
+    public Tweet getTweet(int tweetID)
     {
     	Tweet tweet_return = null;
-    	try
-    	{
-    		if(tweets != null)
-	    		for (Tweet tweet : tweets)
-	    			if(tweet.getID() == id)
-	    				tweet_return = tweet;
-		}
-		catch(Exception e)
-		{
-			System.out.println(e.getMessage());
-		}
+    	if(userTweets != null) {
+	    	for (Tweet tweet : userTweets) {
+	    		if(tweet.getID() == tweetID) {
+	    			tweet_return = tweet;
+	    		}
+	    	}
+    	}
 		return tweet_return;
     }
      
@@ -278,26 +328,18 @@ public class Tweeter
      * @return The requested tweet(s). May be <code>null</code>.
      * @see Tweet
      */
-    public Tweet[] getTweets(Source[] sources)
+    public ArrayList<Tweet> getTweets(Source[] sources)
     {
-    	Tweet[] tweet_return = null;
-    	try
+    	if(userTweets != null)
     	{
-    		if(tweets != null)
-    		{
-        		ArrayList<Tweet> requestedTweets = new ArrayList<Tweet>();
-	    		for (Tweet tweet : tweets)
-	    			for(Source source : sources)
-		    			if(tweet.getSource() == source)
-		    				requestedTweets.add(tweet);
-	    		tweet_return = (requestedTweets.toArray(new Tweet[requestedTweets.size()]));
-    		}
-		}
-		catch(Exception e)
-		{
-			System.out.println(e.getMessage());
-		}
-		return tweet_return;
+        	ArrayList<Tweet> requestedTweets = new ArrayList<Tweet>();
+	    	for (Tweet tweet : userTweets)
+	    		for(Source source : sources)
+		   			if(tweet.getSource() == source)
+		   				requestedTweets.add(tweet);
+	    	return(requestedTweets);
+    	}
+    	return(null);
     }
     
     /**
@@ -309,25 +351,17 @@ public class Tweeter
      * @return The requested tweet(s). May be <code>null</code>.
      * @see Tweet
      */
-    public Tweet[] getTweets(Source source)
+    public ArrayList<Tweet> getTweets(Source source)
     {
-    	Tweet[] tweet_return = null;
-    	try
+    	if(userTweets != null)
     	{
-    		if(tweets != null)
-    		{
-        		ArrayList<Tweet> requestedTweets = new ArrayList<Tweet>();
-	    		for (Tweet tweet : tweets)
-	    			if(tweet.getSource() == source)
-	    				requestedTweets.add(tweet);
-	    		tweet_return = (requestedTweets.toArray(new Tweet[requestedTweets.size()]));
-    		}
-		}
-		catch(Exception e)
-		{
-			System.out.println(e.getMessage());
-		}
-		return tweet_return;
+        	ArrayList<Tweet> requestedTweets = new ArrayList<Tweet>();
+	    	for (Tweet tweet : userTweets)
+		   			if(tweet.getSource() == source)
+		   				requestedTweets.add(tweet);
+	    	return(requestedTweets);
+    	}
+    	return(null);
     }
     
     /**
@@ -344,10 +378,10 @@ public class Tweeter
     	Tweet[] tweet_return = null;
     	try
     	{
-    		if(tweets != null)
+    		if(userTweets != null)
     		{
         		ArrayList<Tweet> requestedTweets = new ArrayList<Tweet>();
-	    		for (Tweet tweet : tweets)
+	    		for (Tweet tweet : userTweets)
 	    			if(tweet.getDate().compareTo(beginDate) >= 0 && tweet.getDate().compareTo(endDate) <= 0)
 	    				requestedTweets.add(tweet);
 	    		tweet_return = ((Tweet[])requestedTweets.toArray());
@@ -374,14 +408,14 @@ public class Tweeter
     	Tweet[] tweet_return = null;
     	try
     	{
-    		if(tweets != null)
+    		if(userTweets != null)
     		{
     			if(!case_sensitive)
     				search = search.toLowerCase();
     			
         		ArrayList<Tweet> requestedTweets = new ArrayList<Tweet>();
         		
-	    		for (Tweet tweet : tweets)
+	    		for (Tweet tweet : userTweets)
 	    			if(tweet.getText().toLowerCase().contains(search))
 	    				requestedTweets.add(tweet);
 	    		
@@ -396,13 +430,25 @@ public class Tweeter
     }
     
     /**
-     * This returns the person's username
+     * This returns the attributes of a Tweeter
      * 
-     * @author Rick Humes
-     * @return userName Peron's username.
+     * @author Scott Smiesko
+     * @return {@code userInfo} - appended string of all Tweeter attributes
      */
     public String toString()
     {
-        return this.user_name;
+    	String userInfo = null;
+    	userInfo = "Info: "				+ userXMLInfoURL + 		"\n" +
+    			   "Timeline: " 		+ userXMLTimelineURL + 	"\n" +
+    			   "ID: " 				+ userID + 				"\n" +
+    			   "Real Name: " 		+ realName + 			"\n" +
+    			   "Screen Name: "		+ screenName + 			"\n" +
+    			   "Location: "			+ userLocation + 		"\n" +
+    			   "Description: "		+ userDescription + 	"\n" +
+    			   "Home Page: "		+ userHomePage + 		"\n" +
+    			   "Verified?: "		+ verifiedUser + 		"\n" +
+    			   "Picture: "			+ userPicture + 		"\n" +
+    			   "Tweets: "			+ userTweets + 			"\n" ;
+        return userInfo;
     }
 }

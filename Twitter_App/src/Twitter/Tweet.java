@@ -9,11 +9,7 @@ import java.util.*;
  */
 public class Tweet
 {
-	public static final Tweet Test_Tweet_1 = new Tweet(Tweeter.Test_Tweeter_1, 1, "Join me for tea, please.", new Date(2010,0,16,1,41), Source.IPhone);
-	public static final Tweet Test_Tweet_2 = new Tweet(Tweeter.Test_Tweeter_1, 2, "The tea is on the table!", new Date(2010,0,16,2,23), Source.IPhone);
-	public static final Tweet Test_Tweet_3 = new Tweet(Tweeter.Test_Tweeter_1, 3, "No one showed up for tea :(", new Date(2010,0,16,4,10), Source.Tweet_Deck);
 
-    private Tweeter person = null;			//Stores the person as a user (see User class for user variables)
     private int id = -1;				//Stores the unique id of the tweet
     private Date date = null;			//Stores the date in which the tweet was created
     private String text = null;			//Stores the body of the tweet
@@ -30,15 +26,14 @@ public class Tweet
      * @param date The date the tweet was posted.
      * @param source The source from which the tweet came
      */
-    public Tweet(Tweeter person, int id, String text, Date date, Source source)
+    public Tweet(int id, String text, Date date, Source source)
     {
     	try
     	{
-    		this.setPerson(person);
-    		this.setID(id);
-    		this.setText(text);
-    		this.setDate(date);
-    		this.setSource(source);
+    		setID(id);
+    		setText(text);
+    		setDate(date);
+    		setSource(source);
     	}
     	catch(Exception e)
     	{
@@ -51,42 +46,6 @@ public class Tweet
      */
     public Tweet()
     {
-    }
-
-    /**
-     * This gets the person who posted this tweet.
-     *
-     * @author Rick Humes
-     * @return person Returns the person who posted this tweet.
-     */
-    public Tweeter getPerson()
-    {
-        return person;
-    }
-    
-    /**
-     * This sets the person who posted this tweet.
-     *
-     * @author Rick Humes
-     * @param person The user that posted the tweet.
-     * @see Tweeter
-     * @return boolean Returns whether or not the user was set successfully.
-     */
-    public boolean setPerson(Tweeter person)
-    {
-    	boolean value = false;
-    	try
-    	{
-	        this.person = person;
-	        //There may be some reason to validate the inputed object.
-	        value = true;
-		}
-		catch(Exception e)
-		{
-			System.out.println(e.getMessage());
-		}
-
-		return value;
     }
     
     /**
@@ -106,20 +65,9 @@ public class Tweet
      * @see Date
      * @return boolean Whether or not the id was set successfully.
      */
-    public boolean setID(int id)
+    public void setID(int newid)
     {
-    	boolean value = false;
-    	try
-    	{
-	        this.id = id;
-	        value = true;
-		}
-		catch(Exception e) 
-		{ 
-			System.out.println(e.getMessage()); 
-		}
-		
-		return value;
+	    id = newid;
     }
     
     /**
@@ -131,7 +79,7 @@ public class Tweet
      */
     public Date getDate()
     {
-        return this.date;
+        return date;
     }
 
     /**
@@ -142,20 +90,9 @@ public class Tweet
      * @see Date
      * @return boolean Returns whether or not the date was set successfully.
      */
-    public boolean setDate(Date date)
+    public void setDate(Date newdate)
     {
-    	boolean value = false;
-    	try
-    	{
-	        this.date = date;
-	        value = true;
-		}
-		catch(Exception e) 
-		{ 
-			System.out.println(e.getMessage()); 
-		}
-		
-		return value;
+	   date = newdate;
     }
 
     /**
@@ -166,7 +103,7 @@ public class Tweet
      */
     public String getText()
     {
-        return this.text;
+        return text;
     }
 
     /**
@@ -176,20 +113,9 @@ public class Tweet
      * @param text The body of the tweet.
      * @return boolean Returns whether or not the body was set successfully.
      */
-    public boolean setText(String text)
+    public void setText(String newtext)
     {
-    	boolean value = false;
-    	try
-    	{
-	        this.text = text;
-	        //There may be some reason to validate the inputed object.
-	        value = true;
-    	}
-    	catch(Exception e)
-    	{
-    		System.out.println(e.getMessage());
-    	}
-    	return value;
+    	text = newtext;
     }
    
     /**
@@ -200,7 +126,7 @@ public class Tweet
      */
     public Source getSource()
     {
-    	return this.source;
+    	return source;
     }
     
     /**
@@ -210,30 +136,16 @@ public class Tweet
      * @param source The source from which this tweet came.
      * @return boolean Returns whether or not the source was set successfully.
      */
-    public boolean setSource(Source source)
+    public void setSource(Source newSource)
     {
-    	boolean value = false;
-    	try
-    	{
-	        this.source = source;
-	        //There may be some reason to validate the inputed object.
-	       	value = true;
-    	}
-    	catch(Exception e)
-    	{
-    		System.out.println(e.getMessage());
-    	}
-    	return value;
+		source = newSource;
     }
-    
-    /**
-     * This returns the text.
-     * 
-     * @author Rick Humes
-     * @return title The title of the tweet.
-     */
-    public String toString()
-    {
-        return this.text;
+    public String toString() {
+    	
+    	String finalTweet;
+    	
+    	finalTweet = "Text: " + text + ", Date: " + date + ", Source: " + source + ", ID: " + id;
+    	
+    	return finalTweet;
     }
 }
