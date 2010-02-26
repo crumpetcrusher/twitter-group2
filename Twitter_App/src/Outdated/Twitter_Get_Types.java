@@ -1,4 +1,4 @@
-package Twitter;
+package Outdated;
 
 public final class Twitter_Get_Types {
 	

@@ -1,4 +1,4 @@
-package Twitter;
+package Outdated;
 import java.io.IOException;
 import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.auth.AuthScope;
