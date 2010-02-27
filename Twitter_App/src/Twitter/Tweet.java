@@ -19,8 +19,6 @@ public class Tweet
      * This is a constructor method that will take a full tweet input.
      *
      * @author Rick Humes
-     * @param person The person that posted the tweet.
-     * @see Tweeter 
      * @param id The unique id of the user.
      * @param text The text of the tweet.
      * @param date The date the tweet was posted.
@@ -28,17 +26,10 @@ public class Tweet
      */
     public Tweet(int id, String text, Date date, Source source)
     {
-    	try
-    	{
     		setID(id);
     		setText(text);
     		setDate(date);
     		setSource(source);
-    	}
-    	catch(Exception e)
-    	{
-    		System.out.println(e.getMessage());
-    	}
     }
    
     /**
@@ -61,9 +52,8 @@ public class Tweet
      * This will set the unique id of this tweet.
      *
      * @author Rick Humes
-     * @param id The unique id of the tweet.
+     * @param newid The unique id of the tweet.
      * @see Date
-     * @return boolean Whether or not the id was set successfully.
      */
     public void setID(int newid)
     {
@@ -86,9 +76,8 @@ public class Tweet
      * This will set the date the tweet was posted.
      *
      * @author Rick Humes
-     * @param date Sets the date in which the tweet was posted.
+     * @param newdate Sets the date in which the tweet was posted.
      * @see Date
-     * @return boolean Returns whether or not the date was set successfully.
      */
     public void setDate(Date newdate)
     {
@@ -110,8 +99,7 @@ public class Tweet
      * This will set the body of the tweet.
      *
      * @author Rick Humes
-     * @param text The body of the tweet.
-     * @return boolean Returns whether or not the body was set successfully.
+     * @param newtext The body of the tweet.
      */
     public void setText(String newtext)
     {
@@ -133,13 +121,13 @@ public class Tweet
      * This will set the source of the tweet.
      *
      * @author Rick Humes
-     * @param source The source from which this tweet came.
-     * @return boolean Returns whether or not the source was set successfully.
+     * @param newSource The source from which this tweet came.
      */
     public void setSource(Source newSource)
     {
 		source = newSource;
     }
+    
     public String toString() {
     	
     	String finalTweet;
