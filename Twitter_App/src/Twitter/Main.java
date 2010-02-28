@@ -1,32 +1,22 @@
 package Twitter;
-
+// Will need this soon: import javax.swing.*;
 
 /**
- * A lot of different changes to Main.java
- * 
- * @author Scott Smiesko
+ * Main class of the program
  */
 public class Main {
 
-	public static void main(String args[])
+	/**
+	 * 
+	 * main object to run the program
+	 * 
+	 * @param args
+	 */
+	public static void main(String[] args)
 	{
 		
-		// Let's have some fun
-		// This twitter object of type "Subscription" is the -bees knees- of the program
-		
-		// This class lets us pass it a subscriptionlist.xml of just "userID" values
-		// and It will populate an array of type "Tweeter" to store all of the UserIDs (constructor)
-		// which at that point, the constructor for each "tweeter" in the array will pull down a
-		// user_feed.xml and store it, then it will parse the XML document to do
-		// .set operations on each tweeter object.
-		
-		// Classy, no?
-		
-		final String subscriptionList = "subscriptionlist.xml";
-		Subscription twitter = new Subscription(subscriptionList);
-		
-		twitter.showTweeters();
+		// This will be where we create our GUI object and show it, but
+		// for now, it will just be a blank main class
 		
 	}
-	
 }
