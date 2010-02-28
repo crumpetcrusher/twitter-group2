@@ -84,6 +84,8 @@ public class User_Timeline {
 		
 		// TODO: Get index count for our tweets array 
 		//			(needed for showing all tweets in array)
+		//			The index count for any array is...
+		//					array.size();
 		
 		/*
 		String tweetID 		= null;

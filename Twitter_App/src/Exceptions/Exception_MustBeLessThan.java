@@ -1,8 +1,8 @@
 package Exceptions;
-import org.apache.commons.lang.NullArgumentException;
+//import org.apache.commons.lang.NullArgumentException;
 
 public class Exception_MustBeLessThan extends RuntimeException{
-
+/*
 		private int max_value;
 	    public Exception_MustBeLessThan() {
 	    	super();
@@ -31,4 +31,5 @@ public class Exception_MustBeLessThan extends RuntimeException{
 	    	}
 	    	return value;
 	    }
+	    */
 }

@@ -12,7 +12,7 @@ import Exceptions.Exception_NegativeNumber;
 public class Search {
 	
 	private static final String search = "http://twitter.com/search.atom?";
-	private ArrayList<String> parameters = new ArrayList();
+	private ArrayList<String> parameters = new ArrayList<String>();
 	StringBuffer xml = new StringBuffer();
 	
 

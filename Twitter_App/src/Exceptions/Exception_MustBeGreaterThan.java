@@ -1,9 +1,9 @@
 package Exceptions;
 
-import org.apache.commons.lang.NullArgumentException;
+//import org.apache.commons.lang.NullArgumentException;
 
 public class Exception_MustBeGreaterThan extends RuntimeException {
-	
+/*	
 	
 	private int min_value;
     public Exception_MustBeGreaterThan() {
@@ -32,5 +32,5 @@ public class Exception_MustBeGreaterThan extends RuntimeException {
     		System.out.println(e.getMessage());
     	}
     	return value;
-    }
+    }*/
 }

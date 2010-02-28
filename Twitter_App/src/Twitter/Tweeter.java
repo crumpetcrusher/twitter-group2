@@ -311,63 +311,19 @@ public class Tweeter
      * @return The requested tweet. May be <code>null</code>.
      * @see Tweet
      */
-    public Tweet getTweet(int tweetID)
+    public Tweet getTweet(String tweetID)
     {
     	Tweet tweet_return = null;
     	if(userTweets != null) {
 	    	for (Tweet tweet : userTweets) {
-	    		if(tweet.getID() == tweetID) {
+	    		if(tweet.getID().equals(tweetID)) {
 	    			tweet_return = tweet;
 	    		}
 	    	}
     	}
 		return tweet_return;
     }
-     
-    /**
-     * Gets tweet(s) by sources.
-     *
-     * @author Rick Humes
-     * @param sources The sources from which the tweet(s) came.
-     * @see Source
-     * @return The requested tweet(s). May be <code>null</code>.
-     * @see Tweet
-     */
-    public ArrayList<Tweet> getTweets(Source[] sources)
-    {
-    	if(userTweets != null)
-    	{
-        	ArrayList<Tweet> requestedTweets = new ArrayList<Tweet>();
-	    	for (Tweet tweet : userTweets)
-	    		for(Source source : sources)
-		   			if(tweet.getSource() == source)
-		   				requestedTweets.add(tweet);
-	    	return(requestedTweets);
-    	}
-    	return(null);
-    }
     
-    /**
-     * Gets tweet(s) by source.
-     *
-     * @author Rick Humes
-     * @param source The source from which the tweet(s) came.
-     * @see Source
-     * @return The requested tweet(s). May be <code>null</code>.
-     * @see Tweet
-     */
-    public ArrayList<Tweet> getTweets(Source source)
-    {
-    	if(userTweets != null)
-    	{
-        	ArrayList<Tweet> requestedTweets = new ArrayList<Tweet>();
-	    	for (Tweet tweet : userTweets)
-		   			if(tweet.getSource() == source)
-		   				requestedTweets.add(tweet);
-	    	return(requestedTweets);
-    	}
-    	return(null);
-    }
     
     /**
      * Gets tweet(s) by date range.
