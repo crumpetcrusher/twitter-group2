@@ -3,7 +3,6 @@ package Twitter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.util.*;
 
 import org.jdom.*;
@@ -80,6 +79,8 @@ public class Subscriptions {
 	
 	/**
 	 * Add new user to the subscription list (adds to ArrayList and saves to XML)
+	 * 
+	 * Checks for duplicates
 	 */
 	public void addNewSubscription(String userID)
 	{
@@ -96,12 +97,14 @@ public class Subscriptions {
 		}
 	}
 	
-	
+	/**
+	 * Processes the XML document and commits
+	 */
 	public void writeDocument()
 	{
         Element root = new Element("Subscriptions");
-
         Document doc = new Document(root);
+        
 		for(Tweeter tweeter : subscribedTweeters)
 		{
 			Element user = new Element("User");
@@ -111,13 +114,18 @@ public class Subscriptions {
 	        user.addContent(userID);
 	        root.addContent(user);
         }
+		
 		commitSubscriptions(doc);
 	}
 	
+	
+	/**
+	 * Physically commits the information to a XML file.
+	 * @param doc
+	 */
 	private void commitSubscriptions(Document doc)
 	{
 
-	      XMLOutputter serializer = new XMLOutputter();
 	      try {
 	    	  	OutputStream stream = new FileOutputStream("bin/subscriptionlist.xml");
 	    	    XMLOutputter outputter = new XMLOutputter();
