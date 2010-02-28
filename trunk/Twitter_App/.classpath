@@ -2,9 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="E:/Documents/Programming/Java/plugins/org.apache.commons.httpclient_3.1.0.v20080605-1935.jar"/>
-	<classpathentry kind="lib" path="E:/Documents/Programming/Java/plugins/org.apache.commons.lang_2.3.0.v200803061910.jar"/>
-	<classpathentry kind="lib" path="E:/Documents/Programming/Java/plugins/org.apache.commons.logging_1.0.4.v200904062259.jar"/>
 	<classpathentry kind="lib" path="src/jdom.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Rick/Desktop/eclipse/plugins/org.apache.commons.httpclient_3.1.0.v20080605-1935.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

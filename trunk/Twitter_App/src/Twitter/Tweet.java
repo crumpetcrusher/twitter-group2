@@ -149,7 +149,7 @@ public class Tweet
     	
     	String finalTweet;
     	
-    	finalTweet = "Text: " + text + ", Date: " + date + ", Source: " + source + ", ID: " + id;
+    	finalTweet = "Text: " + tweetText + ", Date: " + tweetDate + ", Source: " + tweetSource + ", ID: " + tweetID;
     	
     	return finalTweet;
     }
