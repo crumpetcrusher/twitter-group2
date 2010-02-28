@@ -77,7 +77,7 @@ public class Tweeter
      *  uses the userID to get the twitter Info XML File of that user
      * 
      * @author Scott Smiesko
-     * @param {@code newUserID}
+     * @param  newUserID - userID used to get twitter feed
      */
     public Tweeter(String newUserID)
     {
@@ -135,17 +135,6 @@ public class Tweeter
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    }
-    
-    /**
-     * Populates our array of "userTweets" for each tweeter object created;
-     * Not implemented yet.
-     * 
-     * @param xmlFile - parsed and added to Tweeet
-     */
-    public void populateTweetsFromXML(String xmlFile)
-    {
-    	System.out.println("Populating Tweets has not yet been implemented..");
     }
 
 	/**
