@@ -1,8 +1,10 @@
 package Twitter;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.*;
 
 import org.jdom.*;
@@ -25,22 +27,37 @@ public class Subscriptions {
 	private ArrayList<Tweeter> subscribedTweeters = new ArrayList<Tweeter>();
 	
 	/**
+	 * Stores the file location of the subscription list.
+	 */
+	private String subscriptionListLocation;
+	
+	/**
 	 * Constructor for creating a new ArrayList for holding our tweeters
 	 * Uses JDOM to populate a List to store the userIDs before passing to "tweeters"
 	 * 
-	 * @param subscriptionListLocation
+	 * @param subscriptionListLocationInput
 	 * @author Scott Smiesko
 	 */
 	@SuppressWarnings("unchecked")
-	public Subscriptions(String subscriptionListLocation)
+	public Subscriptions(String subscriptionListLocationInput)
 	{
+		subscriptionListLocation = subscriptionListLocationInput;
+		
 		Document doc = null;
 		try {
 			doc = new SAXBuilder().build(subscriptionListLocation);
-		} catch (Exception e) {
+		
+		//Keeping this FileNotFoundException for more specific errors.
+		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			doc = null;
+			subscriptionListLocationInput = null;
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			doc = null;
+			subscriptionListLocationInput = null;
 		}
 		
 		fillTweeters(doc);
@@ -51,13 +68,13 @@ public class Subscriptions {
 	 * 
 	 * @param doc
 	 */
-	public void fillTweeters(Document doc)
+	private void fillTweeters(Document doc)
 	{
-		List subscription = doc.getRootElement().getChildren("User");
+		List<Element> subscription = doc.getRootElement().getChildren("User");
 		
-		for (int i=0; i<subscription.size(); i++)
+		for(Element element : subscription)
 		{
-			String userID = ((Element)subscription.get(i)).getChildText("UserID");
+			String userID = element.getChildText("UserID");
 			subscribedTweeters.add(new Tweeter(userID));
 		}
 		
@@ -68,7 +85,10 @@ public class Subscriptions {
 	 * Removes user from the subscription list (removes from ArrayList and saves to XML)
 	 */
 	public void removeSubscription(String userID)
-	{		
+	{	
+		if(subscriptionListLocation == null)
+			throw new NullPointerException("Subscription list location was not initialized!");
+		
 		for(Tweeter tweeter : subscribedTweeters)
 			if (tweeter.getUserID().equals(userID))
 			{
@@ -82,8 +102,11 @@ public class Subscriptions {
 	 * 
 	 * Checks for duplicates
 	 */
-	public void addNewSubscription(String userID)
+	public void addNewSubscription(String userID) throws NullPointerException
 	{
+		if(subscriptionListLocation == null)
+			throw new NullPointerException("Subscription list location was not initialized!");
+		
 		boolean exists = false;
 		
 		for(Tweeter tweeter : subscribedTweeters)
@@ -102,6 +125,9 @@ public class Subscriptions {
 	 */
 	public void writeDocument()
 	{
+		if(subscriptionListLocation == null)
+			throw new NullPointerException("Subscription list location was not initialized!");
+		
         Element root = new Element("Subscriptions");
         Document doc = new Document(root);
         
@@ -118,7 +144,6 @@ public class Subscriptions {
 		commitSubscriptions(doc);
 	}
 	
-	
 	/**
 	 * Physically commits the information to a XML file.
 	 * @param doc
@@ -127,7 +152,7 @@ public class Subscriptions {
 	{
 
 	      try {
-	    	  	OutputStream stream = new FileOutputStream("bin/subscriptionlist.xml");
+	    	  	OutputStream stream = new FileOutputStream(subscriptionListLocation);
 	    	    XMLOutputter outputter = new XMLOutputter();
 	    	    outputter.output(doc, stream);
 	    	    stream.flush();
@@ -144,11 +169,11 @@ public class Subscriptions {
 	 * 
 	 * @author Scott Smiesko
 	 */
-	public void printTweeters ()
+	public void printTweeters (PrintStream stream)
 	{
 		for(Tweeter tweeter : subscribedTweeters)
 		{
-			System.out.println(tweeter.toString());
+			stream.println(tweeter.toString());
 		}
 	}
 
