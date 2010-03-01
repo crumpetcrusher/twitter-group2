@@ -3,7 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="src/jdom.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Rick/Desktop/eclipse/plugins/org.apache.commons.httpclient_3.1.0.v20080605-1935.jar"/>
 	<classpathentry kind="src" path=".apt_generated">
 		<attributes>
 			<attribute name="optional" value="true"/>
