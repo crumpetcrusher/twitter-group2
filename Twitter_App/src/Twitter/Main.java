@@ -1,5 +1,11 @@
 package Twitter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+
+import SortingClasses.AlphabeticallyTweet;
+import SortingClasses.ChronologicalTweet;
 import Timelines.User_Timeline;
 
 // Will need this soon: import javax.swing.*;
@@ -21,7 +27,7 @@ public class Main {
 		//Testing Methods
 		
 		//testSubscriptions();
-		//testUserTimeline();
+		testUserTimeline();
 		
 		
 		// This will be where we create our GUI object and show it, but
@@ -32,6 +38,9 @@ public class Main {
 	public static void testUserTimeline()
 	{
 		User_Timeline timeline = new User_Timeline("14103500");
+		//timeline.printTweets(System.out);
+		timeline.printTweets(System.out);
+		Collections.sort(timeline.getTweetsList(), new ChronologicalTweet(true));
 		timeline.printTweets(System.out);
 	}
 	
