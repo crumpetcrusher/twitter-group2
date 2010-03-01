@@ -140,7 +140,14 @@ public class User_Timeline {
      */
     public Tweet[] getTweets()
     {
-    	return (Tweet[])tweets.toArray();
+    	Tweet[] temp = new Tweet[tweets.size()];
+    	tweets.toArray(temp);
+    	return temp;
+    }
+    
+    public ArrayList<Tweet> getTweetsList()
+    {
+    	return tweets;
     }
 
     /**
