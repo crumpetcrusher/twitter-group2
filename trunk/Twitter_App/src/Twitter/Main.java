@@ -39,9 +39,8 @@ public class Main {
 	{
 		User_Timeline timeline = new User_Timeline("14103500");
 		//timeline.printTweets(System.out);
-		timeline.printTweets(System.out);
-		Collections.sort(timeline.getTweetsList(), new ChronologicalTweet(true));
-		timeline.printTweets(System.out);
+		Tweet[] gotTweets = timeline.getTweets();
+		Arrays.sort(gotTweets, new ChronologicalTweet(true));
 	}
 	
 	public static void testSubscriptions()

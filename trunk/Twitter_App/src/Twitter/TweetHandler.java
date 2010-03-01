@@ -1,100 +1,17 @@
-package Timelines;
-import Twitter.Tweet;
-import Twitter.Tweeter;
+package Twitter;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.PrintStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
 
-import javax.imageio.ImageIO;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
+public class TweetHandler {
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.input.SAXBuilder;
-import org.xml.sax.InputSource;
-
-/**
- * User_Timeline is what stores a users Tweets and timeline information for a search query.
- * <br /> It is the object that will be displaying in the GUI.
- * 
- * @author Scott Smiesko
- * @version 2/27/2010
- *
- */
-public class User_Timeline {
 	
-	//Class Variables
-
-
-	/**
-	 * {@code tweets} - An ArrayList of Tweet objects
-	 */
-	private	ArrayList<Tweet> tweets = new ArrayList<Tweet>();
-	/**
-	 * The url that points towards usertimeline via twitter... left open ended
-	 */
-	private final String userTimlineURL = "http://api.twitter.com/1/statuses/user_timeline.xml?user_id=";
+	private ArrayList<Tweet> tweets = new ArrayList<Tweet>();
 	
-	//Class Constructor
-	
-	/**
-	 * Default Constructor for populating a User_Timeline object
-	 * @param newUserID
-	 */
-	public User_Timeline(String newUserID) {
-		populateTweets(getTimeline(userTimlineURL + newUserID));
-	}
-	
-	//Class Methods
-
-	/**
-	 * Sets the users unique Timeline URL
-	 * @param newTimelineURL
-	 */
-	private Document getTimeline(String newTimelineURL)
+	public TweetHandler()
 	{
-		System.out.println("Retreiving user tweets...");
-
-		Document doc = null;
-		try 
-		{
-			doc = new SAXBuilder().build(new URL(newTimelineURL));
-		} 
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			doc = null;
-		}
 		
-		return doc;
-	}
-	
-	/**
-	 * Method to populate our ArrayList of tweets with the tweets from a user
-	 */
-	private void populateTweets(Document document)
-	{
-		System.out.println("Populating tweets from received XML");
-
-		ArrayList result = new ArrayList();
-		List<Element> statuses = document.getRootElement().getChildren("status");
-		
-		for(Element element : statuses)
-		{
-			String tweetID = element.getChildText("id");
-			String tweetText = element.getChildText("text");
-			String tweetSource = element.getChildText("source");
-			String tweetDate = element.getChildText("created_at");
-			
-			Tweet tweet = new Tweet(tweetID,tweetText, new Date(tweetDate), tweetSource);
-			tweets.add(tweet);
-		}
 	}
 	
 	/**
@@ -209,5 +126,6 @@ public class User_Timeline {
 		}
 		return tweet_return;
     }
+	
 	
 }
