@@ -11,6 +11,9 @@ import java.util.*;
  */
 public class Tweet
 {
+	
+	//Class Variables
+	
 	/**
 	 * {@code tweetID} - Unique ID number of the tweet
 	 */
@@ -28,6 +31,8 @@ public class Tweet
      */
     private String tweetSource = null;
     
+    //Class Constructor
+    
     /**
      * This is a constructor method that will take a full tweet input.
      *
@@ -39,38 +44,21 @@ public class Tweet
      */
     public Tweet(String newID, String newText, Date newDate, String newSource)
     {
-    		setID(newID);
-    		setText(newText);
-    		setDate(newDate);
-    		setSource(newSource);
-    }
-   
-    /**
-     * Sole constructor. Use this if you wish to add information later.
-     */
-    public Tweet()
-    {
+    	tweetID = newID;
+    	tweetText = newText;
+    	tweetDate= newDate;
+    	tweetSource = newSource;
     }
     
-    /**
+    //Class Methods
+
+     /**
      * @author Rick Humes
      * @return ID The unique ID of the tweet.
      */
     public String getID()
     {
     	return tweetID;
-    }
-    
-    /**
-     * This will set the unique id of this tweet.
-     *
-     * @author Rick Humes
-     * @param newID The unique id of the tweet.
-     * @see Date
-     */
-    public void setID(String newID)
-    {
-	    tweetID = newID;
     }
     
     /**
@@ -86,18 +74,6 @@ public class Tweet
     }
 
     /**
-     * This will set the date the tweet was posted.
-     *
-     * @author Rick Humes
-     * @param newDate Sets the date in which the tweet was posted.
-     * @see Date
-     */
-    public void setDate(Date newDate)
-    {
-	   tweetDate = newDate;
-    }
-
-    /**
      * This will get the body of this tweet.
      * 
      * @author Rick Humes
@@ -106,17 +82,6 @@ public class Tweet
     public String getText()
     {
         return tweetText;
-    }
-
-    /**
-     * This will set the body of the tweet.
-     *
-     * @author Rick Humes
-     * @param newText The body of the tweet.
-     */
-    public void setText(String newText)
-    {
-    	tweetText = newText;
     }
    
     /**
@@ -131,17 +96,6 @@ public class Tweet
     }
     
     /**
-     * This will set the source of the tweet.
-     *
-     * @author Rick Humes
-     * @param newSource The source from which this tweet came.
-     */
-    public void setSource(String newSource)
-    {
-		tweetSource = newSource;
-    }
-    
-    /**
      * toString for showing the tweet information
      * @return finalTweet - our string showing all the attributes of a Tweet
      */
@@ -149,7 +103,11 @@ public class Tweet
     	
     	String finalTweet;
     	
-    	finalTweet = "Text: " + tweetText + ", Date: " + tweetDate + ", Source: " + tweetSource + ", ID: " + tweetID;
+    	finalTweet = 	"[Tweet Object]" 	+ 					"\n\t" +
+    					"Text: " 			+ 	tweetText 	+ 	"\n\t" + 
+    					"Date: " 			+ 	tweetDate 	+ 	"\n\t" + 
+    					"Source: " 			+ 	tweetSource + 	"\n\t" + 
+    					"ID: " 				+ 	tweetID;
     	
     	return finalTweet;
     }

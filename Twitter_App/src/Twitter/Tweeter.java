@@ -10,6 +10,8 @@ import javax.xml.xpath.*;
 
 import org.xml.sax.InputSource;
 
+import Timelines.User_Timeline;
+
 
 /**
  * This is the user object.
@@ -28,7 +30,7 @@ public class Tweeter
 	/**
 	 * Stores the users info XML feed url
 	 */
-	private String userXMLInfoURL = null;
+	private static String userXMLInfoURL = "http://api.twitter.com/1/users/show.xml?user_id=";
 	/**
 	 * Stores the users timeline XML feed url
 	 */
@@ -65,10 +67,8 @@ public class Tweeter
      * Stores the tweeter's profile picture.
      */
     private BufferedImage userPicture = null;
-    /**
-     * Stores the tweeter's tweets.
-     */
-    private ArrayList<Tweet> userTweets = new ArrayList<Tweet>();
+    
+    private User_Timeline timeline;
 
     //Constructors
     
@@ -81,15 +81,19 @@ public class Tweeter
      */
     public Tweeter(String newUserID)
     {
-    	setUserID(newUserID);
-    	setUserXMLInfoURL("http://api.twitter.com/1/users/show.xml?user_id=" + userID);
-    	setUserXMLTimelineURL("http://api.twitter.com/1/statuses/user_timeline.xml?user_id=" + userID);
-    	
-    	populateTweeterFromXML(userXMLInfoURL);
+    	userID = newUserID;
+    	populateTweeterFromXML(userXMLInfoURL + userID);
     }
-    
 
     // Methods
+    
+    /**
+     * Populates users's tweets. Fairly fast process.
+     */
+    public void getUserTimeline()
+    {
+    	timeline = new User_Timeline(userID);
+    }
 
     /**
      * Populates the rest of a tweeter object with data from the XML feed
@@ -137,48 +141,6 @@ public class Tweeter
 		}
     }
 
-	/**
-     * This sets the URL for the XML feed with user information
-     *
-     * @author Scott Smiesko
-     * @param newUserXMLInfoURL
-     * 
-     */
-    public void setUserXMLInfoURL(String newUserXMLInfoURL)
-    {
-    	userXMLInfoURL= newUserXMLInfoURL; 
-    }
-    
-    /**
-     * This gets the URL for the XML feed with user information.
-     *
-     * @author Scott Smiesko
-     * @return {@code userXMLFeed} - the URL to the users own XML feed
-     */
-    public String getUserXMLInfoURL()
-    {
-    	return userXMLInfoURL;
-    }
-    
-    /**
-     * This sets the URL for the XML feed with user tweets
-     * @param newUserXMLTimelineURL
-     */
-    public void setUserXMLTimelineURL(String newUserXMLTimelineURL)
-    {
-    	userXMLTimelineURL = newUserXMLTimelineURL;
-    }
-    
-    /**
-     * This sets the URL for the XML feed with user timeline
-     * @return userXMLTimelineURL;
-     */
-    
-    public String getUserXMLTimelineURL()
-    {
-    	return userXMLTimelineURL;
-    }
-    
     /**
      * This gets the person's unique id.
      *
@@ -188,18 +150,6 @@ public class Tweeter
     public String getUserID()
     {
         return userID;
-    }
-
-    /**
-     * This sets the person's unique id.
-     *
-     * @author Rick Humes
-     * @param userID Peron's unique id.
-     * @return boolean Whether or not the unique id was set successfully.
-     */
-    public void setUserID(String newUserID)
-    {
-    	userID = newUserID;
     }
     
     /**
@@ -214,18 +164,6 @@ public class Tweeter
     }
 
     /**
-     * This sets the person's screenName.
-     *
-     * @author Rick Humes
-     * @param userName Peron's username.
-     * @return boolean Whether or not the username was set successfully.
-     */
-    public void setScreenName(String newScreenName)
-    {
-    	screenName = newScreenName;
-    }
-
-    /**
      * This gets the person's name
      *
      * @author Rick Humes
@@ -235,160 +173,6 @@ public class Tweeter
 	{
 		return realName;
 	}
-	
-    /**
-     * This sets the person's name.
-     *
-     * @author Rick Humes
-     * @param name Peron's name.
-     * @return boolean Whether or not the name was set successfully.
-     */
-    public void setRealName(String newRealName) 
-    {
-    	realName = newRealName;
-	}
-
-    /**
-     * This gets the person's profile picture.
-     *
-     * @author Rick Humes
-     * @return picture Peron's profile picture
-     * @see BufferedImage
-     */
-    public BufferedImage getPicture()
-    {
-        return userPicture;
-    }
-
-    /**
-     * This sets the person's profile picture.
-     *
-     * @author Rick Humes
-     * @param picture Peron's profile picture.
-     * @return boolean Whether or not the profile picture was set successfully.
-     */
-    public void setPicture(BufferedImage newUserPicture)
-    {
-    	userPicture = newUserPicture;
-    }
-    
-    /**
-     * This adds a tweet to this persons tweets.
-     *
-     * @author Rick Humes
-     * @param tweet A tweet.
-     * @see Tweet
-     * @return boolean Whether or not the tweet was added successfully.
-     */
-    public void addTweet(Tweet newTweet)
-    {
-
-    	userTweets.add(newTweet);
-
-    }
-    
-    /**
-     * 
-     * Gets every tweet
-     * 
-     * @author Scott Smiesko
-     * @param null
-     * @return every tweet
-     * @see Tweet
-     */
-    public ArrayList<Tweet> getTweets()
-    {
-    	return userTweets;
-    }
-    
-    
-    /**
-
-     * Gets a tweet by id.
-     *
-     * @author Rick Humes
-     * @param id The id of the tweet.
-     * @return The requested tweet. May be <code>null</code>.
-     * @see Tweet
-     */
-    public Tweet getTweet(String tweetID)
-    {
-    	Tweet tweet_return = null;
-    	if(userTweets != null) {
-	    	for (Tweet tweet : userTweets) {
-	    		if(tweet.getID().equals(tweetID)) {
-	    			tweet_return = tweet;
-	    		}
-	    	}
-    	}
-		return tweet_return;
-    }
-    
-    
-    /**
-     * Gets tweet(s) by date range.
-     *
-     * @author Rick Humes
-     * @param beginDate The earliest tweet able to be shown.
-     * @param endDate The latest tweet able to be shown.
-     * @return The requested tweet(s). May be <code>null</code>.
-     * @see Tweet
-     */
-    public Tweet[] getTweets(Date beginDate, Date endDate)
-    {
-    	Tweet[] tweet_return = null;
-    	try
-    	{
-    		if(userTweets != null)
-    		{
-        		ArrayList<Tweet> requestedTweets = new ArrayList<Tweet>();
-	    		for (Tweet tweet : userTweets)
-	    			if(tweet.getDate().compareTo(beginDate) >= 0 && tweet.getDate().compareTo(endDate) <= 0)
-	    				requestedTweets.add(tweet);
-	    		tweet_return = ((Tweet[])requestedTweets.toArray());
-    		}
-		}
-		catch(Exception e)
-		{
-			System.out.println(e.getMessage());
-		}
-		return tweet_return;
-    }
-    
-    /**
-     * Gets tweet(s) by searching the text.
-     *
-     * @author Rick Humes
-     * @param search Text to be searched for.
-     * @param case_sensitive The search is case sensitive?
-     * @return The requested tweet(s). May be <code>null</code>.
-     * @see Tweet
-     */
-    public Tweet[] getTweets(String search, boolean case_sensitive)
-    {
-    	Tweet[] tweet_return = null;
-    	try
-    	{
-    		if(userTweets != null)
-    		{
-    			if(!case_sensitive)
-    				search = search.toLowerCase();
-    			
-        		ArrayList<Tweet> requestedTweets = new ArrayList<Tweet>();
-        		
-	    		for (Tweet tweet : userTweets)
-	    			if(tweet.getText().toLowerCase().contains(search))
-	    				requestedTweets.add(tweet);
-	    		
-	    		tweet_return = (requestedTweets.toArray(new Tweet[requestedTweets.size()]));
-    		}
-		}
-		catch(Exception e)
-		{
-			System.out.println(e.getMessage());
-		}
-		return tweet_return;
-    }
     
     /**
      * This returns all attributes of a Tweeter
@@ -408,8 +192,7 @@ public class Tweeter
     			   "Description: "		+ userDescription + 	"\n" +
     			   "Home Page: "		+ userHomePage + 		"\n" +
     			   "Verified?: "		+ verifiedUser + 		"\n" +
-    			   "Picture: "			+ userPicture + 		"\n" +
-    			   "Tweets: "			+ userTweets + 			"\n" ;
+    			   "Picture: "			+ userPicture + 		"\n" ;
         return userInfo;
     }
 }
