@@ -125,7 +125,8 @@ public class TweetHandler {
      * @param overwriteInput Overwrite this inputed array?
      * @return Returns the organized array of tweets.
      */
-    public Tweet[] organizeByDate(Tweet[] tweetsIn, boolean overwriteInput)
+    @SuppressWarnings("unchecked")
+	public Tweet[] organizeByDate(Tweet[] tweetsIn, boolean overwriteInput)
     {
     	Tweet[] tweets = (overwriteInput) ? tweetsIn : tweetsIn.clone();
     	Arrays.sort(tweets, new ChronologicalTweet());
@@ -139,7 +140,8 @@ public class TweetHandler {
      * @param overwriteInput Overwrite this inputed array?
      * @return Returns the organized array of tweets.
      */
-    public Tweet[] organizeByAlpha(Tweet[] tweetsIn, boolean overwriteInput)
+    @SuppressWarnings("unchecked")
+	public Tweet[] organizeByAlpha(Tweet[] tweetsIn, boolean overwriteInput)
     {
     	Tweet[] tweets = (overwriteInput) ? tweetsIn : tweetsIn.clone();
        	Arrays.sort(tweets, new AlphabeticallyTweet());

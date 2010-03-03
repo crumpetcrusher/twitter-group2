@@ -1,6 +1,5 @@
 package Twitter;
 
-import java.util.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -67,7 +66,9 @@ public class Tweeter
      * Stores the tweeter's profile picture.
      */
     private BufferedImage userPicture = null;
-    
+    /**
+     * Stores the timeline for this user.
+     */
     private User_Timeline timeline;
 
     //Constructors
@@ -90,7 +91,7 @@ public class Tweeter
     /**
      * Populates users's tweets. Fairly fast process.
      */
-    public void getUserTimeline()
+    public void populateUserTimeline()
     {
     	timeline = new User_Timeline(userID);
     }

@@ -1,11 +1,4 @@
 package Twitter;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-
-import SortingClasses.AlphabeticallyTweet;
-import SortingClasses.ChronologicalTweet;
 import Timelines.User_Timeline;
 
 // Will need this soon: import javax.swing.*;

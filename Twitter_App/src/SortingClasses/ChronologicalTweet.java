@@ -4,6 +4,7 @@ import java.util.Comparator;
 import java.util.Date;
 import Twitter.Tweet;
 
+@SuppressWarnings("unchecked")
 public class ChronologicalTweet implements Comparator {
 
 	private boolean descending = true;
