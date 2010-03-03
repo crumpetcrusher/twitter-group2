@@ -133,7 +133,6 @@ public class User_Timeline {
      * Gets every tweet
      * 
      * @author Scott Smiesko
-     * @param null
      * @return every tweet
      * @see Tweet
      */
