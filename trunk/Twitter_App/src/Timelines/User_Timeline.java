@@ -78,11 +78,11 @@ public class User_Timeline {
 	/**
 	 * Method to populate our ArrayList of tweets with the tweets from a user
 	 */
+	@SuppressWarnings("deprecation")
 	private void populateTweets(Document document)
 	{
 		System.out.println("Populating tweets from received XML");
 
-		ArrayList result = new ArrayList();
 		List<Element> statuses = document.getRootElement().getChildren("status");
 		
 		for(Element element : statuses)
