@@ -1,0 +1,7 @@
+Update Subscriptions.java
+	- incorperate: "subscribers have timelines, timelines have tweets"
+	
+Replace instances of XPath and JDOM with DOM-only code.
+
+Start GUI coding.
+	- Started with Main.java and SubscriptionsManager.java
