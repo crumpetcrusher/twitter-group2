@@ -38,9 +38,10 @@ public class Main {
 	public static void testUserTimeline()
 	{
 		User_Timeline timeline = new User_Timeline("14103500");
-		//timeline.printTweets(System.out);
-		Tweet[] gotTweets = timeline.getTweets();
-		Arrays.sort(gotTweets, new ChronologicalTweet(true));
+		TweetHandler tweetHandler = new TweetHandler();
+		Tweet[] tweets = timeline.getTweets();
+		tweetHandler.organizeByDate(tweets, true);
+		tweetHandler.printTweets(tweets, System.out);
 	}
 	
 	public static void testSubscriptions()
