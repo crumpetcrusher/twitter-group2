@@ -56,7 +56,7 @@ public abstract class Timeline implements Feed {
 		
 	}
 	
-	public void fillTweets(Tweet[] newTweets)
+	public void setTweets(Tweet[] newTweets)
 	{
 		tweets = Arrays.asList(newTweets);
 	}
@@ -70,7 +70,18 @@ public abstract class Timeline implements Feed {
 		for(Tweet tweet : tweets)
 			stream.println(tweet.toString());
 	}
+	
+	public void clear()
+	{
+		tweets = new ArrayList<Tweet>();
+	}
 
+	public Tweet[] getTweets()
+	{
+		Tweet[] temp = new Tweet[tweets.size()];
+		return tweets.toArray(temp);
+	}
+	
     /**
      * Gets a tweet by id.
      *

@@ -49,7 +49,7 @@ public class UserTimeline extends Timeline{
 		System.out.println("Creating User Timeline");
 		tweeter = newTweeter;
 		downloadXML();
-		fillTweets(parseXML());
+		setTweets(parseXML());
 	}
 	
 	//Class Methods
