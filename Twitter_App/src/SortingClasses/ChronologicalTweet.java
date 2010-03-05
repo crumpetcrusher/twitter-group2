@@ -5,7 +5,7 @@ import java.util.Date;
 import Twitter.Tweet;
 
 @SuppressWarnings("unchecked")
-public class ChronologicalTweet implements Comparator {
+public class ChronologicalTweet implements TweetComparer {
 
 	private boolean descending = true;
 	
@@ -18,16 +18,16 @@ public class ChronologicalTweet implements Comparator {
 		descending = isDescending;
 	}
 	
-	public int compare(Object tweet, Object anotherTweet)
+	public int compare(Tweet tweet, Tweet anotherTweet)
 	{
 		int sortInt;
-		Date tweetText 		= ((Tweet)tweet).getDate();
-		Date anotherTweetText = ((Tweet)anotherTweet).getDate();
+		Date tweetDate 		= tweet.getDate();
+		Date anotherTweetDate = anotherTweet.getDate();
 		
-		sortInt = tweetText.compareTo(anotherTweetText);
+		sortInt = tweetDate.compareTo(anotherTweetDate);
 		
 		if(!descending)
-			sortInt = (sortInt == 0) ? 1 : 0;
+			sortInt *= -1;
 		
 		return sortInt;
 	}
