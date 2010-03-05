@@ -1,5 +1,8 @@
 package Twitter;
-import Timelines.User_Timeline;
+import RandomClasses.*;
+import SortingClasses.AlphabeticallyTweet;
+import SortingClasses.ChronologicalTweet;
+import Timelines.UserTimeline;
 
 // Will need this soon: import javax.swing.*;
 
@@ -20,21 +23,29 @@ public class Main {
 		//Testing Methods
 		
 		//testSubscriptions();
-		testUserTimeline();
-		
+		//testUserTimeline();
+		testFeedStuff();
 		
 		// This will be where we create our GUI object and show it, but
 		// for now, it will just be a blank main class
 		
 	}
 	
+	public static void testFeedStuff()
+	{
+		Feed feed = new UserTimeline(new Tweeter("24973163"));
+		System.out.println(feed);
+		//feed.organizeBy();
+		System.out.println(feed);
+	}
+	
 	public static void testUserTimeline()
 	{
-		User_Timeline timeline = new User_Timeline("14103500");
-		TweetHandler tweetHandler = new TweetHandler();
-		Tweet[] tweets = timeline.getTweets();
-		tweetHandler.organizeByDate(tweets, true);
-		tweetHandler.printTweets(tweets, System.out);
+		UserTimeline timeline = new UserTimeline(new Tweeter("14103500"));
+		//TweetHandler tweetHandler = new TweetHandler();
+		//Tweet[] tweets = timeline.getTweets();
+		//tweetHandler.organizeByDate(tweets, true);
+		//tweetHandler.printTweets(tweets, System.out);
 	}
 	
 	public static void testSubscriptions()

@@ -10,7 +10,7 @@ import Twitter.Tweet;
  *
  */
 @SuppressWarnings("unchecked")
-public class AlphabeticallyTweet implements Comparator{
+public class AlphabeticallyTweet implements TweetComparer {
 
 	
 	//Class Variables
@@ -47,16 +47,16 @@ public class AlphabeticallyTweet implements Comparator{
 	 * @param anotherTweet
 	 * @return Return is only needed for the comparator
 	 */
-	public int compare(Object tweet, Object anotherTweet)
+	public int compare(Tweet tweet, Tweet anotherTweet)
 	{
 		int sortInt;
-		String tweetText 		= ((Tweet)tweet).getText();
-		String anotherTweetText = ((Tweet)anotherTweet).getText();
+		String tweetText 		= tweet.getText();
+		String anotherTweetText = anotherTweet.getText();
 		
 		sortInt = tweetText.compareTo(anotherTweetText);
 		
 		if(!descending)
-			sortInt = (sortInt == 0) ? 1 : 0;
+			sortInt *= -1;
 		
 		return sortInt;
 			

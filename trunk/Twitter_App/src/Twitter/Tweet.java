@@ -1,6 +1,8 @@
 package Twitter;
 import java.util.*;
 
+import RandomClasses.FeedItem;
+
 /**
  * This is the tweet object.<br />
  * @version 2/27/2010 @ 7:01PM - Updated documentation & clarified attribute names
@@ -9,7 +11,7 @@ import java.util.*;
  * @author Rick Humes
  * @author Scott Smiesko
  */
-public class Tweet
+public class Tweet implements FeedItem
 {
 	
 	//Class Variables
@@ -31,6 +33,8 @@ public class Tweet
      */
     private String tweetSource = null;
     
+    private Tweeter tweeter= null;
+    
     //Class Constructor
     
     /**
@@ -42,8 +46,9 @@ public class Tweet
      * @param newDate The date the tweet was posted.
      * @param newSource The source from which the tweet came.
      */
-    public Tweet(String newID, String newText, Date newDate, String newSource)
+    public Tweet(Tweeter newTweeter, String newID, String newText, Date newDate, String newSource)
     {
+    	tweeter = newTweeter;
     	tweetID = newID;
     	tweetText = newText;
     	tweetDate= newDate;
@@ -95,6 +100,17 @@ public class Tweet
     	return tweetSource;
     }
     
+    public Tweeter getTweeter()
+    {
+    	return tweeter;
+    }
+    
+    public String source()	{	return 	tweeter.getScreenName();	}
+    
+    public String text()	{	return 	tweetText;					}
+    
+    public Date date()		{	return	tweetDate;					}
+    
     /**
      * toString for showing the tweet information
      * @return finalTweet - our string showing all the attributes of a Tweet
@@ -104,11 +120,16 @@ public class Tweet
     	String finalTweet;
     	
     	finalTweet = 	"[Tweet Object]" 	+ 					"\n\t" +
-    					"Text: " 			+ 	tweetText 	+ 	"\n\t" + 
-    					"Date: " 			+ 	tweetDate 	+ 	"\n\t" + 
-    					"Source: " 			+ 	tweetSource + 	"\n\t" + 
-    					"ID: " 				+ 	tweetID;
+    					"\tText: " 			+ 	tweetText 	+ 	"\n\t" + 
+    					"\tDate: " 			+ 	tweetDate 	+ 	"\n\t" + 
+    					"\tSource: " 		+ 	tweetSource + 	"\n\t" + 
+    					"\tID: " 			+ 	tweetID;
     	
     	return finalTweet;
     }
+    
+    /*public FeedItem toFeedItem()
+    {
+			return new FeedItem(tweeter.getScreenName(),tweetText,tweetDate);
+    }*/
 }

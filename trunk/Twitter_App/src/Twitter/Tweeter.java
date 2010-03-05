@@ -9,7 +9,8 @@ import javax.xml.xpath.*;
 
 import org.xml.sax.InputSource;
 
-import Timelines.User_Timeline;
+import RandomClasses.*;
+import Timelines.UserTimeline;
 
 
 /**
@@ -69,7 +70,9 @@ public class Tweeter
     /**
      * Stores the timeline for this user.
      */
-    private User_Timeline timeline;
+    private UserTimeline timeline;
+    
+    private UserTimeline tweets;
 
     //Constructors
     
@@ -93,7 +96,7 @@ public class Tweeter
      */
     public void populateUserTimeline()
     {
-    	timeline = new User_Timeline(userID);
+    	timeline = new UserTimeline(this);
     }
 
     /**
