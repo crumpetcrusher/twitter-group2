@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 import RandomClasses.Feed;
 import RandomClasses.FeedItem;
@@ -14,7 +15,7 @@ import Twitter.Tweet;
 
 public abstract class Timeline implements Feed {
 
-	private ArrayList<Tweet> tweets = new ArrayList<Tweet>();
+	private List<Tweet> tweets = new ArrayList<Tweet>();
 
 	
 	public void organizeByDate()
@@ -57,7 +58,7 @@ public abstract class Timeline implements Feed {
 	
 	public void fillTweets(Tweet[] newTweets)
 	{
-		tweets = (ArrayList<Tweet>) Arrays.asList(newTweets);
+		tweets = Arrays.asList(newTweets);
 	}
 	
 	/**
