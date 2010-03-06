@@ -4,9 +4,16 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import javax.imageio.ImageIO;
 import javax.xml.xpath.*;
 
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.input.SAXBuilder;
 import org.xml.sax.InputSource;
 
 import RandomClasses.*;
@@ -70,9 +77,9 @@ public class Tweeter
     /**
      * Stores the timeline for this user.
      */
-    private UserTimeline timeline;
+    private boolean userProtected = false;
     
-    private UserTimeline tweets;
+    private Document tweeterXML = null;
 
     //Constructors
     
@@ -85,64 +92,46 @@ public class Tweeter
      */
     public Tweeter(String newUserID)
     {
+    	System.out.println("Creating Tweeter Object for User ID: " + newUserID );
     	userID = newUserID;
-    	populateTweeterFromXML(userXMLInfoURL + userID);
+    	downloadXML();
+    	parseXML();
     }
 
     // Methods
-    
-    /**
-     * Populates users's tweets. Fairly fast process.
-     */
-    public void populateUserTimeline()
-    {
-    	timeline = new UserTimeline(this);
-    }
 
+    
+    public void downloadXML()
+    {
+		System.out.println("Downloading Tweeter Information.");
+
+		try 
+		{
+			tweeterXML = new SAXBuilder().build(new URL(userXMLInfoURL + userID));
+		} 
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			tweeterXML = null;
+		}
+    }
     /**
      * Populates the rest of a tweeter object with data from the XML feed
      * 
      * @author Scott Smiesko
      * @param xmlFile
      */
-    public void populateTweeterFromXML(String xmlFile)
+    public void parseXML()
     {
-    	
-    	XPath xpath = XPathFactory.newInstance().newXPath();
-    	InputSource source = new InputSource (xmlFile);
-    	
-    	System.out.println("Grabbing XML from Twitter.. be patient");
-    	
-    	try {
-			String result = xpath.evaluate("/user/protected", source);
-			if (result == "false")
-			{
-				System.out.println("User feed is locked, bummer");
-			}
-			else
-			{
-				/**
-				 * Set the attributes for our user
-				 */
-				realName = xpath.evaluate("/user/name", source);
-				screenName = xpath.evaluate("/user/screen_name", source);
-				userLocation = xpath.evaluate("/user/location", source);
-				userDescription = xpath.evaluate("/user/description", source);
-				userPicture = ImageIO.read(new URL(xpath.evaluate("/user/profile_image_url", source)));
-				userHomePage = xpath.evaluate("/user/url", source);
-				verifiedUser = xpath.evaluate("/user/verified", source);
-			}
-		} catch (XPathExpressionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			userPicture = null;
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+       	System.out.println("Parsing Tweeter XML");
+       	
+       	Element element = tweeterXML.getRootElement();
+       	
+		realName = element.getChildText("name");
+		screenName = element.getChildText("screen_name");
+		userLocation = element.getChildText("location");
+		userDescription = element.getChildText("description");
+		userProtected = Boolean.parseBoolean(element.getChildText("protected"));
     }
 
     /**
@@ -177,6 +166,11 @@ public class Tweeter
 	{
 		return realName;
 	}
+	
+	public boolean isProtected()
+	{
+		return userProtected;
+	}
     
     /**
      * This returns all attributes of a Tweeter
@@ -187,16 +181,17 @@ public class Tweeter
     public String toString()
     {
     	String userInfo = null;
-    	userInfo = "Info: "				+ userXMLInfoURL + 		"\n" +
-    			   "Timeline: " 		+ userXMLTimelineURL + 	"\n" +
-    			   "ID: " 				+ userID + 				"\n" +
-    			   "Real Name: " 		+ realName + 			"\n" +
-    			   "Screen Name: "		+ screenName + 			"\n" +
-    			   "Location: "			+ userLocation + 		"\n" +
-    			   "Description: "		+ userDescription + 	"\n" +
-    			   "Home Page: "		+ userHomePage + 		"\n" +
-    			   "Verified?: "		+ verifiedUser + 		"\n" +
-    			   "Picture: "			+ userPicture + 		"\n" ;
+    	userInfo = "[Tweeter Object]"							+	"\n\t"	+
+    			   "\tInfo: "			+ 	userXMLInfoURL 		+ 	"\n\t" 	+
+    			   "\tTimeline: " 		+ 	userXMLTimelineURL 	+ 	"\n\t" 	+
+    			   "\tID: " 			+ 	userID 				+ 	"\n\t" 	+
+    			   "\tReal Name: " 		+ 	realName 			+ 	"\n\t"	+
+    			   "\tScreen Name: "	+ 	screenName 			+ 	"\n\t" 	+
+    			   "\tLocation: "		+ 	userLocation 		+ 	"\n\t" 	+
+    			   "\tDescription: "	+ 	userDescription 	+ 	"\n\t" 	+
+    			   "\tHome Page: "		+ 	userHomePage 		+	"\n\t" 	+
+    			   "\tVerified?: "		+ 	verifiedUser 		+ 	"\n\t" 	+
+    			   "\tPicture: "		+ 	userPicture 		+ 	"\n\t" 	;
         return userInfo;
     }
 }

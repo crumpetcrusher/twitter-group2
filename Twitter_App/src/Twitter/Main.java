@@ -1,8 +1,8 @@
 package Twitter;
 import RandomClasses.*;
-import SortingClasses.AlphabeticallyTweet;
-import SortingClasses.ChronologicalTweet;
-import Timelines.UserTimeline;
+import SortingClasses.*;
+import Timelines.*;
+import java.io.Console;
 
 // Will need this soon: import javax.swing.*;
 
@@ -33,15 +33,16 @@ public class Main {
 	
 	public static void testFeedStuff()
 	{
-		Feed feed = new UserTimeline(new Tweeter("24973163"));
-		System.out.println(feed);
+		//Feed feed = new MultipleTimeline( new String[] {"24973163", "14103500"} );
+		//Feed feed = new UserTimeline(new Tweeter("24973163"));
+		//System.out.println(feed);
 		//feed.organizeBy();
-		System.out.println(feed);
+		//System.out.println(feed);
 	}
 	
 	public static void testUserTimeline()
 	{
-		UserTimeline timeline = new UserTimeline(new Tweeter("14103500"));
+		//UserTimeline timeline = new UserTimeline(new Tweeter("14103500"));
 		//TweetHandler tweetHandler = new TweetHandler();
 		//Tweet[] tweets = timeline.getTweets();
 		//tweetHandler.organizeByDate(tweets, true);
