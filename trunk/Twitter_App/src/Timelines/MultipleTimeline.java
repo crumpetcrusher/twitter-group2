@@ -37,17 +37,29 @@ public class MultipleTimeline extends Timeline {
 	public void addTimeline(Timeline timeline)
 	{
 		timelines.add(timeline);
-		updateTweets();
+		setTweets();
 	}
 	
-	public void updateTweets()
+	public void refresh()
+	{
+		for(Timeline timeline : timelines)
+		{
+			timeline.refresh();
+		}
+		clear();
+		setTweets();
+	}
+	
+	public void setTweets()
 	{
 		List<Tweet> temp = new ArrayList<Tweet>();
 		for(Timeline timeline : timelines)
+		{
 			for(Tweet tweet : timeline.getTweets())
 				temp.add(tweet);
+		}
 		clear();
-		setTweets((Tweet[])temp.toArray());
+		setTweets(temp.toArray( new Tweet[0]));
 	}
 
 }

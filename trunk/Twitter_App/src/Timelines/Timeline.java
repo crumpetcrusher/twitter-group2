@@ -17,6 +17,7 @@ public abstract class Timeline implements Feed {
 
 	private List<Tweet> tweets = new ArrayList<Tweet>();
 
+	public abstract void refresh();
 	
 	public void organizeByDate()
 	{
@@ -42,7 +43,7 @@ public abstract class Timeline implements Feed {
 	public void add(Object newTweets)
 	{
 		if(newTweets instanceof Tweet[])
-			tweets = new ArrayList(Arrays.asList((Tweet[])newTweets));
+			tweets = new ArrayList<Tweet>(Arrays.asList((Tweet[])newTweets));
 		else if(newTweets instanceof Tweet)
 			tweets.add((Tweet)newTweets);
 	}
@@ -96,7 +97,7 @@ public abstract class Timeline implements Feed {
     	if(tweets != null) {
 	    	for (Tweet tweet : tweets) {
 	    		if(tweet.getID().equals(tweetID)) {
-	    			tweet_return = tweet;
+	    			tweet_return = tweet.clone();
 	    		}
 	    	}
     	}

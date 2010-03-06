@@ -1,4 +1,5 @@
 package Timelines;
+import Exceptions.UserProtectedException;
 import Twitter.Tweet;
 import Twitter.Tweeter;
 
@@ -16,6 +17,7 @@ import javax.xml.xpath.XPathFactory;
 
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.xml.sax.InputSource;
 
@@ -45,11 +47,12 @@ public class UserTimeline extends Timeline{
 	 * Default Constructor for populating a User_Timeline object
 	 * @param newUserID
 	 */
-	public UserTimeline(Tweeter newTweeter) {
-		System.out.println("Creating User Timeline");
-		tweeter = newTweeter;
-		downloadXML();
-		setTweets(parseXML());
+	public UserTimeline(Tweeter newTweeter) throws UserProtectedException{
+
+			System.out.println("Creating User Timeline for " + newTweeter.getScreenName());
+			tweeter = newTweeter;
+			refresh();
+
 	}
 	
 	//Class Methods
@@ -60,15 +63,16 @@ public class UserTimeline extends Timeline{
 	 */
 	private void downloadXML()
 	{
-		System.out.println("Downloading user timeline.");
+		System.out.println("Downloading User Timeline.");
 
 		try 
 		{
 			timelineXML = new SAXBuilder().build(new URL(userTimlineURL + tweeter.getUserID()));
-		} 
-		catch (Exception e)
+		}
+		catch(JDOMException e) {}
+		catch (IOException e)
 		{
-			e.printStackTrace();
+			System.out.println(tweeter.getScreenName() + "'s tweets seem to be locked!");
 			timelineXML = null;
 		}
 	}
@@ -76,24 +80,46 @@ public class UserTimeline extends Timeline{
 	/**
 	 * Method to populate our ArrayList of tweets with the tweets from a user
 	 */
-	private Tweet[] parseXML()
+	private void parseXML()
 	{
 		System.out.println("Parsing XML");
 		
-		List<Element> statuses = timelineXML.getRootElement().getChildren("status");
-		ArrayList<Tweet> temp = new ArrayList<Tweet>();
-		
-		for(Element element : statuses)
+		try
 		{
-			String tweetID = element.getChildText("id");
-			String tweetText = element.getChildText("text");
-			String tweetSource = element.getChildText("source");
-			String tweetDate = element.getChildText("created_at");
+			List<Element> statuses = timelineXML.getRootElement().getChildren("status");
+			ArrayList<Tweet> temp = new ArrayList<Tweet>();
 			
-			Tweet tweet = new Tweet(tweeter, tweetID, tweetText, new Date(tweetDate), tweetSource);
-			temp.add(tweet);
+			for(Element element : statuses)
+			{
+				String tweetID = element.getChildText("id");
+				String tweetText = element.getChildText("text");
+				String tweetSource = element.getChildText("source");
+				String tweetDate = element.getChildText("created_at");
+				
+				Tweet tweet = new Tweet(tweeter, tweetID, tweetText, new Date(tweetDate), tweetSource);
+				temp.add(tweet);
+			}
+			setTweets(temp.toArray(new Tweet[temp.size()]));
 		}
-		return temp.toArray(new Tweet[temp.size()]);
+		catch(NullPointerException e)
+		{
+		}
+	}
+	
+	public void refresh()
+	{
+		try
+		{
+			if(tweeter.isProtected())
+				throw new UserProtectedException(tweeter);
+			
+				downloadXML();
+				parseXML();
+			
+		}catch(UserProtectedException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 }

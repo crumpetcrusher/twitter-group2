@@ -8,6 +8,8 @@ public interface Feed {
 	
 	public FeedItem[] feedItems();
 	
+	public void refresh();
+	
 	public void organizeByDate();
 	
 	public void organizeByText();

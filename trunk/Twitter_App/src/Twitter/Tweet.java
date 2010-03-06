@@ -55,6 +55,11 @@ public class Tweet implements FeedItem
     	tweetSource = newSource;
     }
     
+    public Tweet(Tweet tweet)
+    {
+    	this(tweet.tweeter, tweet.tweetID, tweet.tweetText, tweet.tweetDate, tweet.tweetSource);
+    }
+    
     //Class Methods
 
      /**
@@ -105,6 +110,11 @@ public class Tweet implements FeedItem
     	return tweeter;
     }
     
+    public Tweet clone()
+    {
+    	return new Tweet(this);
+    }
+    
     public String source()	{	return 	tweeter.getScreenName();	}
     
     public String text()	{	return 	tweetText;					}
@@ -119,10 +129,11 @@ public class Tweet implements FeedItem
     	
     	String finalTweet;
     	
-    	finalTweet = 	"[Tweet Object]" 	+ 					"\n\t" +
-    					"\tText: " 			+ 	tweetText 	+ 	"\n\t" + 
-    					"\tDate: " 			+ 	tweetDate 	+ 	"\n\t" + 
-    					"\tSource: " 		+ 	tweetSource + 	"\n\t" + 
+    	finalTweet = 	"[Tweet Object]" 	+ 							"\n\t" 	+
+    					"\tTweeter: " 	+ 	tweeter.getScreenName()	+	"\r\t"	+
+    					"\tText: " 			+ 	tweetText 			+ 	"\r\t" 	+ 
+    					"\tDate: " 			+ 	tweetDate 			+ 	"\r\t" 	+ 
+    					"\tSource: " 		+ 	tweetSource 		+ 	"\r\t" 	+ 
     					"\tID: " 			+ 	tweetID;
     	
     	return finalTweet;
