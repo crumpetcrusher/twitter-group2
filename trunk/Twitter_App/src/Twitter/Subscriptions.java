@@ -11,6 +11,8 @@ import org.jdom.*;
 import org.jdom.input.*;
 import org.jdom.output.XMLOutputter;
 
+import Exceptions.TweeterException;
+
 
 
 /**
@@ -75,7 +77,13 @@ public class Subscriptions {
 		for(Element element : subscription)
 		{
 			String userID = element.getChildText("UserID");
-			subscribedTweeters.add(new Tweeter(userID));
+			try{
+				Tweeter newTweeter = new Tweeter(userID);
+				subscribedTweeters.add(newTweeter);
+			}catch(TweeterException e)
+			{
+				e.printStackTrace();
+			}
 		}
 		
 		System.out.println("Array of tweeters is now constructed..");
@@ -115,8 +123,15 @@ public class Subscriptions {
 		
 		if(!exists)
 		{
-			subscribedTweeters.add(new Tweeter(userID));
-			writeDocument();
+			try{
+				Tweeter newTweeter = new Tweeter(userID);
+				subscribedTweeters.add(newTweeter);
+				writeDocument();
+			}
+			catch(TweeterException e)
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 	

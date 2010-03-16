@@ -1,5 +1,5 @@
 package Timelines;
-import Exceptions.UserProtectedException;
+import Exceptions.*;
 import Twitter.Tweet;
 import Twitter.Tweeter;
 
@@ -47,12 +47,11 @@ public class UserTimeline extends Timeline{
 	 * Default Constructor for populating a User_Timeline object
 	 * @param newUserID
 	 */
-	public UserTimeline(Tweeter newTweeter) throws UserProtectedException{
-
-			System.out.println("Creating User Timeline for " + newTweeter.getScreenName());
-			tweeter = newTweeter;
-			refresh();
-
+	public UserTimeline(Tweeter newTweeter) throws UserProtectedException
+	{
+		System.out.println("Creating User Timeline for " + newTweeter.getScreenName());
+		tweeter = newTweeter;
+		refresh();
 	}
 	
 	//Class Methods
@@ -61,8 +60,11 @@ public class UserTimeline extends Timeline{
 	 * Sets the users unique Timeline URL
 	 * @param newTimelineURL
 	 */
-	private void downloadXML()
+	private void downloadXML() throws TweeterException
 	{
+		if(tweeter.isProtected())
+			throw new UserProtectedException(tweeter);
+		
 		System.out.println("Downloading User Timeline.");
 
 		try 
@@ -110,15 +112,12 @@ public class UserTimeline extends Timeline{
 	{
 		try
 		{
-			if(tweeter.isProtected())
-				throw new UserProtectedException(tweeter);
-			
-				downloadXML();
-				parseXML();
-			
-		}catch(UserProtectedException e)
+			downloadXML();
+			parseXML();
+		}
+		catch(TweeterException e) 
 		{
-			e.printStackTrace();
+			System.out.println("Unable to refresh.");
 		}
 	}
 	
