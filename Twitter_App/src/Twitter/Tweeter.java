@@ -16,6 +16,7 @@ import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 import org.xml.sax.InputSource;
 
+import Exceptions.*;
 import RandomClasses.*;
 import Timelines.UserTimeline;
 
@@ -32,12 +33,14 @@ import Timelines.UserTimeline;
  */
 public class Tweeter
 {
+	
+	
 	//Class Variables
 	
 	/**
 	 * Stores the users info XML feed url
 	 */
-	private static String userXMLInfoURL = "http://api.twitter.com/1/users/show.xml?user_id=";
+	private final String userXMLInfoURL = "http://api.twitter.com/1/users/show.xml?user_id=";
 	/**
 	 * Stores the users timeline XML feed url
 	 */
@@ -45,7 +48,7 @@ public class Tweeter
     /**
      * Stores the users unique id.
      */
-    private String userID = null;
+    private String userID;
     /**
      * Stores the real name of the user
      */
@@ -90,21 +93,31 @@ public class Tweeter
      * @author Scott Smiesko
      * @param  newUserID - userID used to get twitter feed
      */
-    public Tweeter(String newUserID)
+    public Tweeter(String newUserID) throws TweeterException
     {
     	System.out.println("Creating Tweeter Object for User ID: " + newUserID );
+    	if(!validID(newUserID)) throw new InvalidUserID(newUserID);
     	userID = newUserID;
     	downloadXML();
+    	//if(tweeterXML == null) throw new TweeterException(userID);
     	parseXML();
     }
 
     // Methods
 
+    public boolean validID(String newUserID)
+    {
+    	boolean value = false;
+    	
+    	if(Integer.parseInt(newUserID) > -1)
+    		value = true;
+    	
+    	return value;
+    }
     
-    public void downloadXML()
+    private void downloadXML()
     {
 		System.out.println("Downloading Tweeter Information.");
-
 		try 
 		{
 			tweeterXML = new SAXBuilder().build(new URL(userXMLInfoURL + userID));
@@ -121,7 +134,7 @@ public class Tweeter
      * @author Scott Smiesko
      * @param xmlFile
      */
-    public void parseXML()
+    private void parseXML()
     {
        	System.out.println("Parsing Tweeter XML");
        	

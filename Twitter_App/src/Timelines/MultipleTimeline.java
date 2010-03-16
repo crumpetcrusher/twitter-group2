@@ -8,19 +8,8 @@ import Twitter.Tweeter;
 
 public class MultipleTimeline extends Timeline {
 	
+	
 	private List<Timeline> timelines = new ArrayList<Timeline>();
-	
-	public MultipleTimeline(String[] userIDs)
-	{
-		for(String userID : userIDs)
-			addUserTimeline(new Tweeter(userID));
-	}
-	
-	public MultipleTimeline(Tweeter[] tweeters)
-	{
-		for(Tweeter tweeter : tweeters)
-			addUserTimeline(tweeter);
-	}
 	
 	public MultipleTimeline(Timeline[] newTimelines)
 	{
@@ -28,13 +17,12 @@ public class MultipleTimeline extends Timeline {
 			addTimeline(timeline);
 	}
 	
-	public void addUserTimeline(Tweeter tweeter)
+	public MultipleTimeline(Timeline newTimeline)
 	{
-		UserTimeline temp = new UserTimeline(tweeter);
-		addTimeline(temp);
+		addTimeline(newTimeline);
 	}
 	
-	public void addTimeline(Timeline timeline)
+	private void addTimeline(Timeline timeline)
 	{
 		timelines.add(timeline);
 		setTweets();
@@ -50,7 +38,7 @@ public class MultipleTimeline extends Timeline {
 		setTweets();
 	}
 	
-	public void setTweets()
+	protected void setTweets()
 	{
 		List<Tweet> temp = new ArrayList<Tweet>();
 		for(Timeline timeline : timelines)

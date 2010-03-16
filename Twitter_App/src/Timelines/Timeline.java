@@ -40,7 +40,7 @@ public abstract class Timeline implements Feed {
 		return (FeedItem[]) temp.toArray(new FeedItem[temp.size()]);
 	}
 	
-	public void add(Object newTweets)
+	protected void add(Object newTweets)
 	{
 		if(newTweets instanceof Tweet[])
 			tweets = new ArrayList<Tweet>(Arrays.asList((Tweet[])newTweets));
@@ -57,7 +57,7 @@ public abstract class Timeline implements Feed {
 		
 	}
 	
-	public void setTweets(Tweet[] newTweets)
+	protected void setTweets(Tweet[] newTweets)
 	{
 		tweets = Arrays.asList(newTweets);
 	}
@@ -72,7 +72,7 @@ public abstract class Timeline implements Feed {
 			stream.println(tweet.toString());
 	}
 	
-	public void clear()
+	protected void clear()
 	{
 		tweets = new ArrayList<Tweet>();
 	}

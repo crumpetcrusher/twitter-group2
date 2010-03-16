@@ -2,14 +2,14 @@ package Exceptions;
 
 import Twitter.Tweeter;
 
-public class UserProtectedException extends TweeterException{
+public class InvalidUserID extends TweeterException{
 	
-    public UserProtectedException() {
+    public InvalidUserID() {
     	super();
 	}
 	 
-    public UserProtectedException(Tweeter tweeterErrored) {
-    	tweeter = tweeterErrored;
+    public InvalidUserID(String userIDErrored) {
+    	userID = userIDErrored;
 	}
     
     public void printError()
@@ -20,8 +20,7 @@ public class UserProtectedException extends TweeterException{
     public String toString()
     {
     	String value = "";
-    	value = tweeter.getScreenName() + "'s tweets are protected!";
+    	value = userID + " is an invalid ID!";
     	return value;
     }
-
 }
