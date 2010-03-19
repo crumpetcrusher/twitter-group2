@@ -1,21 +1,16 @@
 package SortingClasses;
 
-import java.util.Comparator;
-
 import Twitter.Tweet;
 
 /**
- * This class is for the sort method.
- * @author Rick Humes
- *
+ * This class allows for sorting alphabetically using the .sort method.
+ * @author rah323
  */
-@SuppressWarnings("unchecked")
 public class AlphabeticallyTweet implements TweetComparer {
 
-	
 	//Class Variables
 	/**
-	 * Whether or not to sort by descending.
+	 * Variable that stores whether or not the tweets should be sorted descending or ascending.
 	 */
 	private boolean descending = true;
 	
@@ -29,7 +24,7 @@ public class AlphabeticallyTweet implements TweetComparer {
 	}
 	
 	/**
-	 * Constructor allows for the user to decide to order by ascending or descending.
+	 * Constructor that accepts an boolean whether or not to do descending..
 	 * 
 	 * @param isDescending Descending = true, Ascending = false;
 	 */
@@ -41,11 +36,10 @@ public class AlphabeticallyTweet implements TweetComparer {
 	//Methods
 	
 	/**
-	 * This method is an override in the Comparator class 
-	 * 
-	 * @param tweet
-	 * @param anotherTweet
-	 * @return Return is only needed for the comparator
+	 * This method is used specifically by Comparator class extended in TweetComparer
+	 * @param tweet 
+	 * @param anotherTweet 
+	 * @return <font color=red>Used only by the Comparator class</font>
 	 */
 	public int compare(Tweet tweet, Tweet anotherTweet)
 	{
@@ -63,4 +57,5 @@ public class AlphabeticallyTweet implements TweetComparer {
 			
 			
 	}
+
 }
