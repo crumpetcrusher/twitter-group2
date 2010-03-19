@@ -13,8 +13,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
 import Exceptions.TweeterException;
-import GUI.CustomObject1;
-import GUI.TextFieldButton;
 import RandomClasses.*;
 import SortingClasses.*;
 import Timelines.*;
@@ -44,7 +42,6 @@ public class Main {
 		
 		//Testing Methods
 		
-			draw();
 			//testSubscriptions();
 			testFeedStuff();
 			//testTweeter();
@@ -52,50 +49,6 @@ public class Main {
 		// This will be where we create our GUI object and show it, but
 		// for now, it will just be a blank main class
 		
-	}
-	
-	public static void draw()
-	{
-	    frame = new JFrame("Test Frame");
-	    mainContainer = new JPanel();
-	    mainContainer.setLayout(new BorderLayout());
-	    //feedPanel = new JPanel();
-	    //feedPanel.setLayout(new GridLayout(0, 1));
-	    //mainContainer.add(feedPanel, BorderLayout.CENTER);
-	    mainContainer.add(new JButton("Jiggers"), BorderLayout.EAST);
-	    mainContainer.add(new JButton("Jiggers"), BorderLayout.WEST);
-	    //mainContainer.add(new JButton("Niggers"));
-	    //JPanel secondaryContainer = new JPanel();
-	    //mainContainer.add(new JButton("Lovers"));
-	    
-	    frame.getContentPane().add(mainContainer);
-	    //frame.getContentPane().add(secondaryContainer);
-	    
-	    //frame.getContentPane().add(mainContainer);
-	    frame.setSize(400, 400);
-	    frame.setLocationRelativeTo(null);
-	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    
-
-		scrollPane = new JScrollPane();
-		scrollPane.setBackground(Color.BLACK);
-		//mainSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		
-		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		mainContainer.add(scrollPane, BorderLayout.CENTER);
-		//scrollPane.setViewportView(feedPanel);
-		/*
-		frame.getContentPane().add(mainSplitPane);
-		
-		mainSplitPane.add(scrollPane, JSplitPane.LEFT);
-	    
-	    //CustomObject1 button = new CustomObject1(new Tweeter("24973163"));  // Initialize the component.
-	    //frame.getContentPane().add(button);      // Place the component on the application
-	                                             // window such that it fills the whole
-	                                             // window frame.
-	                                              * 
-	                                              */
 	}
 	
 	public static void testTweeter()
@@ -142,43 +95,19 @@ public class Main {
 			//feed.organizeByText();
 		
 		//Feed GetFeedItems
-			FeedItem[] feedItems = feed.feedItems();
+			//FeedItem[] feedItems = feed.feedItems();
 		
 		//Feed Refresh
 			//feed.refresh();
 		
 		//Feed Print
-			System.out.println(feed);
-			
-			
-		    feedPanel = new JPanel();
-		    //feedPanel.setLayout(new BorderLayout());
-		    feedPanel.setLayout(new GridLayout(0,1));
-		    //feedPanel.setLayout(new FlowLayout());
-		    /*
+			//System.out.println(feed);
+			/*
 			for(FeedItem feedItem : feedItems)
 			{
-				System.out.println("Adding FeedItem to GUI");
-				//mainContainer.add(new JButton(feedItem.source()));
-				//feedPanel.add(new JButton("Assholes"));
-				feedPanel.add(new CustomObject1(feedItem));
-				//mainContainer.repaint();
 				//System.out.println(feedItem);
-			}*/
-		    /*JPanel obj2 = //new TextFieldButton();
-		    	new CustomObject1("Fuck em");
-		    JPanel obj1 = //new TextFieldButton();
-		    	//new CustomObject1();
-		    feedPanel.add(obj1);
-		    feedPanel.add(obj2);
-		    obj2.setVisible(true);
-		    feedPanel.repaint();
-		    feedPanel.add(new JButton("asshates"));
-		    feedPanel.add(new JButton("asshates"));
-		    feedPanel.setBackground(Color.BLACK);
-			scrollPane.setViewportView(feedPanel);
-			//scrollPane.re
-		    frame.setVisible(true);*/
+			}
+			*/
 			
 		}
 		catch(TweeterException e)
