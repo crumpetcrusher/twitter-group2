@@ -43,12 +43,19 @@ public class Main {
 		//Testing Methods
 		
 			//testSubscriptions();
-			testFeedStuff();
+			//testFeedStuff();
 			//testTweeter();
+			testSearch();
 		
 		// This will be where we create our GUI object and show it, but
 		// for now, it will just be a blank main class
 		
+	}
+	
+	public static void testSearch()
+	{
+		Search search = new Search("Obama");
+		search.printTweets(System.out);
 	}
 	
 	public static void testTweeter()
