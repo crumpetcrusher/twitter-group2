@@ -13,6 +13,7 @@ import javax.xml.xpath.*;
 
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.xml.sax.InputSource;
 
@@ -40,7 +41,7 @@ public class Tweeter
 	/**
 	 * Stores the users info XML feed url
 	 */
-	private final String userXMLInfoURL = "http://api.twitter.com/1/users/show.xml?user_id=";
+	private final String userXMLInfoURL = "http://api.twitter.com/1/users/show.xml";
 	/**
 	 * Stores the users timeline XML feed url
 	 */
@@ -48,7 +49,7 @@ public class Tweeter
     /**
      * Stores the users unique id.
      */
-    private String userID;
+    private String user;
     /**
      * Stores the real name of the user
      */
@@ -93,11 +94,13 @@ public class Tweeter
      * @author Scott Smiesko
      * @param  newUserID - userID used to get twitter feed
      */
-    public Tweeter(String newUserID) throws TweeterException
+    public Tweeter(String newUser) throws TweeterException
     {
-    	System.out.println("Creating Tweeter Object for User ID: " + newUserID );
-    	if(!validID(newUserID)) throw new InvalidUserID(newUserID);
-    	userID = newUserID;
+    	System.out.println("Creating Tweeter Object for: " + newUser );
+    	
+    	
+    	//if(!validID(newUserID) && Integer.valueOf(newUserID) > 0) throw new InvalidUserID(newUserID);
+    	user = newUser;
     	downloadXML();
     	//if(tweeterXML == null) throw new TweeterException(userID);
     	parseXML();
@@ -118,15 +121,25 @@ public class Tweeter
     private void downloadXML()
     {
 		System.out.println("Downloading Tweeter Information.");
-		try 
-		{
-			tweeterXML = new SAXBuilder().build(new URL(userXMLInfoURL + userID));
-		} 
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			tweeterXML = null;
-		}
+		
+			try {
+				tweeterXML = new SAXBuilder().build(new URL(userXMLInfoURL + "?user_id=" + user));
+			} catch (Exception e) {
+				e.printStackTrace();
+				tweeterXML = null;
+			}
+			
+			
+			if(tweeterXML == null)
+			{
+				try {
+					tweeterXML = new SAXBuilder().build(new URL(userXMLInfoURL + "?scree_name=" + user));
+				} catch (Exception e) {
+					e.printStackTrace();
+					tweeterXML = null;
+			}
+			}
+		
     }
     /**
      * Populates the rest of a tweeter object with data from the XML feed
@@ -155,7 +168,7 @@ public class Tweeter
      */
     public String getUserID()
     {
-        return userID;
+        return user;
     }
     
     /**
@@ -197,7 +210,7 @@ public class Tweeter
     	userInfo = "[Tweeter Object]"							+	"\n\t"	+
     			   "\tInfo: "			+ 	userXMLInfoURL 		+ 	"\n\t" 	+
     			   "\tTimeline: " 		+ 	userXMLTimelineURL 	+ 	"\n\t" 	+
-    			   "\tID: " 			+ 	userID 				+ 	"\n\t" 	+
+    			   "\tID: " 			+ 	user 				+ 	"\n\t" 	+
     			   "\tReal Name: " 		+ 	realName 			+ 	"\n\t"	+
     			   "\tScreen Name: "	+ 	screenName 			+ 	"\n\t" 	+
     			   "\tLocation: "		+ 	userLocation 		+ 	"\n\t" 	+
