@@ -76,13 +76,12 @@ public class Search extends Timeline {
 					System.out.println("AhHhH");
 					tweeter = new Tweeter(user);
 					Tweet tweet = new Tweet(tweeter, tweetID, tweetText, new Date(tweetDate), tweetSource);
-					temp.add(tweet);
+					addFeedItem(tweet);
 				} catch (TweeterException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-			setTweets(temp.toArray(new Tweet[temp.size()]));
 		}
 		catch(NullPointerException e)
 		{

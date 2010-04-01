@@ -1,13 +1,13 @@
 package SortingClasses;
 
 import java.util.Date;
-import Twitter.Tweet;
+import RandomClasses.FeedItem;
 
 /**
  * This class allows for sorting chronologically using the .sort method.
  * @author rah323
  */
-public class ChronologicalTweet implements TweetComparer {
+public class ChronologicalFeedItem implements FeedComparer {
 	
 	//Class Variables
 	
@@ -21,7 +21,7 @@ public class ChronologicalTweet implements TweetComparer {
 	/**
 	 * Constructor allows for no inputs. Automatically does descending order.
 	 */
-	public ChronologicalTweet()
+	public ChronologicalFeedItem()
 	{
 	}
 	
@@ -30,7 +30,7 @@ public class ChronologicalTweet implements TweetComparer {
 	 * 
 	 * @param isDescending Descending = true, Ascending = false;
 	 */
-	public ChronologicalTweet(boolean isDescending)
+	public ChronologicalFeedItem(boolean isDescending)
 	{
 		descending = isDescending;
 	}
@@ -43,13 +43,13 @@ public class ChronologicalTweet implements TweetComparer {
 	 * @param anotherTweet 
 	 * @return <font color=red>Used only by the Comparator class</font>
 	 */
-	public int compare(Tweet tweet, Tweet anotherTweet)
+	public int compare(FeedItem feedItem, FeedItem anotherfeedItem)
 	{
 		int sortInt;
-		Date tweetDate 		= tweet.getDate();
-		Date anotherTweetDate = anotherTweet.getDate();
+		Date feedItemDate 		= feedItem.date();
+		Date anotherfeedItemDate = anotherfeedItem.date();
 		
-		sortInt = tweetDate.compareTo(anotherTweetDate);
+		sortInt = feedItemDate.compareTo(anotherfeedItemDate);
 		
 		if(!descending)
 			sortInt *= -1;

@@ -43,9 +43,9 @@ public class Main {
 		//Testing Methods
 		
 			//testSubscriptions();
-			//testFeedStuff();
+			testFeedStuff();
 			//testTweeter();
-			testSearch();
+			//testSearch();
 		
 		// This will be where we create our GUI object and show it, but
 		// for now, it will just be a blank main class
@@ -54,8 +54,8 @@ public class Main {
 	
 	public static void testSearch()
 	{
-		Search search = new Search("Obama");
-		search.printTweets(System.out);
+		//Search search = new Search("Obama");
+		//search.printTweets(System.out);
 	}
 	
 	public static void testTweeter()
@@ -77,7 +77,7 @@ public class Main {
 			//System.out.println(testString);
 			
 		//Tweeter toString
-			System.out.println(tweeter);
+			//System.out.println(tweeter);
 		}
 		catch(TweeterException e)
 		{
@@ -93,8 +93,11 @@ public class Main {
 		{
 		//Feed Creation
 			Feed feed = 
-				//new MultipleTimeline( new Timeline[] {new UserTimeline(new Tweeter("24973163")), new UserTimeline(new Tweeter("14103500"))} );
-				new UserTimeline(new Tweeter("14103500"));
+				new Timeline();
+				//Fill The MultipleTimeline
+					feed.add(new UserTimeline("24973163"));
+					feed.add(new UserTimeline("14103500"));
+				//new UserTimeline("14103500");
 		
 		//Feed Organize
 			//feed.organizeByDate();
@@ -108,16 +111,12 @@ public class Main {
 			//feed.refresh();
 		
 		//Feed Print
-			//System.out.println(feed);
-			/*
-			for(FeedItem feedItem : feedItems)
-			{
-				//System.out.println(feedItem);
-			}
-			*/
+			System.out.println(feed);
+			//System.out.println(((Timeline)feed).printFeeds());
+			
 			
 		}
-		catch(TweeterException e)
+		catch(Exception e)
 		{
 			
 		}
