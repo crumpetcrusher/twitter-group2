@@ -1,12 +1,13 @@
 package SortingClasses;
 
+import RandomClasses.FeedItem;
 import Twitter.Tweet;
 
 /**
  * This class allows for sorting alphabetically using the .sort method.
  * @author rah323
  */
-public class AlphabeticallyTweet implements TweetComparer {
+public class AlphabeticallyFeedItem implements FeedComparer {
 
 	//Class Variables
 	/**
@@ -19,7 +20,7 @@ public class AlphabeticallyTweet implements TweetComparer {
 	/**
 	 * Constructor allows for no inputs. Automatically does descending order.
 	 */
-	public AlphabeticallyTweet()
+	public AlphabeticallyFeedItem()
 	{
 	}
 	
@@ -28,7 +29,7 @@ public class AlphabeticallyTweet implements TweetComparer {
 	 * 
 	 * @param isDescending Descending = true, Ascending = false;
 	 */
-	public AlphabeticallyTweet(boolean isDescending)
+	public AlphabeticallyFeedItem(boolean isDescending)
 	{
 		descending = isDescending;
 	}
@@ -41,13 +42,13 @@ public class AlphabeticallyTweet implements TweetComparer {
 	 * @param anotherTweet 
 	 * @return <font color=red>Used only by the Comparator class</font>
 	 */
-	public int compare(Tweet tweet, Tweet anotherTweet)
+	public int compare(FeedItem feedItem, FeedItem anotherfeedItem)
 	{
 		int sortInt;
-		String tweetText 		= tweet.getText();
-		String anotherTweetText = anotherTweet.getText();
+		String feedItemText 		= feedItem.source();
+		String anotherFeedItemText = anotherfeedItem.source();
 		
-		sortInt = tweetText.compareTo(anotherTweetText);
+		sortInt = feedItemText.compareTo(anotherFeedItemText);
 		
 		if(!descending)
 			sortInt *= -1;

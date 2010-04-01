@@ -43,14 +43,15 @@ public class UserTimeline extends Timeline{
 	
 	//Class Constructor
 	
-	/**
-	 * Default Constructor for populating a User_Timeline object
-	 * @param newUserID
-	 */
-	public UserTimeline(Tweeter newTweeter) throws UserProtectedException
+	public UserTimeline(String newTweeter)
 	{
-		System.out.println("Creating User Timeline for " + newTweeter.getScreenName());
-		tweeter = newTweeter;
+		System.out.println("Creating User Timeline for " + newTweeter);
+		try {
+			tweeter = new Tweeter(newTweeter);
+		} catch (TweeterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		refresh();
 	}
 	
@@ -99,9 +100,8 @@ public class UserTimeline extends Timeline{
 				String tweetDate = element.getChildText("created_at");
 				
 				Tweet tweet = new Tweet(tweeter, tweetID, tweetText, new Date(tweetDate), tweetSource);
-				temp.add(tweet);
+				addFeedItem(tweet);
 			}
-			setTweets(temp.toArray(new Tweet[temp.size()]));
 		}
 		catch(NullPointerException e)
 		{

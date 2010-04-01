@@ -15,6 +15,8 @@ public interface Feed {
 	public void organizeByText();
 	
 	public void organizeBySource();
+	
+	public void add(Feed feed);
 
 	public String toString();
 }
