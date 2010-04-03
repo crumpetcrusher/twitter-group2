@@ -1,25 +1,16 @@
 package Twitter;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.MalformedURLException;
+import java.awt.Component;
+import java.awt.Image;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
-import javax.imageio.ImageIO;
-import javax.xml.xpath.*;
+import javax.swing.ImageIcon;
 
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
-import org.xml.sax.InputSource;
 
-import Exceptions.*;
-import RandomClasses.*;
-import Timelines.UserTimeline;
+import Exceptions.TweeterException;
 
 
 /**
@@ -77,7 +68,7 @@ public class Tweeter
     /**
      * Stores the tweeter's profile picture.
      */
-    private BufferedImage userPicture = null;
+    private Image userPicture = null;
     /**
      * Stores the timeline for this user.
      */
@@ -158,6 +149,7 @@ public class Tweeter
 		userLocation = element.getChildText("location");
 		userDescription = element.getChildText("description");
 		userProtected = Boolean.parseBoolean(element.getChildText("protected"));
+		//userPicture = new ImageIcon(element.getChildText("picture")).getImage();
     }
 
     /**
@@ -191,6 +183,11 @@ public class Tweeter
 	public String getRealName() 
 	{
 		return realName;
+	}
+	
+	public Image getUserPicture()
+	{
+		return userPicture;
 	}
 	
 	public boolean isProtected()
