@@ -1,16 +1,20 @@
 package Twitter;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.Event;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.util.ArrayList;
+import java.util.Date;
 
-import GUI.*;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JPanel;
 
 import Exceptions.TweeterException;
-import RandomClasses.*;
-import SortingClasses.*;
-import Timelines.*;
-import TestingClasses.*;
+import GUI.CompositeTimeline;
+import RandomClasses.Feed;
+import Timelines.Timeline;
+import Timelines.UserTimeline;
 
 
 /**
@@ -18,16 +22,24 @@ import TestingClasses.*;
  */
 public class TwitterApp extends JFrame{
 	
-	Feed feed = null;
 	
 	/**
 	 * Constructor to build our TwitterApp GUI
+	 * @throws TweeterException 
 	 */
-	public TwitterApp()
+	public TwitterApp() throws TweeterException
 	{
 		
-        setTitle("TwitterApp");
+		Container content = new JPanel();
+        content.setLayout(new BorderLayout());
+        
+        ArrayList<Tweet> tweets = new ArrayList<Tweet>();
+        tweets.add(new Tweet(new Tweeter("24973163"), "123", "OMG DOES IT WORK?!", new Date(), "web"));
+        tweets.add(new Tweet(new Tweeter("24973164"), "123", "OMG DOES IT WORK?!", new Date(), "web"));
 
+        
+        content.add(new CompositeTimeline(tweets));
+        
         JMenuBar menubar = new JMenuBar();
         JMenu file = new JMenu("File");
 
@@ -37,29 +49,34 @@ public class TwitterApp extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(300,400);
         setLocation(200,200);
-        setContentPane(new TweetContainer());
+        setContentPane(content);
         setVisible(true);
+        
+        
+        
 	}
 	
 	/**
 	 * main object to run the program
 	 * 
 	 * @param args
+	 * @throws TweeterException 
 	 */
-	public static void main(String[] args)
+	public static void main(String[] args) throws TweeterException
 	{
 		
 		// Testing Methods for Console Output
 		
 			//testSubscriptions();
-			testFeedStuff();
+			//testFeedStuff();
 			//testTweeter();
 			//testSearch();
 		
 			
 		// Testing Methods for GUI Output
-			
-			new TwitterApp();
+		new TwitterApp();
+		
+		// oh hey look at that it does stuff
 		
 	}
 	
