@@ -2,6 +2,7 @@ package Twitter;
 
 import java.awt.Component;
 import java.awt.Image;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
@@ -68,7 +69,7 @@ public class Tweeter
     /**
      * Stores the tweeter's profile picture.
      */
-    private Image userPicture = null;
+    private ImageIcon userPicture = null;
     /**
      * Stores the timeline for this user.
      */
@@ -149,7 +150,12 @@ public class Tweeter
 		userLocation = element.getChildText("location");
 		userDescription = element.getChildText("description");
 		userProtected = Boolean.parseBoolean(element.getChildText("protected"));
-		//userPicture = new ImageIcon(element.getChildText("picture")).getImage();
+		try {
+			userPicture = new ImageIcon(new URL(element.getChildText("profile_image_url")));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     /**
@@ -185,7 +191,7 @@ public class Tweeter
 		return realName;
 	}
 	
-	public Image getUserPicture()
+	public ImageIcon getUserPicture()
 	{
 		return userPicture;
 	}
