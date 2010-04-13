@@ -177,6 +177,9 @@ public class Subscriptions {
 		}
 	}
 	
+	public ArrayList<Tweeter> getSubscriptions(){
+		return subscribedTweeters;
+	}
 	/**
 	 * Testing method for showing if our tweeters array has been filled;
 	 * 
