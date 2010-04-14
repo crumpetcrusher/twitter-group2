@@ -5,12 +5,13 @@ import java.net.URL;
 
 import javax.swing.ImageIcon;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.input.SAXBuilder;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import Exceptions.TweeterException;
 import Timelines.UserTimeline;
+import backend.XMLHelper;
 
 
 /**
@@ -77,7 +78,7 @@ public class Tweeter
     	
     	//if(!validID(newUserID) && Integer.valueOf(newUserID) > 0) throw new InvalidUserID(newUserID);
     	userID = newUser;
-    	downloadXML();
+    	getXML();
     	//if(tweeterXML == null) throw new TweeterException(userID);
     	parseXML();
 
@@ -98,30 +99,11 @@ public class Tweeter
     }
     
     
-    private void downloadXML()
+    private void getXML()
     {
 		System.out.println("Downloading Tweeter Information.");
-
 		
-			try {
-				System.out.println("from user_id");
-				tweeterXML = new SAXBuilder().build(new URL(userXMLInfoURL + "?user_id=" + userID));
-			} catch (Exception e) {
-				e.printStackTrace();
-				tweeterXML = null;
-			}
-			
-			
-			if(tweeterXML == null)
-			{
-				try {
-					System.out.println("from screen_name");
-					tweeterXML = new SAXBuilder().build(new URL(userXMLInfoURL + "?screen_name=" + userID));
-				} catch (Exception e) {
-					e.printStackTrace();
-					tweeterXML = null;
-			}
-			}
+		tweeterXML = XMLHelper.getUserInfoByUserID(userID);	
 		
     }
     /**
@@ -134,19 +116,39 @@ public class Tweeter
     {
        	System.out.println("Parsing Tweeter XML");
        	
-       	Element element = tweeterXML.getRootElement();
+       	Element user;
+       	Element name;
+       	Element screen_name;
+       	Element isProtected;
+       	Element picture;
        	
-		realName = element.getChildText("name");
-		screenName = element.getChildText("screen_name");
-		userProtected = Boolean.parseBoolean(element.getChildText("protected"));
-		try {
-			userPicture = new ImageIcon(new URL(element.getChildText("profile_image_url")));
+       	user = (Element)(tweeterXML.getFirstChild());
+       	
+       	
+       	name = (Element)user.getElementsByTagName("name").item(0);
+       	realName = name.getTextContent();
+       	
+        screen_name = (Element)(user.getElementsByTagName("screen_name").item(0));
+        screenName = screen_name.getTextContent();
+        
+        isProtected = (Element)(user.getElementsByTagName("protected").item(0));
+        userProtected = Boolean.parseBoolean(isProtected.getTextContent());
+        
+        picture = (Element)(user.getElementsByTagName("profile_image_url").item(0));
+        try {
+			userPicture = new ImageIcon(new URL(picture.getTextContent()));
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (DOMException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-    }
 
+       	
+    }
+    
+    
     /**
      * This gets the person's unique id.
      *

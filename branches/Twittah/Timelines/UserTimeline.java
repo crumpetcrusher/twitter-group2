@@ -1,24 +1,19 @@
 package Timelines;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import Exceptions.TweeterException;
 import Twitter.Tweet;
 import Twitter.Tweeter;
+import backend.XMLHelper;
 
 
 public class UserTimeline{
 	
-
-	private final String userTimlineURL = "http://api.twitter.com/1/statuses/user_timeline.xml?user_id=";
 	private Document timelineXML 		= null;
 	private Tweeter tweeter 			= null;
 	private ArrayList<Tweet> userTweets = null;
@@ -40,42 +35,51 @@ public class UserTimeline{
 		
 		System.out.println("Downloading User Timeline.");
 
-		try 
-		{
-			timelineXML = new SAXBuilder().build(new URL(userTimlineURL + tweeter.getUserID()));
-		}
-		catch(JDOMException e) {}
-		catch (IOException e)
-		{
-			System.out.println(tweeter.getUserID() + "'s tweets seem to be locked!");
-			timelineXML = null;
-		}
+		timelineXML = XMLHelper.getTweetsByUserID(tweeter.getUserID());
+		
 	}
 	
 
 	private void parseXML()
 	{
 		System.out.println("Parsing UserTimeline XML");
+		
+		userTweets = new ArrayList<Tweet>();
 	
-		try
+		Element statuses;
+		Element status;
+		Element id;
+		Element text;
+		Element method;
+		Element date;
+		
+		NodeList allStatuses;
+		
+		statuses = (Element)(timelineXML.getDocumentElement());
+		
+		allStatuses = statuses.getElementsByTagName("status");
+		
+		for (int t=0; t < allStatuses.getLength(); ++t)
 		{
-			List<Element> statuses = timelineXML.getRootElement().getChildren("status");
-			userTweets = new ArrayList<Tweet>();
+			status = (Element)(allStatuses.item(t));
 			
-			for(Element element : statuses)
-			{
-				String tweetID = element.getChildText("id");
-				String tweetText = element.getChildText("text");
-				String tweetSource = element.getChildText("source");
-				String tweetDate = element.getChildText("created_at");
-				
-				Tweet tweet = new Tweet(tweeter, tweetID, tweetText, new Date(tweetDate), tweetSource);
-				userTweets.add(tweet);
-			}
+			id = (Element)status.getElementsByTagName("id").item(0);
+			String tweetID = id.getTextContent();
+			
+			text = (Element)status.getElementsByTagName("text").item(0);
+			String tweetText = text.getTextContent();
+			
+			method = (Element)status.getElementsByTagName("source").item(0);
+			String tweetMethod = method.getTextContent();
+			
+			date = (Element)status.getElementsByTagName("created_at").item(0);
+			String tweetDate = date.getTextContent();
+			
+			Tweet tweet = new Tweet(tweeter, tweetID, tweetText, new Date(tweetDate), tweetMethod);
+		
+			userTweets.add(tweet);
 		}
-		catch(NullPointerException e)
-		{
-		}
+		
 	}
 	
 	public void refresh()
