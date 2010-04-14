@@ -26,7 +26,7 @@ public class Main{
 	public static Container TwitterApp() throws Exception
 	{
 		
-		Subscriptions mainSubscriptions = new Subscriptions("src/subscriptionlist.xml");
+		Subscriptions mainSubscriptions = new Subscriptions("subscriptionlist.xml");
 		CompositeTimeline timeline = new CompositeTimeline();
 		
 		
@@ -48,7 +48,7 @@ public class Main{
 		JScrollPane TLView = new JScrollPane(new TimelineViewer(timeline));
 		
 		TLView.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		
+
         
         // Add everything to our GUI container
         //
