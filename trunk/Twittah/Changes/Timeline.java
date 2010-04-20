@@ -1,15 +1,14 @@
 package Changes;
 
-import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
-public class Timeline {
+import Timelines.UserTimeline;
 
+public class Timeline {
+	
 	private List<Timeline> timelines = new ArrayList<Timeline>();
 	
 	private List<DisplayItem> displayItems = new ArrayList<DisplayItem>();
@@ -18,10 +17,6 @@ public class Timeline {
 	
 	public void refresh()
 	{
-		for(Timeline timeline : timelines)
-		{
-			timeline.update();
-		}
 		clear();
 		fill();
 		organizeBy(currentOrganize);
@@ -34,10 +29,9 @@ public class Timeline {
 	}
 	
 	
-	public void add(Timeline timeline)
+	public void addTimeline(Timeline timeline)
 	{
 		timelines.add(timeline);
-		clear();
 		fill();
 	}
 	
@@ -53,9 +47,15 @@ public class Timeline {
 	
 	private void fill()
 	{
+		System.out.println(timelines.toString());
 		for(Timeline timeline : timelines)
-			for(DisplayItem displayItem : timeline.displayItems)
+		{
+			for(DisplayItem displayItem : ((UserTimeline)timeline).getUserTweets())
+			{
+				
 				addDisplayItem(displayItem);
+			}
+		}
 	}
 	
 	public String printFeeds()
