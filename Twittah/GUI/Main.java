@@ -63,14 +63,6 @@ public class Main{
 	{
 		
 		SubscriptionsManager mainSubscriptions = new SubscriptionsManager("subscriptionlist.xml");
-		Timeline timeline = new Timeline();
-		
-		
-		
-		for(Tweeter tweeter : mainSubscriptions.getSubscriptions())
-		{
-			timeline.add(tweeter.getUserTimeline());
-		}
 		
 		
 		
@@ -83,7 +75,7 @@ public class Main{
 		
 		// TimelineViewer Container
 		//
-		JScrollPane TLView = new JScrollPane(new TimelineViewer(timeline));
+		JScrollPane TLView = new JScrollPane(new TimelineViewer(mainSubscriptions.getCompositeTimeline()));
 		
 		TLView.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 

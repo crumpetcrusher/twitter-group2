@@ -19,6 +19,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
+import Changes.Timeline;
 import Exceptions.TweeterException;
 import backend.XMLHelper;
 
@@ -40,6 +41,8 @@ public class SubscriptionsManager {
 	 * Stores the arraylist of Tweeters (people we are subscribing to)
 	 */
 	private ArrayList<Tweeter> subscribedTweeters = new ArrayList<Tweeter>();
+	
+	private Timeline compositeTimeline = new Timeline();
 	
 	/**
 	 * Stores the file location of the subscription list.
@@ -65,7 +68,8 @@ public class SubscriptionsManager {
 		Document subscriptionList = null;
 		subscriptionList = XMLHelper.getDocumentByLocation(subscriptionListLocation);
 		
-		fillSubscriptions(subscriptionList);
+		fillTweeters(subscriptionList);
+		fillTimeline(subscribedTweeters);
 		
 	}
 	
@@ -78,9 +82,11 @@ public class SubscriptionsManager {
 	 * Fills the subscribed tweeters based on the subscription document
 	 * @param subscriptionList 
 	 */
-	private void fillSubscriptions(Document subscriptionList)
+	private void fillTweeters(Document subscriptionList)
 	{
 		
+		// First, we fill our tweeters
+		//
 		Element 	subscriptions;
 		
 		NodeList	tweeters;
@@ -102,7 +108,17 @@ public class SubscriptionsManager {
 				
 		}
 		
+		
 		System.out.println("Array of tweeters is now constructed..");
+		
+	}
+	
+	private void fillTimeline(ArrayList<Tweeter> tweeters)
+	{
+		for (Tweeter tweeter : tweeters)
+		{
+			compositeTimeline.addTimeline(tweeter.getUserTimeline());
+		}
 	}
 	
 	/**
@@ -227,6 +243,10 @@ public class SubscriptionsManager {
 	
 	public ArrayList<Tweeter> getSubscriptions(){
 		return subscribedTweeters;
+	}
+	
+	public Timeline getCompositeTimeline(){
+		return compositeTimeline;
 	}
 
 }
