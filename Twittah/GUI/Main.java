@@ -64,9 +64,10 @@ public class Main{
 		
 		SubscriptionsManager mainSubscriptions = new SubscriptionsManager("subscriptionlist.xml");
 		
+		mainSubscriptions.addNewSubscription("frappe051");
+		mainSubscriptions.addNewSubscription("soljia");
 		
-		
-		
+
 		// GUI Container
 		//
 		Container GUI = new JPanel();

@@ -47,7 +47,6 @@ public class Timeline {
 	
 	private void fill()
 	{
-		System.out.println(timelines.toString());
 		for(Timeline timeline : timelines)
 		{
 			for(DisplayItem displayItem : ((UserTimeline)timeline).getUserTweets())

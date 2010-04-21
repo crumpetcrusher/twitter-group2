@@ -1,7 +1,13 @@
 package Timelines;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.text.html.HTML;
+
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -21,11 +27,12 @@ public class UserTimeline extends Timeline{
 	
 	//Class Constructor
 	
-	public UserTimeline(Tweeter newTweeter)
+	public UserTimeline(Tweeter newTweeter) throws TweeterException
 	{
 		tweeter = newTweeter;
 		System.out.println("Creating User Timeline for " + tweeter.getUserName());
-		refresh();
+		downloadXML();
+		parseXML();
 	}
 	
 
@@ -71,7 +78,8 @@ public class UserTimeline extends Timeline{
 			String tweetText = text.getTextContent();
 			
 			method = (Element)status.getElementsByTagName("source").item(0);
-			String tweetMethod = method.getTextContent();
+			Element methodName = (Element)method.getElementsByTagName("a").item(0);
+			String tweetMethod = methodName.getTextContent();
 			
 			date = (Element)status.getElementsByTagName("created_at").item(0);
 			String tweetDate = date.getTextContent();
