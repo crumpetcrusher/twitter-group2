@@ -1,6 +1,7 @@
 package Changes;
 
 import java.awt.image.BufferedImage;
+import java.net.URI;
 import java.util.Date;
 
 import Twitter.Tweeter;

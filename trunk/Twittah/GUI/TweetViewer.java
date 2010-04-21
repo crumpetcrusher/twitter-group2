@@ -86,7 +86,7 @@ public class TweetViewer extends JPanel
 		Text.setText(item.text());
 		Username = new JLabel(item.tweeter().getUserName());
 		Picture = new JLabel(item.tweeter().getUserPicture());
-		Source = new JLabel(item.source());
+		Source = new JLabel(item.source().toString());
 		Date = new JLabel(item.date().toString());
 		
 		System.out.println("Test: " + Text.toString() + " : " + Username);

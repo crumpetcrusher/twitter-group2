@@ -1,4 +1,5 @@
 package Twitter;
+import java.net.URI;
 import java.util.*;
 
 import Changes.DisplayItem;
@@ -40,15 +41,15 @@ public class Tweet implements DisplayItem
      * @param newID The unique ID of the tweet.
      * @param newText Message of the tweet.
      * @param newDate The date the tweet was posted.
-     * @param newSource The source from which the tweet came.
+     * @param newMethod The source from which the tweet came.
      */
-    public Tweet(Tweeter newTweeter, String newID, String newText, Date newDate, String newSource)
+    public Tweet(Tweeter newTweeter, String newID, String newText, Date newDate, String newMethod)
     {
     	tweeter = newTweeter;
     	tweetID = newID;
     	tweetText = newText;
     	tweetDate= newDate;
-    	tweetMethod = newSource;
+    	tweetMethod = newMethod;
     }
     
     /**
