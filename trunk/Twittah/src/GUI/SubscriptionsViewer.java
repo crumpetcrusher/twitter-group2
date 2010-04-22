@@ -13,6 +13,7 @@ import Twitter.Tweeter;
 public class SubscriptionsViewer extends JPanel {
 	
 	private SubscriptionsManager subscriptionsMgr;
+	private ButtonManager		 buttonMgr;
 	private JPanel subscriptionItemsPanel;
 	private JScrollPane subscriptionsScrollPane;
 	
@@ -34,13 +35,16 @@ public class SubscriptionsViewer extends JPanel {
 	public void setSubscriptionsManager(SubscriptionsManager newSubscriptionsMgr) {
 		subscriptionsMgr = newSubscriptionsMgr;
 	}
+	public void setButtonManager(ButtonManager newButtonMgr) {
+		buttonMgr = newButtonMgr;
+	}
 	
 	public void refreshSubscriptionsViewer() {
 		
 		subscriptionItemsPanel.removeAll();
 		
 		for(Tweeter tweeter : subscriptionsMgr.getSubscriptions()) {
-			SubscriptionItemViewer subscriptionItem = new SubscriptionItemViewer(tweeter);
+			SubscriptionItemViewer subscriptionItem = new SubscriptionItemViewer(tweeter, buttonMgr);
 			subscriptionItemsPanel.add(subscriptionItem);
 		}
 		

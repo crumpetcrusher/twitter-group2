@@ -19,8 +19,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
+import Changes.DisplayItem;
 import Changes.Timeline;
 import Exceptions.TweeterException;
+import Timelines.SearchTimeline;
 import backend.XMLHelper;
 
 
@@ -50,7 +52,7 @@ public class SubscriptionsManager {
 	private String subscriptionListLocation;
 	
 	
-	public void refreshTimeline() {
+	public void fillCompositeTimeline() {
 		
 		compositeTimeline.clear();
 		for (Tweeter tweeter : subscribedTweeters)
@@ -62,6 +64,25 @@ public class SubscriptionsManager {
 		compositeTimeline.organizeBy();
 	}
 	
+	public void clearTimeline() {
+		compositeTimeline.clear();
+	}
+	
+	public void addUserToTimeline(String name) {
+		
+		for(Tweeter tweeter : subscribedTweeters){
+			if (tweeter.getUserName().equals(name)) {
+				compositeTimeline.addTimeline(tweeter.getUserTimeline());
+			}
+		}
+		
+	}
+	
+	public void addSearchToTimeline(String[] query) {
+		SearchTimeline searchTimeline = new SearchTimeline(query);
+		compositeTimeline.addTimeline(searchTimeline);
+	}
+
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	//  Class Constructors
 	//

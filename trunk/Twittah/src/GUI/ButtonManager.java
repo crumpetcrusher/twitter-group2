@@ -14,7 +14,7 @@ public class ButtonManager {
 	
 	public void doAddSubscription(String newName) {
 		subscriptionsMgr.addSubscription(newName);
-		subscriptionsMgr.refreshTimeline();
+		subscriptionsMgr.fillCompositeTimeline();
 		subscriptionsVwr.refreshSubscriptionsViewer();
 		timelineVwr.refreshTimelineViewer();
 		
@@ -24,7 +24,7 @@ public class ButtonManager {
 	
 	public void doDeleteSubscription(String name) {
 		subscriptionsMgr.removeSubscription(name);
-		subscriptionsMgr.refreshTimeline();
+		subscriptionsMgr.fillCompositeTimeline();
 		subscriptionsVwr.refreshSubscriptionsViewer();
 		timelineVwr.refreshTimelineViewer();
 		
@@ -32,8 +32,16 @@ public class ButtonManager {
 	}
 	
 	public void doRefreshTimeline() {
-		subscriptionsMgr.refreshTimeline();
+		subscriptionsMgr.fillCompositeTimeline();
 		timelineVwr.refreshTimelineViewer();
+	}
+	
+	public void doSelectUser(String name) {
+		
+		subscriptionsMgr.clearTimeline();
+		subscriptionsMgr.addUserToTimeline(name);
+		timelineVwr.refreshTimelineViewer();
+		
 	}
 	
 	public void setSubscriptionsManager(SubscriptionsManager newSubscriptionsMgr) {

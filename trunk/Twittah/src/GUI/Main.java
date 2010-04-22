@@ -48,6 +48,8 @@ public class Main extends JPanel{
 		buttonMgr.setSubscriptionsViewer(subscriptionsVwr);
 		buttonMgr.setTimelineViewer(timelineVwr);
 		
+		
+		
 		subscriptionsVwr.setSubscriptionsManager(subscriptionsMgr);
 		subscriptionsVwr.refreshSubscriptionsViewer();
 		
@@ -58,6 +60,8 @@ public class Main extends JPanel{
 		timelineVwr.refreshTimelineViewer();
 		
 		add(timelineVwr, BorderLayout.EAST);
+		
+		
 		
 		buttonPanel = new JPanel();
 		
