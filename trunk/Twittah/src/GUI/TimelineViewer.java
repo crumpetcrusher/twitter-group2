@@ -11,11 +11,6 @@ import javax.swing.ScrollPaneConstants;
 import Changes.DisplayItem;
 import Twitter.SubscriptionsManager;
 
-/**
- * Displays all of the TweetContainer GUI objects in a "Timeline" feed
- * @author Frappe051
- *
- */
 public class TimelineViewer extends JPanel
 {
 	private SubscriptionsManager subscriptionsMgr;
@@ -34,6 +29,7 @@ public class TimelineViewer extends JPanel
 		timelineScrollPane.setViewportView(timelineItemsPanel);
 		
 		add(timelineScrollPane);
+		
 	}
 	
 	public void setSubscriptionsManager(SubscriptionsManager newSubscriptionsMgr) {
@@ -52,10 +48,6 @@ public class TimelineViewer extends JPanel
 		timelineScrollPane.setVisible(false);
 		timelineScrollPane.setVisible(true);
 		
-		
-		
 	}
-	
-	
 
 }

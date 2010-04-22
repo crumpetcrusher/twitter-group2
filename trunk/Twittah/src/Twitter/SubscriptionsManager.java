@@ -51,7 +51,15 @@ public class SubscriptionsManager {
 	
 	
 	public void refreshTimeline() {
-		compositeTimeline.refresh();
+		
+		compositeTimeline.clear();
+		for (Tweeter tweeter : subscribedTweeters)
+		{
+			tweeter.getUserTimeline().update();
+			compositeTimeline.addTimeline(tweeter.getUserTimeline());
+		}
+		compositeTimeline.fill();
+		compositeTimeline.organizeBy();
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////

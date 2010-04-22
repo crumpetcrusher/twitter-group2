@@ -15,12 +15,6 @@ public class Timeline {
 	
 	private OrganizeType currentOrganize  = OrganizeType.JAN_DEC;
 	
-	public void refresh()
-	{
-		clear();
-		fill();
-		organizeBy(currentOrganize);
-	}
 	
 	public DisplayItem[] displayItems()
 	{
@@ -39,16 +33,16 @@ public class Timeline {
 		displayItems.add(newDisplayItem);
 	}
 	
-	private void clear()
+	public void clear()
 	{
+		timelines.clear();
 		displayItems.clear();
 	}
 	
-	private void fill()
+	public void fill()
 	{
 		for(Timeline timeline : timelines)
 		{
-			((UserTimeline)timeline).update();
 			for(DisplayItem displayItem : ((UserTimeline)timeline).getUserTweets())
 			{
 				
@@ -76,10 +70,9 @@ public class Timeline {
 		
 	}
 	
-	public void organizeBy(OrganizeType type)
+	public void organizeBy()
 	{
-		currentOrganize = type;
-		Collections.sort(displayItems, new DisplayItemOrganizer(type));
+		Collections.sort(displayItems, new DisplayItemOrganizer(currentOrganize));
 	}
 	
 	

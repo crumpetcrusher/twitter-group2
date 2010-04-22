@@ -31,6 +31,11 @@ public class ButtonManager {
 		
 	}
 	
+	public void doRefreshTimeline() {
+		subscriptionsMgr.refreshTimeline();
+		timelineVwr.refreshTimelineViewer();
+	}
+	
 	public void setSubscriptionsManager(SubscriptionsManager newSubscriptionsMgr) {
 		subscriptionsMgr = newSubscriptionsMgr;
 	}
