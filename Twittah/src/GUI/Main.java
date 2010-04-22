@@ -22,6 +22,7 @@ public class Main extends JPanel{
 	private JPanel				 buttonPanel;
 	private JButton				 addSubscriptionButton;
 	private JButton				 deleteSubscriptionButton;
+	private JButton				 refreshTimelineButton;
 	
 	
 	/**
@@ -95,6 +96,17 @@ public class Main extends JPanel{
 				});
 
 		buttonPanel.add(deleteSubscriptionButton);
+		
+		refreshTimelineButton = new JButton("Refresh Timeline");
+		
+		refreshTimelineButton.addActionListener(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+							buttonMgr.doRefreshTimeline();
+					}
+				});
+		
+		buttonPanel.add(refreshTimelineButton);
 		
 		add(buttonPanel, BorderLayout.SOUTH);
 		

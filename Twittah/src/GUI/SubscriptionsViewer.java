@@ -13,7 +13,6 @@ import Twitter.Tweeter;
 public class SubscriptionsViewer extends JPanel {
 	
 	private SubscriptionsManager subscriptionsMgr;
-	
 	private JPanel subscriptionItemsPanel;
 	private JScrollPane subscriptionsScrollPane;
 	
@@ -47,12 +46,7 @@ public class SubscriptionsViewer extends JPanel {
 		
 		subscriptionsScrollPane.setVisible(false);
 		subscriptionsScrollPane.setVisible(true);
-		
-		
-		
+
 	}
-	
-	
-	
 
 }
