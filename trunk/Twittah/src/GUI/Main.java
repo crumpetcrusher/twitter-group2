@@ -13,6 +13,11 @@ import Twitter.SubscriptionsManager;
 
 public class Main extends JPanel{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5964038338276344070L;
+
 	private SubscriptionsManager subscriptionsMgr;
 	
 	private SubscriptionsViewer	 subscriptionsVwr;

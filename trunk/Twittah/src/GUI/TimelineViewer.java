@@ -7,12 +7,17 @@ import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 
 import Changes.DisplayItem;
 import Twitter.SubscriptionsManager;
 
 public class TimelineViewer extends JPanel
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6080155935322827731L;
 	private SubscriptionsManager subscriptionsMgr;
 	private JPanel timelineItemsPanel;
 	private JScrollPane timelineScrollPane;
@@ -45,8 +50,13 @@ public class TimelineViewer extends JPanel
 			timelineItemsPanel.add(displayItem);
 		}
 		
-		timelineScrollPane.setVisible(false);
-		timelineScrollPane.setVisible(true);
+		SwingUtilities.invokeLater( new Runnable() {
+			public void run() {
+				timelineScrollPane.setVisible(false);
+				timelineScrollPane.setVisible(true);
+			}
+		});
+		
 		
 	}
 
