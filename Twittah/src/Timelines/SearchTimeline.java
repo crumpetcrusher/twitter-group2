@@ -1,22 +1,17 @@
 	package Timelines;
 
-	import java.net.URL;
 	import java.util.ArrayList;
-	import java.util.Date;
-	import java.util.List;
-	import java.util.regex.*;
-	import org.w3c.dom.DOMException;
-	import org.w3c.dom.Document;
-	import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-	import org.w3c.dom.NodeList;
+import java.util.Date;
 
-import backend.XMLHelper;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
-import Twitter.Tweet;
-	import Twitter.Tweeter;
 import Changes.Timeline;
 import Exceptions.TweeterException;
+import Twitter.Tweet;
+import Twitter.Tweeter;
+import backend.XMLHelper;
 
 public class SearchTimeline extends Timeline {
 
@@ -155,5 +150,9 @@ public class SearchTimeline extends Timeline {
 		}
 		
 
+		public ArrayList<Tweet> getSearchTweets() {
+			
+			return tweets;
+		}
 
 }
