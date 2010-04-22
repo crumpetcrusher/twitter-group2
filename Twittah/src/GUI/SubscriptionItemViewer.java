@@ -13,6 +13,10 @@ import Twitter.Tweeter;
 
 public class SubscriptionItemViewer extends JPanel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3820782173640263639L;
 	private ButtonManager buttonMgr;
 	private String tweeterName;
 	private ImageIcon tweeterIcon;

@@ -1,17 +1,21 @@
 package GUI;
 
-import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 
 import Twitter.SubscriptionsManager;
 import Twitter.Tweeter;
 
 public class SubscriptionsViewer extends JPanel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2630564832490907193L;
 	private SubscriptionsManager subscriptionsMgr;
 	private ButtonManager		 buttonMgr;
 	private JPanel subscriptionItemsPanel;
@@ -47,9 +51,13 @@ public class SubscriptionsViewer extends JPanel {
 			SubscriptionItemViewer subscriptionItem = new SubscriptionItemViewer(tweeter, buttonMgr);
 			subscriptionItemsPanel.add(subscriptionItem);
 		}
-		
-		subscriptionsScrollPane.setVisible(false);
-		subscriptionsScrollPane.setVisible(true);
+
+			SwingUtilities.invokeLater( new Runnable() {
+				public void run() {
+					subscriptionsScrollPane.setVisible(false);
+					subscriptionsScrollPane.setVisible(true);
+				}
+			});
 
 	}
 

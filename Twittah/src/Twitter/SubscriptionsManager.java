@@ -19,7 +19,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
-import Changes.DisplayItem;
 import Changes.Timeline;
 import Exceptions.TweeterException;
 import Timelines.SearchTimeline;
