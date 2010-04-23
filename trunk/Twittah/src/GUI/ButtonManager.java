@@ -1,7 +1,6 @@
 package GUI;
 
-import javax.swing.SwingUtilities;
-
+import Changes.OrganizeType;
 import Twitter.SubscriptionsManager;
 
 public class ButtonManager {
@@ -10,7 +9,6 @@ public class ButtonManager {
 	private SubscriptionsViewer  subscriptionsVwr;
 	private TimelineViewer		 timelineVwr;
 	
-	private String temp;
 	
 	public ButtonManager() {
 		
@@ -18,54 +16,77 @@ public class ButtonManager {
 	
 	public void doAddSubscription(String newName) {
 		
-		temp = null;
-		temp = newName;
-		
-		SwingUtilities.invokeLater( new Runnable() {
-			public void run() {
-				subscriptionsMgr.addSubscription(temp);
-				subscriptionsMgr.fillCompositeTimeline();
-				subscriptionsVwr.refreshSubscriptionsViewer();
-				timelineVwr.refreshTimelineViewer();
-				temp = null;
-			}
-		});
+		subscriptionsVwr.setEnabled(false);
+		subscriptionsMgr.addSubscription(newName);
+		subscriptionsMgr.fillCompositeTimeline();
+		subscriptionsVwr.refreshSubscriptionsViewer();
+		timelineVwr.refreshTimelineViewer();
+		subscriptionsVwr.setEnabled(true);
 		
 		
 	}
 	
 	public void doDeleteSubscription(String name) {
-		temp = null;
-		temp = name;
-		SwingUtilities.invokeLater( new Runnable() {
-			public void run() {
-				subscriptionsMgr.removeSubscription(temp);
-				subscriptionsMgr.fillCompositeTimeline();
-				subscriptionsVwr.refreshSubscriptionsViewer();
-				timelineVwr.refreshTimelineViewer();
-				temp = null;
-			}
-		});
+
+		subscriptionsVwr.setEnabled(false);
+		timelineVwr.setEnabled(false);
+		subscriptionsMgr.removeSubscription(name);
+		subscriptionsMgr.fillCompositeTimeline();
+		subscriptionsVwr.refreshSubscriptionsViewer();
+		timelineVwr.refreshTimelineViewer();
+		timelineVwr.setEnabled(true);
+		subscriptionsVwr.setEnabled(true);
 		
 	}
 	
 	public void doRefreshTimeline() {
 		
-		SwingUtilities.invokeLater( new Runnable() {
-			public void run() {
-				subscriptionsMgr.fillCompositeTimeline();
-				timelineVwr.refreshTimelineViewer();
-			}
-		});
+		timelineVwr.setEnabled(false);
+		subscriptionsMgr.fillCompositeTimeline();
+		timelineVwr.refreshTimelineViewer();
+		timelineVwr.setEnabled(true);
+		
 	}
 	
 	public void doSelectUser(String name) {
 		
+		timelineVwr.setEnabled(false);
 		subscriptionsMgr.clearTimeline();
 		subscriptionsMgr.addUserToTimeline(name);
-
 		timelineVwr.refreshTimelineViewer();
+		timelineVwr.setEnabled(true);
 
+	}
+	
+	public void sortByDate() {
+		timelineVwr.setEnabled(false);
+		System.out.println("sorting by date");
+		OrganizeType type = OrganizeType.JAN_DEC;
+		subscriptionsMgr.setOrganizeType(type);
+		subscriptionsMgr.getCompositeTimeline().organize();
+		timelineVwr.refreshTimelineViewer();
+		timelineVwr.setEnabled(true);
+	} 
+	
+	public void sortByAscend() {
+		timelineVwr.setEnabled(false);
+		System.out.println("sorting by ascending alphabetically");
+		OrganizeType type = OrganizeType.Z_A;
+		subscriptionsMgr.setOrganizeType(type);
+		subscriptionsMgr.getCompositeTimeline().organize();
+		timelineVwr.refreshTimelineViewer();
+		timelineVwr.setEnabled(true);
+	}
+	
+	public void sortByDescend() {
+		timelineVwr.setEnabled(false);
+		System.out.println("sorting by descending alphabetically");
+		OrganizeType type = OrganizeType.A_Z;
+		subscriptionsMgr.setOrganizeType(type);
+		subscriptionsMgr.getCompositeTimeline().organize();
+		timelineVwr.refreshTimelineViewer();
+		timelineVwr.setEnabled(true);
+		
 	}
 	
 	public void setSubscriptionsManager(SubscriptionsManager newSubscriptionsMgr) {

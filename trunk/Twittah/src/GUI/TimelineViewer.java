@@ -49,13 +49,9 @@ public class TimelineViewer extends JPanel
 			DisplayItemViewer displayItem = new DisplayItemViewer(tweet);
 			timelineItemsPanel.add(displayItem);
 		}
-		
-		SwingUtilities.invokeLater( new Runnable() {
-			public void run() {
+
 				timelineScrollPane.setVisible(false);
 				timelineScrollPane.setVisible(true);
-			}
-		});
 		
 		
 	}

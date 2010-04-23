@@ -69,21 +69,26 @@ public class Timeline {
 		
 	}
 	
-	public void organizeBy()
+	public void organize()
 	{
 		Collections.sort(displayItems, new DisplayItemOrganizer(currentOrganize));
 	}
 
 
 	public void removeTimeline(Timeline timeline) {
-		String toDeleteTimelineName = ((UserTimeline) timeline).getUserTweets().get(0).getTweeter().getUserName();
+		//String toDeleteTimelineName = ((UserTimeline) timeline).getUserTweets().get(0).getTweeter().getUserName();
 		
 		for(Timeline temp : timelines) {
-			String timelineName = ((UserTimeline) temp).getUserTweets().get(0).getTweeter().getUserName();
-			if (timelineName.equals(toDeleteTimelineName)) {
-				timelines.remove(timelines.iterator());
+			if (temp.equals(timeline)){
+				timelines.remove(timeline);
 			}
 		}
+		
+	}
+
+
+	public void setOrganizeType(OrganizeType type) {
+		currentOrganize = type;
 		
 	}
 	

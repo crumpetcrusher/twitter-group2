@@ -20,6 +20,7 @@ public class SubscriptionItemViewer extends JPanel {
 	private ButtonManager buttonMgr;
 	private String tweeterName;
 	private ImageIcon tweeterIcon;
+	private boolean itemIsSearch = false;
 
 	private JLabel subscriptionItem = new JLabel();
 
@@ -52,5 +53,47 @@ public class SubscriptionItemViewer extends JPanel {
 		
 		add(subscriptionItem);
 	}
+	
+	
+	SubscriptionItemViewer(String search, ButtonManager newButtonMgr) {
+		
+		itemIsSearch = true;
+		buttonMgr = newButtonMgr;
+		tweeterName = search;
+		tweeterIcon = new ImageIcon("src/Changes/twittericon.png");
+		
+		setPreferredSize(new Dimension(200, 60));
+		
+		JButton button = new JButton(tweeterIcon);
+		button.setOpaque(false);
+		button.setBorderPainted(false);
+		button.setContentAreaFilled(false);
+		
+		button.addActionListener(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						System.out.println(tweeterName);
+						buttonMgr.doSelectUser(tweeterName);
+
+					}
+				});
+		
+		add(button);
+		subscriptionItem.setText(tweeterName);
+		
+		add(subscriptionItem);
+		
+		
+		
+	}
+	
+	public boolean isSearch()
+	{
+		return itemIsSearch;
+	}
+	
+	
+	
+	
 	
 }

@@ -16,7 +16,7 @@ public class DisplayItemOrganizer implements Comparator<DisplayItem>{
 	public int compare(DisplayItem item1, DisplayItem item2) {
 		int result = 0;
 		
-		String  comparee1Text = item1.text(), comparee2Text = item2.text();
+		String  comparee1Text = item1.tweeter().getUserName().toLowerCase(), comparee2Text = item2.tweeter().getUserName().toLowerCase();
 		Date comparee1Date = item1.date(), comparee2Date = item2.date();
 		
 		if(type == OrganizeType.A_Z || type ==  OrganizeType.Z_A)
@@ -29,7 +29,7 @@ public class DisplayItemOrganizer implements Comparator<DisplayItem>{
 		else
 		{
 			result = comparee1Date.compareTo(comparee2Date);
-			if(type == OrganizeType.DEC_JAN)
+			if(type == OrganizeType.JAN_DEC)
 				result *= -1;
 		}
 		
