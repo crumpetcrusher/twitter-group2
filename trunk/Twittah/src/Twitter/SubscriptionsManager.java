@@ -52,29 +52,62 @@ public class SubscriptionsManager {
 	
 	
 	public void fillCompositeTimeline() {
-		
-		compositeTimeline.clear();
-		for (Tweeter tweeter : subscribedTweeters)
-		{
-			tweeter.getUserTimeline().update();
-			compositeTimeline.addTimeline(tweeter.getUserTimeline());
-		}
-		compositeTimeline.fill();
-		compositeTimeline.organizeBy();
+		Thread fillCompositeTimeline = new Thread ( new Runnable () {
+			public void run() {
+				compositeTimeline.clear();
+				for (Tweeter tweeter : subscribedTweeters)
+				{
+					tweeter.getUserTimeline().update();
+					compositeTimeline.addTimeline(tweeter.getUserTimeline());
+				}
+				compositeTimeline.fill();
+				compositeTimeline.organizeBy();
+				
+			}
+		});
+		fillCompositeTimeline.setDaemon(true);
+		fillCompositeTimeline.start();
 	}
 	
 	public void clearTimeline() {
-		compositeTimeline.clear();
+		Thread clearTimeline = new Thread ( new Runnable () {
+			public void run() {
+				compositeTimeline.clear();
+			}
+		});
+		clearTimeline.setDaemon(true);
+		clearTimeline.start();
 	}
 	
-	public void addUserToTimeline(String name) {
+	public void addUserToTimeline(final String name) {
 		
-		for(Tweeter tweeter : subscribedTweeters){
-			if (tweeter.getUserName().equals(name)) {
-				compositeTimeline.addTimeline(tweeter.getUserTimeline());
+		Thread addUserToTimeline = new Thread ( new Runnable () {
+			public void run() {
+				for(Tweeter tweeter : subscribedTweeters){
+					if (tweeter.getUserName().equals(name)) {
+						compositeTimeline.addTimeline(tweeter.getUserTimeline());
+					}
+				}
+				
 			}
-		}
+		});
+		addUserToTimeline.setDaemon(true);
+		addUserToTimeline.start();
+	}
+	
+	public void removeUserFromTimeline(final String name) {
 		
+		Thread removeUserFromTimeline = new Thread(new Runnable() {
+			public void run() {
+				for(Tweeter tweeter : subscribedTweeters){
+					if (tweeter.getUserName().equals(name)) {
+						compositeTimeline.removeTimeline(tweeter.getUserTimeline());
+					}
+				}
+			}
+		});
+		removeUserFromTimeline.setDaemon(true);
+		removeUserFromTimeline.start();
 	}
 	
 	public void addSearchToTimeline(String[] query) {
@@ -100,8 +133,8 @@ public class SubscriptionsManager {
 		Document subscriptionList = null;
 		subscriptionList = XMLHelper.getDocumentByLocation(subscriptionListLocation);
 		
-		fillTweeters(subscriptionList);
-		fillTimeline();
+		initializeTweeters(subscriptionList);
+		initializeTimeline();
 		
 	}
 	
@@ -114,7 +147,7 @@ public class SubscriptionsManager {
 	 * Fills the subscribed tweeters based on the subscription document
 	 * @param subscriptionList 
 	 */
-	private void fillTweeters(Document subscriptionList)
+	private void initializeTweeters(Document subscriptionList)
 	{
 		
 		// First, we fill our tweeters
@@ -145,7 +178,7 @@ public class SubscriptionsManager {
 		
 	}
 	
-	private void fillTimeline()
+	private void initializeTimeline()
 	{
 		for (Tweeter tweeter : subscribedTweeters)
 		{

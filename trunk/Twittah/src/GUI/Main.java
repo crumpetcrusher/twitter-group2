@@ -64,6 +64,7 @@ public class Main extends JPanel{
 		timelineVwr.setSubscriptionsManager(subscriptionsMgr);
 		timelineVwr.refreshTimelineViewer();
 		
+		
 		add(timelineVwr, BorderLayout.EAST);
 		
 		
@@ -118,6 +119,7 @@ public class Main extends JPanel{
 		buttonPanel.add(refreshTimelineButton);
 		
 		add(buttonPanel, BorderLayout.SOUTH);
+		
 		
 		
         
