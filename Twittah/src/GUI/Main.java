@@ -4,10 +4,16 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 
 import Twitter.SubscriptionsManager;
 
@@ -56,6 +62,7 @@ public class Main extends JPanel{
 		
 		
 		subscriptionsVwr.setSubscriptionsManager(subscriptionsMgr);
+		subscriptionsVwr.setButtonManager(buttonMgr);
 		subscriptionsVwr.refreshSubscriptionsViewer();
 		
 		
@@ -71,7 +78,7 @@ public class Main extends JPanel{
 		
 		buttonPanel = new JPanel();
 		
-		buttonPanel.setLayout(new GridLayout(1,2));
+		buttonPanel.setLayout(new GridLayout(1,0));
 		
 		addSubscriptionButton = new JButton("Add Subscription");
 		
@@ -79,7 +86,7 @@ public class Main extends JPanel{
 				new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						String name = JOptionPane.showInputDialog("Enter Username:");
-						if (name == null){
+						if ((name == null) || (name == "")) {
 							System.out.println("no user entered");
 						}
 						else{
@@ -96,7 +103,7 @@ public class Main extends JPanel{
 				new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						String name = JOptionPane.showInputDialog("Enter username:");
-						if (name == null){
+						if ((name == null) || (name == "")) {
 							System.out.println("no user entered");
 						}
 						else{
@@ -123,6 +130,74 @@ public class Main extends JPanel{
 		
 		
         
+	}
+	
+	public static void main(String[] args) throws Exception
+	{		
+		
+		final Main main = new Main();
+		
+		JFrame frame = new JFrame("Twittah!");
+		
+		
+		// Menubar
+		//
+		JMenuBar menubar = new JMenuBar();
+		JMenu file = new JMenu("File");
+		JMenu sort = new JMenu("Sort");
+		
+		ButtonGroup group = new ButtonGroup();
+		
+		JRadioButtonMenuItem sortByDate = new JRadioButtonMenuItem("Date");
+		sortByDate.setSelected(true);
+		sortByDate.setMnemonic(KeyEvent.VK_R);
+		group.add(sortByDate);
+		sort.add(sortByDate);
+		
+		sortByDate.addActionListener(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						main.buttonMgr.sortByDate();
+					}
+				});
+
+		JRadioButtonMenuItem sortByAscend = new JRadioButtonMenuItem("Alphabetical Ascending");
+		sortByAscend.setMnemonic(KeyEvent.VK_O);
+		group.add(sortByAscend);
+		sort.add(sortByAscend);
+		
+		sortByAscend.addActionListener(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						main.buttonMgr.sortByAscend();
+					}
+				});
+
+		JRadioButtonMenuItem sortByDescend = new JRadioButtonMenuItem("Alphabetical Descending");
+		sortByAscend.setMnemonic(KeyEvent.VK_O);
+		group.add(sortByDescend);
+		sort.add(sortByDescend);
+		
+		sortByDescend.addActionListener(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						main.buttonMgr.sortByDescend();
+					}
+				});
+		
+		menubar.add(file);
+		menubar.add(sort);
+    
+		// TwitterApp Properties
+		//
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(600,600);
+		frame.setJMenuBar(menubar);
+		frame.getContentPane().add(main);
+		frame.pack();
+		frame.setVisible(true);
+		
+		
 	}
 	
 }

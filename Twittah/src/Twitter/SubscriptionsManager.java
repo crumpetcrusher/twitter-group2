@@ -19,6 +19,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
+import Changes.OrganizeType;
 import Changes.Timeline;
 import Exceptions.TweeterException;
 import Timelines.SearchTimeline;
@@ -50,10 +51,13 @@ public class SubscriptionsManager {
 	 */
 	private String subscriptionListLocation;
 	
+	public void setOrganizeType(OrganizeType type) {
+		compositeTimeline.setOrganizeType(type);
+		
+	}
+
 	
 	public void fillCompositeTimeline() {
-		Thread fillCompositeTimeline = new Thread ( new Runnable () {
-			public void run() {
 				compositeTimeline.clear();
 				for (Tweeter tweeter : subscribedTweeters)
 				{
@@ -61,58 +65,44 @@ public class SubscriptionsManager {
 					compositeTimeline.addTimeline(tweeter.getUserTimeline());
 				}
 				compositeTimeline.fill();
-				compositeTimeline.organizeBy();
-				
-			}
-		});
-		fillCompositeTimeline.setDaemon(true);
-		fillCompositeTimeline.start();
+				compositeTimeline.organize();
 	}
 	
 	public void clearTimeline() {
-		Thread clearTimeline = new Thread ( new Runnable () {
-			public void run() {
+
 				compositeTimeline.clear();
-			}
-		});
-		clearTimeline.setDaemon(true);
-		clearTimeline.start();
+
 	}
 	
-	public void addUserToTimeline(final String name) {
-		
-		Thread addUserToTimeline = new Thread ( new Runnable () {
-			public void run() {
+	public void addUserToTimeline(String name) {
+
 				for(Tweeter tweeter : subscribedTweeters){
 					if (tweeter.getUserName().equals(name)) {
 						compositeTimeline.addTimeline(tweeter.getUserTimeline());
 					}
 				}
+				compositeTimeline.fill();
+				compositeTimeline.organize();
 				
-			}
-		});
-		addUserToTimeline.setDaemon(true);
-		addUserToTimeline.start();
 	}
 	
-	public void removeUserFromTimeline(final String name) {
-		
-		Thread removeUserFromTimeline = new Thread(new Runnable() {
-			public void run() {
+	public void removeUserFromTimeline(String name) {
+
 				for(Tweeter tweeter : subscribedTweeters){
 					if (tweeter.getUserName().equals(name)) {
 						compositeTimeline.removeTimeline(tweeter.getUserTimeline());
 					}
 				}
-			}
-		});
-		removeUserFromTimeline.setDaemon(true);
-		removeUserFromTimeline.start();
+				compositeTimeline.fill();
+				compositeTimeline.organize();
+
 	}
 	
 	public void addSearchToTimeline(String[] query) {
 		SearchTimeline searchTimeline = new SearchTimeline(query);
 		compositeTimeline.addTimeline(searchTimeline);
+		compositeTimeline.fill();
+		compositeTimeline.organize();
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -184,6 +174,8 @@ public class SubscriptionsManager {
 		{
 			compositeTimeline.addTimeline(tweeter.getUserTimeline());
 		}
+		compositeTimeline.fill();
+		compositeTimeline.organize();
 	}
 	
 	/**
