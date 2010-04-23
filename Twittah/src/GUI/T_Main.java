@@ -26,6 +26,7 @@ public class T_Main {
 		frame.setSize(600,600);
 		frame.setJMenuBar(menubar);
 		frame.getContentPane().add(main);
+		frame.pack();
 		frame.setVisible(true);
 		
 		

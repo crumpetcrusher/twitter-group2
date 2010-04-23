@@ -60,17 +60,12 @@ public class ButtonManager {
 	}
 	
 	public void doSelectUser(String name) {
-		temp = null;
-		temp = name;
 		
-		SwingUtilities.invokeLater( new Runnable() {
-			public void run() {
-				subscriptionsMgr.clearTimeline();
-				subscriptionsMgr.addUserToTimeline(temp);
-				timelineVwr.refreshTimelineViewer();
-				temp = null;
-			}
-		});
+		subscriptionsMgr.clearTimeline();
+		subscriptionsMgr.addUserToTimeline(name);
+
+		timelineVwr.refreshTimelineViewer();
+
 	}
 	
 	public void setSubscriptionsManager(SubscriptionsManager newSubscriptionsMgr) {

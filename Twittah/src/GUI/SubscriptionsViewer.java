@@ -5,7 +5,6 @@ import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingUtilities;
 
 import Twitter.SubscriptionsManager;
 import Twitter.Tweeter;
@@ -51,13 +50,8 @@ public class SubscriptionsViewer extends JPanel {
 			SubscriptionItemViewer subscriptionItem = new SubscriptionItemViewer(tweeter, buttonMgr);
 			subscriptionItemsPanel.add(subscriptionItem);
 		}
-
-			SwingUtilities.invokeLater( new Runnable() {
-				public void run() {
-					subscriptionsScrollPane.setVisible(false);
-					subscriptionsScrollPane.setVisible(true);
-				}
-			});
+		subscriptionsScrollPane.setVisible(false);
+		subscriptionsScrollPane.setVisible(true);
 
 	}
 
