@@ -55,7 +55,6 @@ public class SubscriptionsManager {
 		compositeTimeline.setOrganizeType(type);
 		
 	}
-
 	
 	public void fillCompositeTimeline() {
 				compositeTimeline.clear();
@@ -98,10 +97,9 @@ public class SubscriptionsManager {
 
 	}
 	
-	public void addSearchToTimeline(String[] query) {
+	public void addSearchToTimeline(String query) {
 		SearchTimeline searchTimeline = new SearchTimeline(query);
 		compositeTimeline.addTimeline(searchTimeline);
-		compositeTimeline.fill();
 		compositeTimeline.organize();
 	}
 

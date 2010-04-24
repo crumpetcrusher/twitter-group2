@@ -2,6 +2,8 @@
 
 	import java.util.ArrayList;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -18,7 +20,7 @@ public class SearchTimeline extends Timeline {
 		private final String searchURL = "http://search.twitter.com/search.atom?q=";
 		private String[] query;
 		private Document timelineXML = null;
-		private ArrayList<Tweet> tweets = null;
+		//private ArrayList<Tweet> tweets = null;
 		
 		
 		public SearchTimeline(String newQuery)
@@ -42,7 +44,7 @@ public class SearchTimeline extends Timeline {
 		 */
 		private void downloadXML() throws TweeterException
 		{
-			System.out.println("Downloading User Timeline.");
+			System.out.println("Downloading Search Timeline.");
 
 			timelineXML = XMLHelper.getTweetsByKeywords(query);
 		}
@@ -53,9 +55,8 @@ public class SearchTimeline extends Timeline {
 		private void parseXML()
 		{
 			
-			System.out.println("Parsing UserTimeline XML");
-			
-			tweets = new ArrayList<Tweet>();
+			System.out.println("Parsing Search XML");
+		
 		
 			Element entries;
 			Element entry;
@@ -65,6 +66,8 @@ public class SearchTimeline extends Timeline {
 			Element date;
 			Element tweeterEle;
 			Tweeter tweeter;
+            Pattern pattern; //= Pattern.compile(console.readLine("%nEnter your regex: "));
+            Matcher matcher; //= pattern.matcher(console.readLine("Enter input string to search: "));
 			
 			NodeList allEntries;
 			
@@ -76,11 +79,11 @@ public class SearchTimeline extends Timeline {
 			{
 				entry = (Element)(allEntries.item(t));
 				
-				id = (Element)entry.getElementsByTagName("uri").item(0);
+				id = (Element)entry.getElementsByTagName("name").item(0);
 				String tweetID = id.getTextContent();
 				tweeter = new Tweeter(tweetID, null, null);
 				
-				text = (Element)entry.getElementsByTagName("content").item(0);
+				text = (Element)entry.getElementsByTagName("title").item(0);
 				String tweetText = text.getTextContent();
 				
 				method = (Element)entry.getElementsByTagName("twitter:source").item(0);
@@ -89,12 +92,19 @@ public class SearchTimeline extends Timeline {
 				
 				date = (Element)entry.getElementsByTagName("published").item(0);
 				String tweetDate = date.getTextContent();
+				pattern = Pattern.compile("T.+");
+				matcher = pattern.matcher(tweetDate);
+				tweetDate = matcher.replaceAll("");
+				pattern = Pattern.compile("-");
+				matcher = pattern.matcher(tweetDate);
+				tweetDate = matcher.replaceAll("/");
+				Date date1 = new Date(tweetDate);
 				
-				System.out.println(tweetID + " - " + tweetText + " - " + method + " - " + tweetDate);
-				Tweet tweet = new Tweet(tweeter, tweetID, tweetText, new Date(tweetDate), tweetMethod);//new Date(tweetDate), tweetMethod);
+				//System.out.println(tweetID + " - " + tweetText + " - " + method + " - " + tweetDate);
+				Tweet tweet = new Tweet(tweeter, tweetID, tweetText, date1, tweetMethod);//new Date(tweetDate), tweetMethod);
 				
-				System.out.println(tweet);
-				tweets.add(tweet);
+				//System.out.println(tweet);
+				addDisplayItem(tweet);
 			}
 			/*	
 			System.out.println("Parsing XML");

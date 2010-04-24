@@ -17,7 +17,9 @@ public class Timeline {
 	
 	public DisplayItem[] displayItems()
 	{
-		DisplayItem[] temp = new DisplayItem[displayItems.size()]; 
+		DisplayItem[] temp = new DisplayItem[displayItems.size()];
+		
+		
 		return displayItems.toArray(temp);
 	}
 	
@@ -25,6 +27,9 @@ public class Timeline {
 	public void addTimeline(Timeline timeline)
 	{
 		timelines.add(timeline);
+		for(DisplayItem item : timeline.displayItems())
+			System.out.println("Text: " + item.text());
+		fill();
 	}
 	
 	protected void addDisplayItem(DisplayItem newDisplayItem)
@@ -40,14 +45,17 @@ public class Timeline {
 	
 	public void fill()
 	{
+		displayItems.clear();
 		for(Timeline timeline : timelines)
 		{
-			for(DisplayItem displayItem : ((UserTimeline)timeline).getUserTweets())
+			//for(DisplayItem displayItem : ((UserTimeline)timeline).getUserTweets())
+			for(DisplayItem displayItem : timeline.displayItems())
 			{
 				
 				addDisplayItem(displayItem);
 			}
 		}
+		organize();
 	}
 	
 	public String printFeeds()
@@ -91,96 +99,6 @@ public class Timeline {
 		currentOrganize = type;
 		
 	}
-	
-	
-	/*
-    **
-     * Gets a tweet by id.
-     *
-     * @author Rick Humes
-     * @param id The id of the tweet.
-     * @return The requested tweet. May be <code>null</code>.
-     * @see Tweet
-     *
-    public Tweet getTweet(String tweetID)
-    {
-    	Tweet tweet_return = null;
-    	if(feedItems != null) {
-	    	for (Tweet tweet : feedItems) {
-	    		if(tweet.getID().equals(tweetID)) {
-	    			tweet_return = tweet.clone();
-	    		}
-	    	}
-    	}
-		return tweet_return;
-    }
-*/
-
-	
-    /*
-     * Gets tweet(s) by date range.
-     *
-     * @author Rick Humes
-     * @param beginDate The earliest tweet able to be shown.
-     * @param endDate The latest tweet able to be shown.
-     * @return The requested tweet(s). May be <code>null</code>.
-     * @see Tweet
-     *
-    public Tweet[] getTweets(Date beginDate, Date endDate)
-    {
-    	Tweet[] tweet_return = null;
-    	try
-    	{
-    		if(feedItems != null)
-    		{
-        		ArrayList<Tweet> requestedTweets = new ArrayList<Tweet>();
-	    		for (Tweet tweet : feedItems)
-	    			if(tweet.getDate().compareTo(beginDate) >= 0 && tweet.getDate().compareTo(endDate) <= 0)
-	    				requestedTweets.add(tweet);
-	    		tweet_return = ((Tweet[])requestedTweets.toArray());
-    		}
-		}
-		catch(Exception e)
-		{
-			System.out.println(e.getMessage());
-		}
-		return tweet_return;
-    }*/
-    
-    /*
-     * Gets tweet(s) by searching the text.
-     *
-     * @author Rick Humes
-     * @param search Text to be searched for.
-     * @param case_sensitive The search is case sensitive?
-     * @return The requested tweet(s). May be <code>null</code>.
-     * @see Tweet
-     *
-    public Tweet[] getTweets(String search, boolean case_sensitive)
-    {
-    	Tweet[] tweet_return = null;
-    	try
-    	{
-    		if(feedItems != null)
-    		{
-    			if(!case_sensitive)
-    				search = search.toLowerCase();
-    			
-        		ArrayList<Tweet> requestedTweets = new ArrayList<Tweet>();
-        		
-	    		for (Tweet tweet : feedItems)
-	    			if(tweet.getText().contains(search))
-	    				requestedTweets.add(tweet);
-	    		
-	    		tweet_return = (requestedTweets.toArray(new Tweet[requestedTweets.size()]));
-    		}
-		}
-		catch(Exception e)
-		{
-			System.out.println(e.getMessage());
-		}
-		return tweet_return;
-    }*/
 
 	
 }
