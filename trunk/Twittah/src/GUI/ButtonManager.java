@@ -89,6 +89,16 @@ public class ButtonManager {
 		
 	}
 	
+	public void search(String query)
+	{
+		timelineVwr.setEnabled(false);
+		System.out.println("Searching for " + query);
+		subscriptionsMgr.addSearchToTimeline(query);
+		timelineVwr.refreshTimelineViewer();
+		timelineVwr.setEnabled(true);
+	}
+
+	
 	public void setSubscriptionsManager(SubscriptionsManager newSubscriptionsMgr) {
 		subscriptionsMgr = newSubscriptionsMgr;
 	}

@@ -23,7 +23,7 @@ public class UserTimeline extends Timeline{
 	
 	private Document timelineXML 		= null;
 	private Tweeter tweeter 			= null;
-	private ArrayList<Tweet> userTweets = null;
+	//private ArrayList<Tweet> userTweets = null;
 	
 	//Class Constructor
 	
@@ -52,7 +52,7 @@ public class UserTimeline extends Timeline{
 	{
 		System.out.println("Parsing UserTimeline XML");
 		
-		userTweets = new ArrayList<Tweet>();
+		//userTweets = new ArrayList<Tweet>();
 	
 		Element statuses;
 		Element status;
@@ -86,8 +86,7 @@ public class UserTimeline extends Timeline{
 			
 			Tweet tweet = new Tweet(tweeter, tweetID, tweetText, new Date(tweetDate), tweetMethod);
 		
-			userTweets.add(tweet);
-		}
+			addDisplayItem(tweet);		}
 		
 	}
 	

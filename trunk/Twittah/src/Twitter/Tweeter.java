@@ -77,6 +77,14 @@ public class Tweeter
     	userPicture = image;
     	userTimeline = timeline;
     	
+    	if(userPicture == null)
+			try {
+				userPicture = new ImageIcon(new URL("http://s.twimg.com/a/1271891196/images/default_profile_5_normal.png"));
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	
     }
 
     // Methods
