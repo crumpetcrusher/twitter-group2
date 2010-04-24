@@ -4,10 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -34,6 +37,7 @@ public class Main extends JPanel{
 	private JButton				 addSubscriptionButton;
 	private JButton				 deleteSubscriptionButton;
 	private JButton				 refreshTimelineButton;
+	private JButton				searchButton;
 	
 	
 	/**
@@ -128,6 +132,26 @@ public class Main extends JPanel{
 		add(buttonPanel, BorderLayout.SOUTH);
 		
 		
+		searchButton = new JButton("Search");
+		
+		searchButton.addActionListener(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						String name = JOptionPane.showInputDialog("Query: ");
+						if ((name == null) || (name == "")) {
+							System.out.println("No text to search for");
+						}
+						else{
+							buttonMgr.search(name);
+						}
+					}
+				});
+
+		buttonPanel.add(searchButton);
+		
+		
+		
+		
 		
         
 	}
@@ -138,15 +162,52 @@ public class Main extends JPanel{
 		final Main main = new Main();
 		
 		JFrame frame = new JFrame("Twittah!");
-		
+		final Thread 	refreshThread = ( new Thread() {
+
+			public void run() {
+				
+				main.buttonMgr.doRefreshTimeline();
+
+			}
+
+			}
+
+			);
 		
 		// Menubar
 		//
 		JMenuBar menubar = new JMenuBar();
 		JMenu file = new JMenu("File");
 		JMenu sort = new JMenu("Sort");
+		JMenu options = new JMenu("Options");
 		
 		ButtonGroup group = new ButtonGroup();
+		
+		JCheckBoxMenuItem refreshAuto = new JCheckBoxMenuItem("Refresh Automatically");//new JRadioButtonMenuItem("Refresh Automatically");
+		refreshAuto.setSelected(true);
+		refreshAuto.setMnemonic(KeyEvent.VK_R);
+		group.add(refreshAuto);
+		options.add(refreshAuto);
+		
+		
+		refreshAuto.addItemListener(
+				new ItemListener() {
+					public void itemStateChanged(ItemEvent e) {
+						JCheckBoxMenuItem item = ((JCheckBoxMenuItem) e.getSource());
+						if(e.getStateChange() == ItemEvent.SELECTED)
+						{
+							System.out.println("TRUE");
+							refreshThread.stop();
+						}
+						else
+						{
+							System.out.println("FALSE");
+							refreshThread.start();
+						}
+							
+							
+					}
+				});
 		
 		JRadioButtonMenuItem sortByDate = new JRadioButtonMenuItem("Date");
 		sortByDate.setSelected(true);
@@ -187,6 +248,7 @@ public class Main extends JPanel{
 		
 		menubar.add(file);
 		menubar.add(sort);
+		menubar.add(options);
     
 		// TwitterApp Properties
 		//
