@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import Twitter.Tweeter;
+import backend.ButtonManager;
 
 public class SubscriptionItemViewer extends JPanel {
 	
@@ -29,6 +30,8 @@ public class SubscriptionItemViewer extends JPanel {
 		
 		
 		buttonMgr = newButtonMgr;
+		
+		
 		tweeterName = newTweeter.getUserName();
 		tweeterIcon = newTweeter.getUserPicture();
 		
@@ -44,7 +47,6 @@ public class SubscriptionItemViewer extends JPanel {
 					public void actionPerformed(ActionEvent e) {
 						System.out.println(tweeterName);
 						buttonMgr.doSelectUser(tweeterName);
-
 					}
 				});
 		
