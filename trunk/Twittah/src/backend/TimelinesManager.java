@@ -2,13 +2,15 @@ package backend;
 
 import Changes.OrganizeType;
 import Changes.Timeline;
+import Timelines.CompositeTimeline;
 import Timelines.SearchTimeline;
 import Twitter.Tweeter;
 
 public class TimelinesManager {
 	
 	private SubscriptionsManager subscriptionsMgr;
-	private Timeline compositeTimeline = new Timeline();
+	//private Timeline compositeTimeline = new Timeline();
+	private CompositeTimeline compositeTimeline = new CompositeTimeline();
 
 	public TimelinesManager(SubscriptionsManager newSubscriptionsMgr) {
 
@@ -23,8 +25,7 @@ public class TimelinesManager {
 		{
 			compositeTimeline.addTimeline(tweeter.getUserTimeline());
 		}
-		compositeTimeline.fill();
-		compositeTimeline.organize();
+		//compositeTimeline.refresh();
 		
 	}
 	
@@ -45,7 +46,7 @@ public class TimelinesManager {
 	
 	public void clearTimeline() {
 
-		compositeTimeline.clear();
+		compositeTimeline.clearAll();
 
 	}
 	
@@ -56,8 +57,8 @@ public class TimelinesManager {
 				compositeTimeline.addTimeline(tweeter.getUserTimeline());
 			}
 		}
-		compositeTimeline.fill();
-		compositeTimeline.organize();
+		//compositeTimeline.fill();
+		//compositeTimeline.organize();
 		
 	}
 
@@ -68,23 +69,22 @@ public class TimelinesManager {
 				compositeTimeline.removeTimeline(tweeter.getUserTimeline());
 			}
 		}
-		compositeTimeline.fill();
-		compositeTimeline.organize();
+		//compositeTimeline.fill();
+		//compositeTimeline.organize();
 
 	}
 
 	
 	public void refreshTimeline() {
-				compositeTimeline.fill();
-				compositeTimeline.organize();
+		compositeTimeline.refresh();
 	}
 	
 	
 	public void addSearchToTimeline(String query) {
 		SearchTimeline searchTimeline = new SearchTimeline(query);
 		compositeTimeline.addTimeline(searchTimeline);
-		compositeTimeline.fill();
-		compositeTimeline.organize();
+		//compositeTimeline.fill();
+		//compositeTimeline.organize();
 	}
 
 	

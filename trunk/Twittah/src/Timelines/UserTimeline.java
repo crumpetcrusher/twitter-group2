@@ -21,7 +21,7 @@ public class UserTimeline extends Timeline {
 		tweeter = newTweeter;
 		System.out.println("Creating User Timeline for "
 				+ tweeter.getUserName());
-		reload();
+		downloadAndParse();
 	}
 
 	private void downloadXML() throws TweeterException {
@@ -31,8 +31,6 @@ public class UserTimeline extends Timeline {
 
 	private void parseXML() {
 		System.out.println("Parsing UserTimeline XML");
-
-		// userTweets = new ArrayList<Tweet>();
 
 		Element statuses;
 		Element status;
@@ -70,10 +68,11 @@ public class UserTimeline extends Timeline {
 		}
 	}
 
-	public void reload() {
+	public void downloadAndParse() {
 		try {
 			downloadXML();
-			parseXML();
+			if(timelineXML != null)
+				parseXML();
 		} catch (TweeterException e) {
 			System.out.println("Unable to refresh.");
 		}

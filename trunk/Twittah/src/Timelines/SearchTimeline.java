@@ -19,7 +19,6 @@ public class SearchTimeline extends Timeline {
 		private final String searchURL = "http://search.twitter.com/search.atom?q=";
 		private String[] query;
 		private Document timelineXML = null;
-		//private ArrayList<Tweet> tweets = null;
 		
 		
 		public SearchTimeline(String newQuery)
@@ -99,50 +98,11 @@ public class SearchTimeline extends Timeline {
 				tweetDate = matcher.replaceAll("/");
 				Date date1 = new Date(tweetDate);
 				
-				//System.out.println(tweetID + " - " + tweetText + " - " + method + " - " + tweetDate);
 				Tweet tweet = new Tweet(tweeter, tweetID, tweetText, date1, tweetMethod);//new Date(tweetDate), tweetMethod);
 				
 				//System.out.println(tweet);
 				addDisplayItem(tweet);
 			}
-			/*	
-			System.out.println("Parsing XML");
-			
-			try
-			{
-				List<Element> statuses = timelineXML.getRootElement().getChildren("entry");
-				ArrayList<Tweet> temp = new ArrayList<Tweet>();
-				
-				for(Element element : statuses)
-				{
-					
-					String tweetID = element.getChildText("id");
-					String tweetText = element.getChildText("content");
-					String tweetSource = element.getChildText("twitter:source");
-					String tweetDate = element.getChildText("published");
-					String user = element.getChildText("link");
-					Pattern pattern = Pattern.compile("(?<=twitter.com\\/).+?(?=\\/statuses)");
-					Matcher matcher = pattern.matcher(user);
-		            while (matcher.find()) {
-						user = "\"%s\"";
-		            }
-
-					Tweeter tweeter;
-					System.out.println("hm3");
-					try {
-						System.out.println("AhHhH");
-						tweeter = new Tweeter(user);
-						Tweet tweet = new Tweet(tweeter, tweetID, tweetText, new Date(tweetDate), tweetSource);
-						addFeedItem(tweet);
-					} catch (TweeterException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
-			catch(NullPointerException e)
-			{
-			}*/
 		}
 		
 		public void reload()
@@ -151,6 +111,21 @@ public class SearchTimeline extends Timeline {
 			{
 				downloadXML();
 				parseXML();
+			}
+			catch(TweeterException e) 
+			{
+				System.out.println("Unable to refresh.");
+			}
+		}
+
+		@Override
+		public void downloadAndParse() {
+			// TODO Auto-generated method stub
+			try
+			{
+				downloadXML();
+				if(timelineXML != null)
+					parseXML();
 			}
 			catch(TweeterException e) 
 			{
