@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -30,8 +31,7 @@ public class SubscriptionItemViewer extends JPanel {
 		
 		
 		buttonMgr = newButtonMgr;
-		
-		
+	
 		tweeterName = newTweeter.getUserName();
 		tweeterIcon = newTweeter.getUserPicture();
 		

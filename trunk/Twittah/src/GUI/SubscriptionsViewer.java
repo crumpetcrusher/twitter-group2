@@ -1,12 +1,12 @@
 package GUI;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
@@ -28,6 +28,8 @@ public class SubscriptionsViewer extends JPanel {
 	
 	public SubscriptionsViewer() {
 		
+		setLayout(new BorderLayout());
+		
 		JButton compositeTimelineButton = new JButton("Composite Timeline");
 		
 		compositeTimelineButton.addActionListener(
@@ -37,9 +39,7 @@ public class SubscriptionsViewer extends JPanel {
 					}
 				});
 		
-		add(compositeTimelineButton);
-		
-		
+		add(compositeTimelineButton, BorderLayout.NORTH);
 		
 		subscriptionItemsPanel = new JPanel();
 		subscriptionsScrollPane = new JScrollPane(subscriptionItemsPanel);
@@ -48,9 +48,7 @@ public class SubscriptionsViewer extends JPanel {
 		
 		subscriptionsScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
-		subscriptionsScrollPane.setSize(new Dimension(100, 400));
-		
-		add(subscriptionsScrollPane);
+		add(subscriptionsScrollPane, BorderLayout.CENTER);
 		
 	}
 
@@ -63,19 +61,10 @@ public class SubscriptionsViewer extends JPanel {
 	}
 	
 	public void refreshSubscriptionsViewer() {
-
 		subscriptionItemsPanel.removeAll();
-		
 		for(Tweeter tweeter : subscriptionsMgr.getSubscriptions()) {
 			SubscriptionItemViewer subscriptionItem = new SubscriptionItemViewer(tweeter, buttonMgr);
 			subscriptionItemsPanel.add(subscriptionItem);
 		}
-
 	}
-	
-	public void repaintSubscriptionsViewer() {
-		subscriptionItemsPanel.repaint();
-		this.repaint();
-	}
-
 }

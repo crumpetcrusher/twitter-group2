@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import Timelines.UserTimeline;
-
 public class Timeline {
 	
 	private List<Timeline> timelines = new ArrayList<Timeline>();

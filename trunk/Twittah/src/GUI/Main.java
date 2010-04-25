@@ -1,9 +1,7 @@
 package GUI;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,6 +18,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.SwingUtilities;
 
 import backend.ButtonManager;
 import backend.SubscriptionsManager;
@@ -43,9 +42,7 @@ public class Main extends JPanel{
 	private JButton				 addSubscriptionButton;
 	private JButton				 deleteSubscriptionButton;
 	private JButton				 refreshTimelineButton;
-	private JButton				searchButton;
-	
-	GridBagConstraints constraints = new GridBagConstraints();
+	private JButton				 searchButton;
 	
 	/**
 	 * GUI creation
@@ -55,7 +52,7 @@ public class Main extends JPanel{
 	 * @return GUI - one mass container of all objcts created inside this function
 	 * @throws Exception 
 	 */
-	public Main(Container rootpane) throws Exception
+	public Main() throws Exception
 	{
 		subscriptionsMgr = new SubscriptionsManager("src/subscriptionlist.xml");
 		timelinesMgr	 = new TimelinesManager(subscriptionsMgr);
@@ -70,7 +67,6 @@ public class Main extends JPanel{
 		buttonMgr.setSubscriptionsViewer(subscriptionsVwr);
 		buttonMgr.setTimelinesManager(timelinesMgr);
 		buttonMgr.setTimelinesViewer(timelinesVwr);
-		buttonMgr.setRootPane(rootpane);
 		
 		timelinesVwr.setTimelinesManager(timelinesMgr);
 		
@@ -81,17 +77,7 @@ public class Main extends JPanel{
 		timelinesVwr.refreshTimelinesViewer();
 		
 		
-		setLayout(new GridBagLayout());
-		constraints.weightx = 1.0;
-		constraints.weighty = 1.0;
-		constraints.fill = GridBagConstraints.BOTH;
-		
-		int x, y;
-		
-		constraints.gridheight = 2;
-		
-		addGB(subscriptionsVwr, x = 0, y = 0);
-		addGB(timelinesVwr, x = 1, y = 0);
+		setLayout(new BorderLayout());
 		
 		
 		buttonPanel = new JPanel();
@@ -144,12 +130,6 @@ public class Main extends JPanel{
 		
 		buttonPanel.add(refreshTimelineButton);
 		
-		constraints.gridheight = 1;
-		constraints.gridwidth = 2;
-		
-		addGB(buttonPanel, x = 0, y = 3);
-		
-		
 		searchButton = new JButton("Search");
 		
 		searchButton.addActionListener(
@@ -160,58 +140,51 @@ public class Main extends JPanel{
 							System.out.println("No text to search for");
 						}
 						else{
-							buttonMgr.search(name);
+							buttonMgr.doSearch(name);
 						}
 					}
 				});
 
 		buttonPanel.add(searchButton);
 		
-		
-		
-		
-		
+		add(subscriptionsVwr, BorderLayout.WEST);
+		add(timelinesVwr, BorderLayout.CENTER);
+		add(buttonPanel, BorderLayout.SOUTH);
         
 	}
 	
-	protected void addGB(Component component, int x, int y) {
-		constraints.gridx = x;
-		constraints.gridy = y;
-		add(component, constraints);
-	}
 	
-	public static void main(String[] args) throws Exception
-	{		
-		
+	public static void main(String[] args) throws Exception {		
+		final Main main = new Main();
+		final Thread refreshThread = (new Thread() {
+			public void run() {
+				do {
+					try {
+						sleep(10000);
+						main.buttonMgr.doRefreshTimeline();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				} while (isAlive());
+			}
+		});
 		
 		JFrame frame = new JFrame("Twittah!");
-		final Main main = new Main(frame.getContentPane());
-		final Thread 	refreshThread = ( new Thread() {
 
-			public void run() {
-				
-				main.buttonMgr.doRefreshTimeline();
-
-			}
-
-			}
-
-			);
-		
-		
 		// Menubar
 		//
-		JMenuBar menubar = new JMenuBar();
-		JMenu file = new JMenu("File");
-		JMenu sort = new JMenu("Sort");
-		JMenu options = new JMenu("Options");
+		JMenuBar menubar 	= new JMenuBar();
+		JMenu file 		 	= new JMenu("File");
+		JMenu sort 		 	= new JMenu("Sort");
+		JMenu options		= new JMenu("Options");
+		ButtonGroup group 	= new ButtonGroup();
 		
-		ButtonGroup group = new ButtonGroup();
 		
-		JCheckBoxMenuItem refreshAuto = new JCheckBoxMenuItem("Refresh Automatically");//new JRadioButtonMenuItem("Refresh Automatically");
+		JCheckBoxMenuItem refreshAuto = new JCheckBoxMenuItem("Refresh Automatically");
 		refreshAuto.setSelected(true);
 		refreshAuto.setMnemonic(KeyEvent.VK_R);
-		group.add(refreshAuto);
 		options.add(refreshAuto);
 		
 		
@@ -222,15 +195,21 @@ public class Main extends JPanel{
 						if(e.getStateChange() == ItemEvent.SELECTED)
 						{
 							System.out.println("TRUE");
-							refreshThread.stop();
+							SwingUtilities.invokeLater(new Runnable() {
+							    public void run() {
+							    	refreshThread.start();
+							    }
+							});
 						}
-						else
+						if(e.getStateChange() == ItemEvent.DESELECTED)
 						{
 							System.out.println("FALSE");
-							refreshThread.start();
+							SwingUtilities.invokeLater(new Runnable() {
+							    public void run() {
+							    	refreshThread.interrupt();
+							    }
+							});
 						}
-							
-							
 					}
 				});
 		
@@ -280,6 +259,7 @@ public class Main extends JPanel{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setJMenuBar(menubar);
 		frame.getContentPane().add(main);
+		frame.setPreferredSize(new Dimension(700, 500));
 		frame.pack();
 		frame.setResizable(true);
 		frame.setVisible(true);

@@ -2,12 +2,21 @@
 <Settings>
 
 
-	<Subscriptions><user name="profhal"><tweets>
-	<tweet>
-		<text></text>
-		<date></date>
-		<source></source></tweet></tweets>
-	<picture></picture></user><user name = "Frappe051">
-	<tweets></tweets>
-	<picture></picture></user></Subscriptions>
-	<Sort></Sort></Settings>
+	<Subscriptions>
+		<user name="profhal">
+			<tweets>
+				<tweet>
+					<text></text>
+					<date></date>
+					<source></source>
+				</tweet>
+			</tweets>
+			<picture></picture>
+		</user>
+		<user name="Frappe051">
+			<tweets></tweets>
+			<picture></picture>
+		</user>
+	</Subscriptions>
+	<Sort></Sort>
+</Settings>
