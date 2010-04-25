@@ -75,7 +75,6 @@ public class TimelinesManager {
 
 	
 	public void refreshTimeline() {
-				compositeTimeline.refresh();
 				compositeTimeline.fill();
 				compositeTimeline.organize();
 	}

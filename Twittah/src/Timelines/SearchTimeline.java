@@ -27,14 +27,14 @@ public class SearchTimeline extends Timeline {
 			System.out.println("Creating Search Timeline for " + newQuery);
 			query = new String[1];
 			query[0] = newQuery;
-			update();
+			reload();
 		}
 		
 		public SearchTimeline(String[] newQuery)
 		{
 			System.out.println("Creating Search Timeline for " + newQuery);
 			query = newQuery;
-			update();
+			reload();
 		}
 		
 		/**
@@ -145,7 +145,7 @@ public class SearchTimeline extends Timeline {
 			}*/
 		}
 		
-		public void update()
+		public void reload()
 		{
 			try
 			{

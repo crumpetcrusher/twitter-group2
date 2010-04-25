@@ -2,5 +2,9 @@
 <Settings>
 
 
-	<Subscriptions><name>profhal</name><name>Frappe051</name></Subscriptions>
-	<Sort></Sort></Settings>
+	<Subscriptions>
+		<name>profhal</name>
+		<name>Frappe051</name>
+	</Subscriptions>
+	<Sort></Sort>
+</Settings>

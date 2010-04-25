@@ -2,13 +2,13 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import Changes.DisplayItem;
-import Twitter.Tweet;
 
 /**
  * TweetContainer is a JPanel containing all the information in a tweet that
@@ -58,6 +58,7 @@ public class DisplayItemViewer extends JPanel
 		Date = new JLabel(item.date().toString());
 
 		JPanel metadata = new JPanel();
+		metadata.setLayout(new GridLayout(1,0));
 		
 		metadata.add(Source);
 		metadata.add(Date);
@@ -65,7 +66,8 @@ public class DisplayItemViewer extends JPanel
 		Text.setLineWrap(true);
 		Text.setEditable(false);
 		
-		setLayout(new BorderLayout());
+		setLayout(new BorderLayout(2, 3));
+		
 		add(Username, BorderLayout.NORTH);
 		add(Picture, BorderLayout.WEST);
 		add(Text, BorderLayout.CENTER);
