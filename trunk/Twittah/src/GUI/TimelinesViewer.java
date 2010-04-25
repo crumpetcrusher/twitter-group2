@@ -7,22 +7,21 @@ import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingUtilities;
 
 import Changes.DisplayItem;
-import Twitter.SubscriptionsManager;
+import backend.TimelinesManager;
 
-public class TimelineViewer extends JPanel
+public class TimelinesViewer extends JPanel
 {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6080155935322827731L;
-	private SubscriptionsManager subscriptionsMgr;
+	private TimelinesManager timelinesMgr;
 	private JPanel timelineItemsPanel;
 	private JScrollPane timelineScrollPane;
 	
-	public TimelineViewer() {
+	public TimelinesViewer() {
 		
 		timelineItemsPanel = new JPanel();
 		timelineScrollPane = new JScrollPane();
@@ -37,23 +36,26 @@ public class TimelineViewer extends JPanel
 		
 	}
 	
-	public void setSubscriptionsManager(SubscriptionsManager newSubscriptionsMgr) {
-		subscriptionsMgr = newSubscriptionsMgr;
+	public void setTimelinesManager(TimelinesManager newTimelinesMgr) {
+		timelinesMgr = newTimelinesMgr;
 	}
 	
-	public void refreshTimelineViewer() {
+	
+	public void refreshTimelinesViewer() {
 		
 		timelineItemsPanel.removeAll();
-		
-		for(DisplayItem tweet : subscriptionsMgr.getCompositeTimeline().displayItems()) {
+	
+		for(DisplayItem tweet : timelinesMgr.getCompositeTimeline().displayItems()) {
 			DisplayItemViewer displayItem = new DisplayItemViewer(tweet);
 			timelineItemsPanel.add(displayItem);
 		}
 
-				timelineScrollPane.setVisible(false);
-				timelineScrollPane.setVisible(true);
 		
-		
+	}
+	
+	public void repaintTimelinesViewer() {
+		timelineItemsPanel.repaint();
+		this.repaint();
 	}
 
 }

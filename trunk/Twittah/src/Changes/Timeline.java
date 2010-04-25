@@ -43,6 +43,11 @@ public class Timeline {
 		displayItems.clear();
 	}
 	
+	public void refresh() {
+		displayItems.clear();
+		
+	}
+	
 	public void fill()
 	{
 		displayItems.clear();
@@ -84,8 +89,7 @@ public class Timeline {
 
 
 	public void removeTimeline(Timeline timeline) {
-		//String toDeleteTimelineName = ((UserTimeline) timeline).getUserTweets().get(0).getTweeter().getUserName();
-		
+
 		for(Timeline temp : timelines) {
 			if (temp.equals(timeline)){
 				timelines.remove(timeline);
