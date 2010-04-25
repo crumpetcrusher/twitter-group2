@@ -1,13 +1,6 @@
 package Timelines;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Date;
 
-import javax.swing.text.html.HTML;
-
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -102,10 +95,6 @@ public class UserTimeline extends Timeline{
 			System.out.println("Unable to refresh.");
 		}
 	}
-	
-	public ArrayList<Tweet> getUserTweets()
-	{
-		return userTweets;
-	}
+
 	
 }
