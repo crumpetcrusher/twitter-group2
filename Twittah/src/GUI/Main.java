@@ -170,6 +170,8 @@ public class Main extends JPanel{
                                 } while (isAlive());
                         }
                 });
+                refreshThread.start();
+                refreshThread.suspend();
                 
                 JFrame frame = new JFrame("Twittah!");
 
@@ -183,7 +185,7 @@ public class Main extends JPanel{
                 
                 
                 JCheckBoxMenuItem refreshAuto = new JCheckBoxMenuItem("Refresh Automatically");
-                refreshAuto.setSelected(true);
+                refreshAuto.setSelected(false);
                 refreshAuto.setMnemonic(KeyEvent.VK_R);
                 options.add(refreshAuto);
                 
@@ -194,19 +196,19 @@ public class Main extends JPanel{
                                                 JCheckBoxMenuItem item = ((JCheckBoxMenuItem) e.getSource());
                                                 if(e.getStateChange() == ItemEvent.SELECTED)
                                                 {
-                                                        System.out.println("TRUE");
+                                                        System.out.println("Start");
                                                         SwingUtilities.invokeLater(new Runnable() {
                                                             public void run() {
-                                                                refreshThread.start();
+                                                                refreshThread.resume();
                                                             }
                                                         });
                                                 }
                                                 if(e.getStateChange() == ItemEvent.DESELECTED)
                                                 {
-                                                        System.out.println("FALSE");
+                                                        System.out.println("Stop");
                                                         SwingUtilities.invokeLater(new Runnable() {
                                                             public void run() {
-                                                                refreshThread.interrupt();
+                                                                refreshThread.suspend();
                                                             }
                                                         });
                                                 }
