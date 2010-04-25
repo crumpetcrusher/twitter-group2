@@ -1,6 +1,5 @@
-	package Timelines;
+package Timelines;
 
-	import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -159,10 +158,5 @@ public class SearchTimeline extends Timeline {
 			}
 		}
 		
-
-		public ArrayList<Tweet> getSearchTweets() {
-			
-			return tweets;
-		}
 
 }
