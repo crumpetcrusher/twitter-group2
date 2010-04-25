@@ -1,63 +1,69 @@
 package Timelines;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+import Changes.DisplayItem;
+import Changes.DisplayItemOrganizer;
+import Changes.OrganizeType;
+import Changes.Timeline;
 import Twitter.Tweet;
 
-public class CompositeTimeline {
-
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Class Attributes
-	//
-	private ArrayList<Tweet> tweets = new ArrayList<Tweet>();
+public class CompositeTimeline extends Timeline{
 	
+	private List<Timeline> timelines = new ArrayList<Timeline>();
 	
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Class Constructors
-	//
-	public CompositeTimeline()
+	public void addTimeline(Timeline timeline)
 	{
+		timelines.add(timeline);
+		for(DisplayItem item : timeline.displayItems())
+			System.out.println("Text: " + item.text());
+		fill();
+	}
+	
+	public void clearAll()
+	{
+		clearItems();
+		timelines.clear();
+	}
+	
+	public void refresh() {
+
 		
 	}
 	
-	public CompositeTimeline(ArrayList<Tweet> fillTweets)
+	public void fill()
 	{
-		for(Tweet tweet : fillTweets)
-		{
-			tweets.add(tweet);
+		clearItems();
+		for(Timeline timeline : timelines)
+			for(DisplayItem displayItem : timeline.displayItems())
+				addDisplayItem(displayItem);
+		organize();
+	}
+
+	public void removeTimeline(Timeline timeline) {
+
+		for(Timeline temp : timelines) {
+			if (temp.equals(timeline)){
+				timelines.remove(timeline);
+			}
 		}
+		fill();
+		
 	}
 	
-	public void add(ArrayList<Tweet> fillTweets)
-	{
-		for(Tweet tweet : fillTweets)
+	protected void reload() {}
+
+	@Override
+	public void downloadAndParse() {
+		for(Timeline timeline :  timelines)
 		{
-			tweets.add(tweet);
+			timeline.clearItems();
+			timeline.downloadAndParse();
 		}
+		fill();
 	}
-	
-	public ArrayList<Tweet> getTweets()
-	{
-		return tweets;
-	}
-	
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Class Methods
-	//
-	
-/*
-	public void organizeByDate()
-	{
-		Collections.sort(tweets, new ChronologicalTweets());
-	}
-	
-	public void organizeByText()
-	{
-		Collections.sort(tweets, new AlphabeticallyTweets());
-	}
-	
-	public void organizeBySource(){}
-*/
 
 	
 }

@@ -65,6 +65,7 @@ public class Tweeter
     	
     	userName = name;
 	    	getXML();
+	    	if(tweeterXML != null)
 	    	parseXML();
 
     	userTimeline = new UserTimeline(this);

@@ -186,6 +186,7 @@ public class XMLHelper {
         	System.out.println("Error accessing the stream.");
         	System.out.println("   URL : " + url);
             System.out.println("   " + i.getMessage());
+            document = null;
         
         } 		
 		

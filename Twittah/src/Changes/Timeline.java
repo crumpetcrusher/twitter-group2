@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Timeline {
+public abstract class Timeline {
 	
 	private List<Timeline> timelines = new ArrayList<Timeline>();
 	
@@ -21,34 +21,45 @@ public class Timeline {
 		return displayItems.toArray(temp);
 	}
 	
-	
+	/*
 	public void addTimeline(Timeline timeline)
 	{
 		timelines.add(timeline);
 		for(DisplayItem item : timeline.displayItems())
 			System.out.println("Text: " + item.text());
 		fill();
-	}
+	}*/
 	
 	protected void addDisplayItem(DisplayItem newDisplayItem)
 	{
 		displayItems.add(newDisplayItem);
 	}
-	
-	public void clear()
+	/*
+	public void clearAll()
 	{
+		clearItems();
 		timelines.clear();
+	}*/
+	
+	public void clearItems()
+	{
 		displayItems.clear();
 	}
 	
+	/*
 	public void refresh() {
-		displayItems.clear();
+		for(Timeline timeline :  timelines)
+		{
+			timeline.clearItems();
+			timeline.downloadAndParse();
+		}
+		clearItems();
+		fill();
 		
 	}
 	
 	public void fill()
 	{
-		displayItems.clear();
 		for(Timeline timeline : timelines)
 		{
 			//for(DisplayItem displayItem : ((UserTimeline)timeline).getUserTweets())
@@ -59,17 +70,7 @@ public class Timeline {
 			}
 		}
 		organize();
-	}
-	
-	public String printFeeds()
-	{
-		String temp = "";
-		
-		for(Timeline timeline : timelines)
-			temp += timeline.toString() + "\r\n" ;
-		
-		return temp;
-	}
+	}*/
 	
 	public String toString()
 	{
@@ -85,7 +86,7 @@ public class Timeline {
 		Collections.sort(displayItems, new DisplayItemOrganizer(currentOrganize));
 	}
 
-
+/*
 	public void removeTimeline(Timeline timeline) {
 
 		for(Timeline temp : timelines) {
@@ -93,14 +94,18 @@ public class Timeline {
 				timelines.remove(timeline);
 			}
 		}
+		fill();
 		
 	}
-
+*/
 
 	public void setOrganizeType(OrganizeType type) {
 		currentOrganize = type;
 		
 	}
+
+
+	public abstract void downloadAndParse();
 
 	
 }
