@@ -1,11 +1,11 @@
 package GUI;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -23,7 +23,7 @@ public class SubscriptionsViewer extends JPanel {
 	private static final long serialVersionUID = -2630564832490907193L;
 	private SubscriptionsManager subscriptionsMgr;
 	private ButtonManager		 buttonMgr;
-	private JPanel subscriptionItemsPanel;
+	private Container subscriptionItemsPanel;
 	private JScrollPane subscriptionsScrollPane;
 	
 	public SubscriptionsViewer() {
@@ -41,10 +41,8 @@ public class SubscriptionsViewer extends JPanel {
 		
 		add(compositeTimelineButton, BorderLayout.NORTH);
 		
-		subscriptionItemsPanel = new JPanel();
+		subscriptionItemsPanel = Box.createVerticalBox();
 		subscriptionsScrollPane = new JScrollPane(subscriptionItemsPanel);
-		
-		subscriptionItemsPanel.setLayout(new GridLayout(0, 1));
 		
 		subscriptionsScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
@@ -65,6 +63,8 @@ public class SubscriptionsViewer extends JPanel {
 		for(Tweeter tweeter : subscriptionsMgr.getSubscriptions()) {
 			SubscriptionItemViewer subscriptionItem = new SubscriptionItemViewer(tweeter, buttonMgr);
 			subscriptionItemsPanel.add(subscriptionItem);
+			subscriptionItemsPanel.add(Box.createVerticalGlue());
+			subscriptionItemsPanel.add(Box.createVerticalStrut(1));
 		}
 	}
 }

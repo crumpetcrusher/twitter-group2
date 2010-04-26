@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import Changes.DisplayItem;
 import Changes.DisplayItemOrganizer;
 import Changes.OrganizeType;
@@ -17,8 +20,6 @@ public class CompositeTimeline extends Timeline{
 	public void addTimeline(Timeline timeline)
 	{
 		timelines.add(timeline);
-		for(DisplayItem item : timeline.displayItems())
-			System.out.println("Text: " + item.text());
 		fill();
 	}
 	
@@ -63,6 +64,21 @@ public class CompositeTimeline extends Timeline{
 			timeline.downloadAndParse();
 		}
 		fill();
+	}
+/*
+	@Override
+	public Element toElement(Document doc) {
+		Element temp = doc.createElement("Timeline");
+		temp.setAttribute("Type", "Composite");
+		for(Timeline timeline : timelines)
+			temp.appendChild(timeline.toElement(doc));
+		return temp;
+	}*/
+
+	@Override
+	public void saveTimeline() {
+		for(Timeline timeline : timelines)
+			timeline.saveTimeline();
 	}
 
 	

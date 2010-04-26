@@ -27,11 +27,21 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 package backend;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 
@@ -115,19 +125,9 @@ public class XMLHelper {
     // This operation returns recent tweets containing the set of keywords supplied. If an error is encountered
 	// null is returned.
 	//
-	public static org.w3c.dom.Document getTweetsByKeywords(String[] keywords) {
-		
-		String keywordString = "";
-
-		for (int k=0; k < keywords.length; ++k) {
-			
-			keywordString += keywords[k];
-			
-			keywordString += ( (k == (keywords.length - 1)) ? "" : "+" );
-			
-		}
-		
-        return getXMLDocument(SEARCH_REQUEST_LOCATION_URL + keywordString);
+	public static org.w3c.dom.Document getTweetsByKeywords(String keywords) {
+		keywords = keywords.replace(' ', '+');
+        return getXMLDocument(SEARCH_REQUEST_LOCATION_URL + keywords);
 				
 	}
 	
@@ -193,6 +193,41 @@ public class XMLHelper {
         return document;
 		
 		
+	}
+	
+	/**
+	 * This method allows you to write a Document to a file location.
+	 * 
+	 * @author Rick
+	 * @since 3/25/2010 3:58PM
+	 */
+	public static void writeDocument(Document document, String location)
+	{
+		DOMSource source = new DOMSource(document);
+		
+		File file = new File(location);
+		Result result = new StreamResult(file);
+		
+		Transformer xformer;
+		try {
+			xformer = TransformerFactory.newInstance().newTransformer();
+
+			xformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			xformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+			xformer.setOutputProperty(OutputKeys.METHOD, "xml");
+			
+			xformer.transform(source, result);
+		} catch (TransformerConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TransformerFactoryConfigurationError e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 }

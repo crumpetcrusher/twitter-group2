@@ -2,12 +2,13 @@ package GUI;
 
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import java.awt.Container;
 
+import javax.swing.Box;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 
 import Changes.DisplayItem;
 import backend.TimelinesManager;
@@ -19,21 +20,18 @@ public class TimelinesViewer extends JPanel
 	 */
 	private static final long serialVersionUID = 6080155935322827731L;
 	private TimelinesManager timelinesMgr;
-	private JPanel timelineItemsPanel;
+	private Container  timelineItemsPanel;
 	private JScrollPane timelineScrollPane;
 	
 	public TimelinesViewer() {
 		
 		setLayout(new BorderLayout());
-		timelineItemsPanel = new JPanel();
 		timelineScrollPane = new JScrollPane();
 		
-		timelineItemsPanel.setLayout(new GridLayout(0, 1));
-		
+		timelineItemsPanel = Box.createVerticalBox();
 		
 		timelineScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		timelineScrollPane.setViewportView(timelineItemsPanel);
-		
 		
 		add(timelineScrollPane, BorderLayout.CENTER);
 		
@@ -50,10 +48,17 @@ public class TimelinesViewer extends JPanel
 	
 		for(DisplayItem tweet : timelinesMgr.getCompositeTimeline().displayItems()) {
 			DisplayItemViewer displayItem = new DisplayItemViewer(tweet);
+			timelineItemsPanel.add(Box.createVerticalGlue());
 			timelineItemsPanel.add(displayItem);
-			timelineItemsPanel.add(new JSeparator());
+			timelineItemsPanel.add(Box.createVerticalStrut(10));
 		}
-
+		
+		SwingUtilities.invokeLater(new Runnable() {
+		    public void run() {
+		    	setVisible(false);
+		    	setVisible(true);
+		    }
+		});
 		
 	}
 

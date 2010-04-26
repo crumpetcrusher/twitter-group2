@@ -9,7 +9,9 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import Changes.Timeline;
 import Exceptions.TweeterException;
+import Timelines.SearchTimeline;
 import Timelines.UserTimeline;
 import backend.XMLHelper;
 
@@ -42,6 +44,10 @@ public class Tweeter
      */
     private UserTimeline userTimeline = null;
     /**
+     * This user could also be a search user..
+     */
+    private SearchTimeline searchTimeline = null;
+    /**
      * Is the user protected?  Can we get their tweets?
      */
     private boolean userProtected = false;
@@ -72,11 +78,11 @@ public class Tweeter
     	
     }
     
-    public Tweeter(String name, ImageIcon image, UserTimeline timeline)
+    public Tweeter(String name, ImageIcon image, Timeline timeline)
     {
     	userName = name;
     	userPicture = image;
-    	userTimeline = timeline;
+    	userTimeline = (UserTimeline)timeline;
     	
     	if(userPicture == null)
 			try {

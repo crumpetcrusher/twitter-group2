@@ -4,13 +4,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import Timelines.CompositeTimeline;
+
 public abstract class Timeline {
 	
 	private List<Timeline> timelines = new ArrayList<Timeline>();
 	
-	private List<DisplayItem> displayItems = new ArrayList<DisplayItem>();
+	protected List<DisplayItem> displayItems = new ArrayList<DisplayItem>();
 	
 	private OrganizeType currentOrganize  = OrganizeType.JAN_DEC;
+	
+	protected Document timelineXML = null;
 	
 	
 	public DisplayItem[] displayItems()
@@ -106,6 +113,11 @@ public abstract class Timeline {
 
 
 	public abstract void downloadAndParse();
-
+	
+	public abstract void saveTimeline();
 	
 }
+	
+
+
+	

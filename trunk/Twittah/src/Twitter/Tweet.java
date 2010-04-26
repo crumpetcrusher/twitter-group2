@@ -2,6 +2,9 @@ package Twitter;
 import java.net.URI;
 import java.util.*;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import Changes.DisplayItem;
 
 
@@ -48,7 +51,7 @@ public class Tweet implements DisplayItem
     	tweeter = newTweeter;
     	tweetID = newID;
     	tweetText = newText;
-    	tweetDate= newDate;
+    	tweetDate = newDate;
     	tweetMethod = newMethod;
     }
     
@@ -144,6 +147,26 @@ public class Tweet implements DisplayItem
 	@Override
 	public Tweeter tweeter() {
 		return tweeter;
+	}
+
+	@Override
+	public Element toElement(Document doc) {
+		Element tweet = doc.createElement("status");
+		Element tweetTweeterIDEle = doc.createElement("screen_name");
+		tweetTweeterIDEle.setTextContent(tweeter.getUserName());
+		tweet.appendChild(tweetTweeterIDEle);
+		Element tweetDateEle = doc.createElement("created_at");
+		tweetDateEle.setTextContent(tweetDate.toString());
+		tweet.appendChild(tweetDateEle);
+		Element tweetTextEle = doc.createElement("text");
+		tweetTextEle.setTextContent(tweetText);
+		tweet.appendChild(tweetTextEle);
+		Element tweetSourceEle = doc.createElement("source");
+		tweetSourceEle.setTextContent(tweetMethod);
+		tweet.appendChild(tweetSourceEle);
+		return tweet;
+		
+		
 	}
     
  

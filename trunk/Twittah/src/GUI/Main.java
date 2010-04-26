@@ -19,10 +19,17 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.SwingUtilities;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import backend.ButtonManager;
 import backend.SubscriptionsManager;
 import backend.TimelinesManager;
+import backend.XMLHelper;
 
 public class Main extends JPanel{
 
@@ -31,18 +38,19 @@ public class Main extends JPanel{
          */
         private static final long serialVersionUID = 5964038338276344070L;
 
-        private SubscriptionsManager subscriptionsMgr;
+        private SubscriptionsManager 	 subscriptionsMgr;
         private TimelinesManager         timelinesMgr;
         private ButtonManager            buttonMgr;
         
         private SubscriptionsViewer      subscriptionsVwr;
         private TimelinesViewer          timelinesVwr;
         
-        private JPanel                           buttonPanel;
-        private JButton                          addSubscriptionButton;
-        private JButton                          deleteSubscriptionButton;
-        private JButton                          refreshTimelineButton;
-        private JButton                          searchButton;
+        private JPanel                   buttonPanel;
+        private JButton                  addSubscriptionButton;
+        private JButton                  deleteSubscriptionButton;
+        private JButton                  refreshTimelineButton;
+        private JButton                  searchButton;
+        private JButton					 testButton;
         
         /**
          * GUI creation
@@ -56,7 +64,7 @@ public class Main extends JPanel{
         {
                 subscriptionsMgr = new SubscriptionsManager("src/subscriptionlist.xml");
                 timelinesMgr     = new TimelinesManager(subscriptionsMgr);
-                buttonMgr                = new ButtonManager();
+                buttonMgr        = new ButtonManager();
                 
                 subscriptionsVwr = new SubscriptionsViewer();
                 timelinesVwr     = new TimelinesViewer();
@@ -73,8 +81,9 @@ public class Main extends JPanel{
                 subscriptionsVwr.setSubscriptionsManager(subscriptionsMgr);
                 subscriptionsVwr.setButtonManager(buttonMgr);
 
-                subscriptionsVwr.refreshSubscriptionsViewer();
                 timelinesVwr.refreshTimelinesViewer();
+                subscriptionsVwr.refreshSubscriptionsViewer();
+
                 
                 
                 setLayout(new BorderLayout());
@@ -83,6 +92,32 @@ public class Main extends JPanel{
                 buttonPanel = new JPanel();
                 
                 buttonPanel.setLayout(new GridLayout(1,0));
+                
+                //Test BUTTON
+                testButton = new JButton("Test");
+                
+                testButton.addActionListener(
+                                new ActionListener() {
+                                        public void actionPerformed(ActionEvent e) {
+                                                //String name = JOptionPane.showInputDialog("Query: ");
+                                    		DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
+                                    		DocumentBuilder docBuilder;
+											try {
+												docBuilder = dbfac.newDocumentBuilder();
+	                                    		Document document = docBuilder.newDocument();
+	                                    		Element root = document.createElement("Settings");
+	                                    		document.appendChild(root);
+	                                        	//subscriptionsMgr.writeData(root, document);
+	                                        	XMLHelper.writeDocument(document, "src/test.xml");
+											} catch (ParserConfigurationException e1) {
+												// TODO Auto-generated catch block
+												e1.printStackTrace();
+											}
+                                        }
+                                });
+
+                buttonPanel.add(testButton);
+                
                 
                 addSubscriptionButton = new JButton("Add Subscription");
                 
@@ -178,11 +213,48 @@ public class Main extends JPanel{
                 // Menubar
                 //
                 JMenuBar menubar        = new JMenuBar();
-                JMenu file                      = new JMenu("File");
-                JMenu sort                      = new JMenu("Sort");
+                JMenu file              = new JMenu("File");
+                JMenu sort              = new JMenu("Sort");
                 JMenu options           = new JMenu("Options");
-                ButtonGroup group       = new ButtonGroup();
+                ButtonGroup sortGroup   = new ButtonGroup();
                 
+                
+                JRadioButtonMenuItem sortByDate = new JRadioButtonMenuItem("Date");
+                sortByDate.setSelected(true);
+                sortByDate.setMnemonic(KeyEvent.VK_R);
+                sortGroup.add(sortByDate);
+                sort.add(sortByDate);
+                
+                sortByDate.addActionListener(
+                                new ActionListener() {
+                                        public void actionPerformed(ActionEvent e) {
+                                                main.buttonMgr.sortByDate();
+                                        }
+                                });
+
+                JRadioButtonMenuItem sortByAscend = new JRadioButtonMenuItem("Alphabetical Ascending");
+                sortByAscend.setMnemonic(KeyEvent.VK_O);
+                sortGroup.add(sortByAscend);
+                sort.add(sortByAscend);
+                
+                sortByAscend.addActionListener(
+                                new ActionListener() {
+                                        public void actionPerformed(ActionEvent e) {
+                                                main.buttonMgr.sortByAscend();
+                                        }
+                                });
+
+                JRadioButtonMenuItem sortByDescend = new JRadioButtonMenuItem("Alphabetical Descending");
+                sortByAscend.setMnemonic(KeyEvent.VK_O);
+                sortGroup.add(sortByDescend);
+                sort.add(sortByDescend);
+                
+                sortByDescend.addActionListener(
+                                new ActionListener() {
+                                        public void actionPerformed(ActionEvent e) {
+                                                main.buttonMgr.sortByDescend();
+                                        }
+                                });
                 
                 JCheckBoxMenuItem refreshAuto = new JCheckBoxMenuItem("Refresh Automatically");
                 refreshAuto.setSelected(false);
@@ -215,43 +287,6 @@ public class Main extends JPanel{
                                         }
                                 });
                 
-                JRadioButtonMenuItem sortByDate = new JRadioButtonMenuItem("Date");
-                sortByDate.setSelected(true);
-                sortByDate.setMnemonic(KeyEvent.VK_R);
-                group.add(sortByDate);
-                sort.add(sortByDate);
-                
-                sortByDate.addActionListener(
-                                new ActionListener() {
-                                        public void actionPerformed(ActionEvent e) {
-                                                main.buttonMgr.sortByDate();
-                                        }
-                                });
-
-                JRadioButtonMenuItem sortByAscend = new JRadioButtonMenuItem("Alphabetical Ascending");
-                sortByAscend.setMnemonic(KeyEvent.VK_O);
-                group.add(sortByAscend);
-                sort.add(sortByAscend);
-                
-                sortByAscend.addActionListener(
-                                new ActionListener() {
-                                        public void actionPerformed(ActionEvent e) {
-                                                main.buttonMgr.sortByAscend();
-                                        }
-                                });
-
-                JRadioButtonMenuItem sortByDescend = new JRadioButtonMenuItem("Alphabetical Descending");
-                sortByAscend.setMnemonic(KeyEvent.VK_O);
-                group.add(sortByDescend);
-                sort.add(sortByDescend);
-                
-                sortByDescend.addActionListener(
-                                new ActionListener() {
-                                        public void actionPerformed(ActionEvent e) {
-                                                main.buttonMgr.sortByDescend();
-                                        }
-                                });
-                
                 menubar.add(file);
                 menubar.add(sort);
                 menubar.add(options);
@@ -266,6 +301,16 @@ public class Main extends JPanel{
                 frame.setResizable(true);
                 frame.setVisible(true);
                 
+        }
+        
+        public void init()
+        {
+        	
+        }
+        
+        private void writeSettings(Element root, Document doc)
+        {
+        	
         }
         
 }
