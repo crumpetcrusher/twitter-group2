@@ -1,5 +1,6 @@
 package GUI;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -22,9 +23,10 @@ public class SubscriptionItemViewer extends JPanel {
 	private ButtonManager buttonMgr;
 	private String tweeterName;
 	private ImageIcon tweeterIcon;
+	private JLabel	nameLabel;
+	private JButton selectUserButton;
+	private JButton selectSearchButton;
 	private boolean itemIsSearch = false;
-
-	private JLabel subscriptionItem = new JLabel();
 
 	
 	SubscriptionItemViewer(Tweeter newTweeter, ButtonManager newButtonMgr) {
@@ -35,14 +37,14 @@ public class SubscriptionItemViewer extends JPanel {
 		tweeterName = newTweeter.getUserName();
 		tweeterIcon = newTweeter.getUserPicture();
 		
-		setPreferredSize(new Dimension(200, 60));
+		setPreferredSize(new Dimension(200, 40));
 
-		JButton button = new JButton(tweeterIcon);
-		button.setOpaque(false);
-		button.setBorderPainted(false);
-		button.setContentAreaFilled(false);
+		selectUserButton = new JButton(tweeterIcon);
+		selectUserButton.setOpaque(false);
+		selectUserButton.setBorderPainted(false);
+		selectUserButton.setContentAreaFilled(false);
 		
-		button.addActionListener(
+		selectUserButton.addActionListener(
 				new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						System.out.println(tweeterName);
@@ -50,10 +52,10 @@ public class SubscriptionItemViewer extends JPanel {
 					}
 				});
 		
-		add(button);
-		subscriptionItem.setText(tweeterName);
+		nameLabel = new JLabel(tweeterName);
 		
-		add(subscriptionItem);
+		add(selectUserButton, BorderLayout.EAST);
+		add(nameLabel, BorderLayout.CENTER);
 	}
 	
 	
@@ -63,15 +65,16 @@ public class SubscriptionItemViewer extends JPanel {
 		buttonMgr = newButtonMgr;
 		tweeterName = search;
 		tweeterIcon = new ImageIcon("src/Changes/twittericon.png");
+		nameLabel = new JLabel(tweeterName);
 		
 		setPreferredSize(new Dimension(200, 60));
 		
-		JButton button = new JButton(tweeterIcon);
-		button.setOpaque(false);
-		button.setBorderPainted(false);
-		button.setContentAreaFilled(false);
+		selectSearchButton = new JButton(tweeterIcon);
+		selectSearchButton.setOpaque(false);
+		selectSearchButton.setBorderPainted(false);
+		selectSearchButton.setContentAreaFilled(false);
 		
-		button.addActionListener(
+		selectSearchButton.addActionListener(
 				new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						System.out.println(tweeterName);
@@ -80,10 +83,10 @@ public class SubscriptionItemViewer extends JPanel {
 					}
 				});
 		
-		add(button);
-		subscriptionItem.setText(tweeterName);
+		add(selectSearchButton, BorderLayout.EAST);
 		
-		add(subscriptionItem);
+		
+		add(nameLabel, BorderLayout.CENTER);
 		
 		
 		

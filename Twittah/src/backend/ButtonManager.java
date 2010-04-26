@@ -1,7 +1,5 @@
 package backend;
 
-import java.awt.Container;
-
 import javax.swing.SwingUtilities;
 
 import Changes.OrganizeType;
@@ -39,14 +37,6 @@ public class ButtonManager {
 		timelinesMgr.refreshTimeline();
 		subscriptionsVwr.refreshSubscriptionsViewer();
 		timelinesVwr.refreshTimelinesViewer();
-		SwingUtilities.invokeLater(new Runnable() {
-		    public void run() {
-		    	subscriptionsVwr.setVisible(false);
-		    	timelinesVwr.setVisible(false);
-		    	subscriptionsVwr.setVisible(true);
-		    	timelinesVwr.setVisible(true);
-		    }
-		});
 	}
 	
 	public void doDeleteSubscription(String name) {
@@ -55,49 +45,23 @@ public class ButtonManager {
 		timelinesMgr.initialize();
 		subscriptionsVwr.refreshSubscriptionsViewer();
 		timelinesVwr.refreshTimelinesViewer();
-		SwingUtilities.invokeLater(new Runnable() {
-		    public void run() {
-		    	subscriptionsVwr.setVisible(false);
-		    	timelinesVwr.setVisible(false);
-		    	subscriptionsVwr.setVisible(true);
-		    	timelinesVwr.setVisible(true);
-		    }
-		});
 	}
 	
 	public void doRefreshTimeline() {
 		timelinesMgr.refreshTimeline();
 		timelinesVwr.refreshTimelinesViewer();
-		SwingUtilities.invokeLater(new Runnable() {
-		    public void run() {
-		    	timelinesVwr.setVisible(false);
-		    	timelinesVwr.setVisible(true);
-		    }
-		});
 	}
 	
 	public void doSelectUser(String name) {
 		timelinesMgr.clearTimeline();
 		timelinesMgr.addUserToTimeline(name);
 		timelinesVwr.refreshTimelinesViewer();
-		SwingUtilities.invokeLater(new Runnable() {
-		    public void run() {
-		    	timelinesVwr.setVisible(false);
-		    	timelinesVwr.setVisible(true);
-		    }
-		});
 	}
 	
 	public void doShowCompositeTimeline() {
 		timelinesMgr.clearTimeline();
 		timelinesMgr.initialize();
 		timelinesVwr.refreshTimelinesViewer();
-		SwingUtilities.invokeLater(new Runnable() {
-		    public void run() {
-		    	timelinesVwr.setVisible(false);
-		    	timelinesVwr.setVisible(true);
-		    }
-		});
 	}
 	
 	public void sortByDate() {
@@ -106,12 +70,6 @@ public class ButtonManager {
 		timelinesMgr.setOrganizeType(type);
 		timelinesMgr.getCompositeTimeline().organize();
 		timelinesVwr.refreshTimelinesViewer();
-		SwingUtilities.invokeLater(new Runnable() {
-		    public void run() {
-		    	timelinesVwr.setVisible(false);
-		    	timelinesVwr.setVisible(true);
-		    }
-		});
 	} 
 	
 	public void sortByAscend() {
@@ -120,12 +78,6 @@ public class ButtonManager {
 		timelinesMgr.setOrganizeType(type);
 		timelinesMgr.getCompositeTimeline().organize();
 		timelinesVwr.refreshTimelinesViewer();
-		SwingUtilities.invokeLater(new Runnable() {
-		    public void run() {
-		    	timelinesVwr.setVisible(false);
-		    	timelinesVwr.setVisible(true);
-		    }
-		});
 	}
 	
 	public void sortByDescend() {
@@ -133,25 +85,16 @@ public class ButtonManager {
 		OrganizeType type = OrganizeType.A_Z;
 		timelinesMgr.setOrganizeType(type);
 		timelinesMgr.getCompositeTimeline().organize();
+		//subscriptionsMgr.setOrganizeType(type);
+		//subscriptionsMgr.organize();
 		timelinesVwr.refreshTimelinesViewer();
-		SwingUtilities.invokeLater(new Runnable() {
-		    public void run() {
-		    	timelinesVwr.setVisible(false);
-		    	timelinesVwr.setVisible(true);
-		    }
-		});
 	}
 	
 	public void doSearch(String query) {
 		System.out.println("Searching for " + query);
+		//subscriptionsMgr.addSubscription(query);
 		timelinesMgr.clearTimeline();
 		timelinesMgr.addSearchToTimeline(query);
 		timelinesVwr.refreshTimelinesViewer();
-		SwingUtilities.invokeLater(new Runnable() {
-		    public void run() {
-		    	timelinesVwr.setVisible(false);
-		    	timelinesVwr.setVisible(true);
-		    }
-		});
 	}
 }

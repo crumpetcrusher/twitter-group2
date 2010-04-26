@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -17,23 +20,18 @@ import backend.XMLHelper;
 public class SearchTimeline extends Timeline {
 
 		private final String searchURL = "http://search.twitter.com/search.atom?q=";
-		private String[] query;
-		private Document timelineXML = null;
+		private String query;
 		
 		
 		public SearchTimeline(String newQuery)
 		{
 			System.out.println("Creating Search Timeline for " + newQuery);
-			query = new String[1];
-			query[0] = newQuery;
+			query = newQuery;
 			reload();
 		}
 		
-		public SearchTimeline(String[] newQuery)
-		{
-			System.out.println("Creating Search Timeline for " + newQuery);
-			query = newQuery;
-			reload();
+		public SearchTimeline() {
+			
 		}
 		
 		/**
@@ -43,7 +41,7 @@ public class SearchTimeline extends Timeline {
 		private void downloadXML() throws TweeterException
 		{
 			System.out.println("Downloading Search Timeline.");
-
+			
 			timelineXML = XMLHelper.getTweetsByKeywords(query);
 		}
 		
@@ -86,7 +84,11 @@ public class SearchTimeline extends Timeline {
 				
 				method = (Element)entry.getElementsByTagName("twitter:source").item(0);
 				String tweetMethod = method.getTextContent();
-				// do REGEX on tweetMethod string to get past <a blahblah> GOOD STUFF HERE </a>
+				String methodPattern = "</?.*?>";
+				Matcher methodMatcher = Pattern.compile(methodPattern).matcher(tweetMethod);
+				while (methodMatcher.find()) {
+					tweetMethod = methodMatcher.replaceAll("");
+				}
 				
 				date = (Element)entry.getElementsByTagName("published").item(0);
 				String tweetDate = date.getTextContent();
@@ -97,6 +99,7 @@ public class SearchTimeline extends Timeline {
 				matcher = pattern.matcher(tweetDate);
 				tweetDate = matcher.replaceAll("/");
 				Date date1 = new Date(tweetDate);
+				
 				
 				Tweet tweet = new Tweet(tweeter, tweetID, tweetText, date1, tweetMethod);//new Date(tweetDate), tweetMethod);
 				
@@ -131,6 +134,28 @@ public class SearchTimeline extends Timeline {
 			{
 				System.out.println("Unable to refresh.");
 			}
+		}
+/*
+		@Override
+		public Element toElement(Document doc) {
+			Element temp = doc.createElement("Owner");
+			temp.setAttribute("Type", "Search");
+			temp.setTextContent(query);
+			return temp;
+		}*/
+
+		@Override
+		public void saveTimeline() {
+			XMLHelper.writeDocument(timelineXML, "src/searchtimeline_" + query + ".xml");
+			
+		}
+		
+		public static SearchTimeline parseFromDocument(Document doc)
+		{
+			SearchTimeline temp = new SearchTimeline();
+			temp.timelineXML = doc;
+			temp.parseXML();
+			return temp;
 		}
 		
 

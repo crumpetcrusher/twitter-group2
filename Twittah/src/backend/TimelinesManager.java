@@ -1,9 +1,15 @@
 package backend;
 
+import java.io.File;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import Changes.OrganizeType;
 import Changes.Timeline;
 import Timelines.CompositeTimeline;
 import Timelines.SearchTimeline;
+import Timelines.UserTimeline;
 import Twitter.Tweeter;
 
 public class TimelinesManager {
@@ -15,8 +21,14 @@ public class TimelinesManager {
 	public TimelinesManager(SubscriptionsManager newSubscriptionsMgr) {
 
 		subscriptionsMgr = newSubscriptionsMgr;
-		initialize();
+		load();
+		//initialize();
 		
+	}
+	
+	private void load()
+	{
+		loadPreviousTimelines();
 	}
 	
 	protected void initialize() {
@@ -25,7 +37,7 @@ public class TimelinesManager {
 		{
 			compositeTimeline.addTimeline(tweeter.getUserTimeline());
 		}
-		//compositeTimeline.refresh();
+		compositeTimeline.refresh();
 		
 	}
 	
@@ -85,6 +97,54 @@ public class TimelinesManager {
 		compositeTimeline.addTimeline(searchTimeline);
 		//compositeTimeline.fill();
 		//compositeTimeline.organize();
+	}
+	
+	public void addTimeline(Timeline timeline)
+	{
+		compositeTimeline.addTimeline(timeline);
+	}
+	
+	public void saveTimelines()
+	{
+		compositeTimeline.saveTimeline();
+	}
+	
+	public void loadPreviousTimelines()
+	{
+		File dir = new File("src");
+		String[] files = dir.list();
+		Document doc = null;
+		
+		for(String file : files)
+			if(file.contains("timeline") && file.contains(".xml"))
+			{
+				System.out.println("Loading " + file);
+				doc = XMLHelper.getDocumentByLocation("src/" + file);
+				if(file.contains("user"))
+				{
+					addTimeline(UserTimeline.parseFromDocument(doc));
+					System.out.println(UserTimeline.parseFromDocument(doc));
+				}
+				else
+					addTimeline(SearchTimeline.parseFromDocument(doc));
+			}
+	}
+	
+	public void deletePreviousTimelines()
+	{
+		File dir = new File("src");
+		String[] files = dir.list();
+		Document doc = null;
+		
+		for(String file : files)
+			if(file.contains("timeline") && file.contains(".xml"))
+			{
+				File temp = new File("src/" + file);
+				if(temp.delete())
+					System.out.println("File Deleted: " + file);
+				else
+					System.out.println(file + " not delteed!");
+			}
 	}
 
 	

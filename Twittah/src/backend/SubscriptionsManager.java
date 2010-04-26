@@ -182,6 +182,22 @@ public class SubscriptionsManager {
 		}
 	}
 	
+	
+	public Element getData(Document doc)
+	{
+		Element subscriptions = doc.createElement("Subscriptions");
+		
+		for (Tweeter tweeter : subscribedTweeters)
+		{
+			Element text = doc.createElement("Text");
+			text.setAttribute("Type", "Tweeter");
+			text.setTextContent(tweeter.getUserName());
+			subscriptions.appendChild(text);
+		}
+		
+		return subscriptions;
+	}
+	
 	/**
 	 * Processes the XML document and commits
 	 * @throws ParserConfigurationException 
