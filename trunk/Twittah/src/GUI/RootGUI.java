@@ -73,23 +73,6 @@ public class RootGUI extends JPanel{
 	    
 	    buttonPanel.add(addSubscriptionButton);
 	    
-	    deleteSubscriptionButton = new JButton("Delete Subscription");
-	    
-	    deleteSubscriptionButton.addActionListener(
-	                    new ActionListener() {
-	                            public void actionPerformed(ActionEvent e) {
-	                                    String name = JOptionPane.showInputDialog("Enter username:");
-	                                    if ((name == null) || (name == "")) {
-	                                            System.out.println("no user entered");
-	                                    }
-	                                    else{
-	                                            buttonMgr.doDeleteSubscription(name);
-	                                    }
-	                            }
-	                    });
-	
-	    buttonPanel.add(deleteSubscriptionButton);
-	    
 	    refreshTimelineButton = new JButton("Refresh Timeline");
 	    
 	    refreshTimelineButton.addActionListener(

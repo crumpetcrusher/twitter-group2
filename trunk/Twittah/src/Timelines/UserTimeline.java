@@ -125,6 +125,7 @@ public class UserTimeline extends Timeline {
                     			downloadXML();
                     			if(timelineXML != null)
                     				parseXML();
+                    			timelineRefreshed();
                     			suspend();
                             } catch (TweeterException e) {
 								// TODO Auto-generated catch block

@@ -65,11 +65,10 @@ public class TimelinesManager implements ProgramStateListener {
 		return compositeTimeline.getOrganizeType();
 	}
 	
-	public void addUserToTimeline(String name) {
+	public void addToTimeline(SubscriptionItem subscriptItemToAdd) {
 		for(SubscriptionItem subscriptItem : subscriptionsMgr.getSubscriptions())
-			if (subscriptItem.text().equals(name)) 
-				compositeTimeline.addTimeline(subscriptItem.timeline());	
-		//timelinesVwr.refresh();
+			if (subscriptItem.equals(subscriptItemToAdd)) 
+				compositeTimeline.addTimeline(subscriptItem.timeline());
 	}
 
 	public void removeUserFromTimeline(String name) {
@@ -124,7 +123,7 @@ public class TimelinesManager implements ProgramStateListener {
 				else
 					addTimeline(SearchTimeline.parseFromDocument(doc));
 			}
-		timelinesVwr.refresh();
+		//timelinesVwr.refresh();
 	}
 	
 	public void deletePreviousTimelines()
@@ -146,13 +145,11 @@ public class TimelinesManager implements ProgramStateListener {
 
 	@Override
 	public void stateReceived(ProgramStateEvent event) {
-		System.out.println("State Received: " + event.state());
-		if(event.state() == ProgramState.TIMELINE_ADDED)
-		{
-			System.out.println("Refresh TimelineViewer!");
-			timelinesVwr.refresh();
-		}
+	    System.out.println("State Received: " + event.state() );
+	    if(event.state() == ProgramState.TIMELINE_ADDED || event.state() == ProgramState.TIMELINE_REFRESHED)
+	    {
+	        System.out.println("Refresh TimelineViewer!");
+	        timelinesVwr.refresh();
+	    }
 	}
-
-	
 }

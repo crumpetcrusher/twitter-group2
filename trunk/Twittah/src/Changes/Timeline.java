@@ -61,6 +61,18 @@ public abstract class Timeline {
 	public void setOrganizeType(OrganizeType type) {
 		currentOrganize = type;
 	}
+	
+	protected synchronized void timelineRefreshed()
+	{
+	    ProgramStateEvent state = new ProgramStateEvent(this, ProgramState.TIMELINE_REFRESHED);
+	    ProgramStateListener[] listeners = new ProgramStateListener[_listeners.size()];
+	    _listeners.toArray(listeners);
+	    for(ProgramStateListener listener : listeners)
+	    {
+	        System.out.println("Sending state" + state.state() + " to" + listener);
+	        listener.stateReceived(state);
+	        }
+	}
 
 
 	public abstract void downloadAndParse();

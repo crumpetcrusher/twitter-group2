@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 
 import Changes.SubscriptionItem;
 import Twitter.Tweeter;
@@ -46,7 +47,6 @@ public class SubscriptionsViewer extends JPanel {
 		subscriptionsScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		add(subscriptionsScrollPane, BorderLayout.CENTER);
-		
 	}
 	
 	public void refresh(SubscriptionsManager subscriptionsMgr, ButtonManager buttonMgr) {
@@ -57,5 +57,11 @@ public class SubscriptionsViewer extends JPanel {
 			subscriptionItemsPanel.add(Box.createVerticalGlue());
 			subscriptionItemsPanel.add(Box.createVerticalStrut(1));
 		}
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        setVisible(false);
+                        setVisible(true);
+                    }
+                });
 	}
 }
