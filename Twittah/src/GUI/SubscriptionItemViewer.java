@@ -22,41 +22,54 @@ public class SubscriptionItemViewer extends JPanel {
 	 */
 	private static final long serialVersionUID = -3820782173640263639L;
 	private ButtonManager buttonMgr;
-	private String tweeterName;
-	private ImageIcon tweeterIcon;
+	private String id;
+	private ImageIcon icon;
 	private JLabel	nameLabel;
-	private JButton selectUserButton;
+	private JButton selectSubscriptionButton;
 	private JButton selectSearchButton;
+	private JButton deleteButton;
+	private JButton viewButton;
+	private SubscriptionItem _subscriptItem;
 	private boolean itemIsSearch = false;
 
 	
 	SubscriptionItemViewer(SubscriptionItem subscriptItem, ButtonManager newButtonMgr) {
 		
-		
+	        _subscriptItem = subscriptItem;
 		buttonMgr = newButtonMgr;
+		deleteButton = new JButton("X");
+		viewButton = new JButton("View");
 	
-		tweeterName = subscriptItem.text();
-		tweeterIcon = subscriptItem.icon();
+		id = subscriptItem.text();
+		icon = subscriptItem.icon();
 		
 		setPreferredSize(new Dimension(200, 40));
 
-		selectUserButton = new JButton(tweeterIcon);
-		selectUserButton.setOpaque(false);
-		selectUserButton.setBorderPainted(false);
-		selectUserButton.setContentAreaFilled(false);
+		selectSubscriptionButton = new JButton(icon);
+		selectSubscriptionButton.setOpaque(false);
+		selectSubscriptionButton.setBorderPainted(false);
+		selectSubscriptionButton.setContentAreaFilled(false);
 		
-		selectUserButton.addActionListener(
+		selectSubscriptionButton.addActionListener(
 				new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						System.out.println(tweeterName);
-						buttonMgr.doSelectUser(tweeterName);
+						buttonMgr.doSelectSubscription(_subscriptItem);
 					}
 				});
 		
-		nameLabel = new JLabel(tweeterName);
+		deleteButton.addActionListener(
+                              new ActionListener() {
+                                      public void actionPerformed(ActionEvent e) {
+                                              buttonMgr.doDeleteSubscription(_subscriptItem);
+                                      }
+                              });
 		
-		add(selectUserButton, BorderLayout.EAST);
+		nameLabel = new JLabel(id);
+		
+		add(selectSubscriptionButton, BorderLayout.EAST);
 		add(nameLabel, BorderLayout.CENTER);
+		add(deleteButton, BorderLayout.EAST);
+		add(viewButton, BorderLayout.EAST);
 	}
 	
 	
@@ -64,13 +77,13 @@ public class SubscriptionItemViewer extends JPanel {
 		
 		itemIsSearch = true;
 		buttonMgr = newButtonMgr;
-		tweeterName = search;
-		tweeterIcon = new ImageIcon("src/Changes/twittericon.png");
-		nameLabel = new JLabel(tweeterName);
+		id = search;
+		icon = new ImageIcon("src/Changes/twittericon.png");
+		nameLabel = new JLabel(id);
 		
 		setPreferredSize(new Dimension(200, 60));
 		
-		selectSearchButton = new JButton(tweeterIcon);
+		selectSearchButton = new JButton(icon);
 		selectSearchButton.setOpaque(false);
 		selectSearchButton.setBorderPainted(false);
 		selectSearchButton.setContentAreaFilled(false);
@@ -78,8 +91,7 @@ public class SubscriptionItemViewer extends JPanel {
 		selectSearchButton.addActionListener(
 				new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						System.out.println(tweeterName);
-						buttonMgr.doSelectUser(tweeterName);
+						buttonMgr.doSelectSubscription(_subscriptItem);
 
 					}
 				});

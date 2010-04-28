@@ -129,19 +129,19 @@ public class SubscriptionsManager implements ProgramStateListener
 	 * Removes user from the subscription list (removes from ArrayList and saves to XML)
 	 * @param name 
 	 */
-	public void removeSubscription(String name)
+	public void removeSubscription(SubscriptionItem item)
 	{	
 		if(subscriptionListLocation == null)
 			throw new NullPointerException("Subscription list location was not initialized!");
 		
 		for(SubscriptionItem subscriptItem : _subscriptions)
-			if (subscriptItem.text().equals(name))
+			if (subscriptItem.equals(item))
 			{
 				_subscriptions.remove(subscriptItem);
 				
 				try {
 					writeDocument();
-					System.out.println("User has been removed");
+					System.out.println("Subscription Removed");
 				} catch (ParserConfigurationException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -170,28 +170,6 @@ public class SubscriptionsManager implements ProgramStateListener
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		/*
-		tweeter
-		Thread         thread = (new Thread() {
-            public void run() {
-        		if(subscriptionListLocation == null)
-        			throw new NullPointerException("Subscription list was not initialized!");
-        		
-        		boolean exists = false;
-        			
-        		for(SubscriptionItem subscriptItem : _subscriptions)
-        			if (subscriptItem.text().equals(subscriptItem.text()))
-        				exists = true;
-        		
-        		if(!exists)
-        		{
-						_subscriptions.add(subscriptItem);
-						System.out.println("Subscription Added!");
-						subscriptionAdded();
-						suspend();
-        		}
-        }});
-    	thread.start(); */
 	}
 	
 	public void addSubscription(SubscriptionItem item)

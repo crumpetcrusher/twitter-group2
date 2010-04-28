@@ -129,6 +129,7 @@ public class SearchTimeline extends Timeline {
 				downloadXML();
 				if(timelineXML != null)
 					parseXML();
+				timelineRefreshed();
 			}
 			catch(TweeterException e) 
 			{

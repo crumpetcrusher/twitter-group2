@@ -8,6 +8,7 @@ import javax.swing.SwingUtilities;
 import org.w3c.dom.Document;
 
 import Changes.OrganizeType;
+import Changes.SubscriptionItem;
 import Exceptions.TweeterException;
 import GUI.RootGUI;
 import GUI.SubscriptionsViewer;
@@ -31,8 +32,8 @@ public class ButtonManager {
 			subscriptionsMgr.addTweeterSubscription(newName);
 	}
 	
-	public void doDeleteSubscription(String name) {
-		subscriptionsMgr.removeSubscription(name);
+	public void doDeleteSubscription(SubscriptionItem item) {
+		subscriptionsMgr.removeSubscription(item);
 		timelinesMgr.clearTimeline();
 		timelinesMgr.initialize();
 	}
@@ -41,9 +42,9 @@ public class ButtonManager {
 		timelinesMgr.refreshTimeline();
 	}
 	
-	public void doSelectUser(String name) {
+	public void doSelectSubscription(SubscriptionItem item) {
 		timelinesMgr.clearTimeline();
-		timelinesMgr.addUserToTimeline(name);
+		timelinesMgr.addToTimeline(item);
 	}
 	
 	public void doShowCompositeTimeline() {

@@ -17,7 +17,7 @@ import Changes.OrganizeType;
 import Changes.Timeline;
 import Twitter.Tweet;
 
-public class CompositeTimeline extends Timeline{
+public class CompositeTimeline extends Timeline implements ProgramStateListener{
 	
 	private List<Timeline> timelines = new ArrayList<Timeline>();
 	
@@ -25,6 +25,7 @@ public class CompositeTimeline extends Timeline{
 	{
 		System.out.println("Timeline Added");
 		timelines.add(timeline);
+		timeline.addProgramStateListener(this);
 		fill();
 		timelineAdded();
 	}
@@ -34,11 +35,11 @@ public class CompositeTimeline extends Timeline{
 		ProgramStateEvent state = new ProgramStateEvent(this, ProgramState.TIMELINE_ADDED);
 		ProgramStateListener[] listeners = new ProgramStateListener[_listeners.size()];
 		_listeners.toArray(listeners);
-        for(ProgramStateListener listener : listeners)
-        {
-        	System.out.println("Sending state" + state.state() + " to" + listener);
-        	listener.stateReceived(state);
-        }
+            for(ProgramStateListener listener : listeners)
+            {
+            	System.out.println("Sending state" + state.state() + " to" + listener);
+            	listener.stateReceived(state);
+            }
 	}
 	
 	public void clearAll()
@@ -76,7 +77,8 @@ public class CompositeTimeline extends Timeline{
 			timeline.clearItems();
 			timeline.downloadAndParse();
 		}
-		fill();
+		//fill();
+		//timelineRefreshed();
 	}
 
 	@Override
@@ -84,6 +86,17 @@ public class CompositeTimeline extends Timeline{
 		for(Timeline timeline : timelines)
 			timeline.saveTimeline();
 	}
+
+    @Override
+    public void stateReceived(ProgramStateEvent event) {
+        System.out.println("State Received: " + event.state() );
+        if(event.state() == ProgramState.TIMELINE_ADDED || event.state() == ProgramState.TIMELINE_REFRESHED)
+        {
+            System.out.println("Timeline Refreshed!");
+            fill();
+            timelineRefreshed();
+        }
+    }
 
 	
 }
