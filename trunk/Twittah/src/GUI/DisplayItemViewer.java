@@ -2,7 +2,7 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.JLabel;
@@ -11,130 +11,133 @@ import javax.swing.JTextArea;
 
 import Changes.DisplayItem;
 
-/**
- * TweetContainer is a JPanel containing all the information in a tweet that
- * gets displayed in a composite timeline
- * would have.
- * @author Frappe051
- *
- */
-public class DisplayItemViewer extends JPanel
-{
+public class DisplayItemViewer extends JPanel {
 
-	/**
-	 * 
-	 */
-	JLabel Username = null;
-	/**
-	 * 
-	 */
-	JLabel Picture = null;
-	/**
-	 * 
-	 */
-	JTextArea Text = new JTextArea();
+    //
+    //
+    JLabel    Username = null;
+    JLabel    Picture  = null;
+    JTextArea Text     = new JTextArea();
+    JLabel    metadata = null;
 
-	JLabel metadata = null;
-	
-	/**
-	 * Constructor for creating a TweetContainer GUI object (in a JPanel) 
-	 * 
-	 * @param tweet
-	 */
-	
-	public DisplayItemViewer(DisplayItem item)
-	{
-		setPreferredSize(new Dimension(400,100));
-		
-		Text.setText(item.text());
-		Text.setOpaque(false);
-		Text.setWrapStyleWord(true);
-		
-		Username = new JLabel(item.tweeter().getUserName());
-		Picture = new JLabel(item.tweeter().getUserPicture());
-		
-		String date;
-		long then = item.date().getTime();
-		
-		date = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new java.util.Date (then*1000));
-		
-		/* shitty code swearing is bad... mmmkay
+    // This is the constructor for the DisplayItemViewer class
+    //
+    // item : The specific DisplayItem that is to be shown inside our JPanel.
+    //
+    public DisplayItemViewer(DisplayItem item) {
+        // Typical size our JPanel should be for displaying the DisplayItem
+        setPreferredSize(new Dimension(400, 100));
 
-		 
-		if (years > 0) {
-			if (years == 1) {
-				date = "about " + years + " year ago ";
-			}
-			else {
-				date = "about " + years + " years ago ";
-			}
-		}
-		else if (months > 0) {
-			if (months == 1) {
-				date = "about " + months + " month ago ";
-			}
-			else {
-				date = "about " + months + " months ago ";
-			}
-		}
-		else if (weeks > 0){
-			if (weeks == 1) {
-				date = "about " + weeks + " week ago ";
-			}
-			else {
-				date = "about " + weeks + " weeks ago ";
-			}
-		}
-		else if (days > 0) {
-			if (days == 1) {
-				date = "about " + days + " day ago ";
-			}
-			else {
-				date = "about " + days + " days ago ";
-			}
-		}
-		else if (hours > 0) {
-			if (hours == 1) {
-				date = "about " + hours + " hour ago ";
-			}
-			else {
-				date = "about " + hours + " hours ago ";
-			}
-		}
-		else if (minutes > 0) {
-			if (minutes == 1) {
-				date = minutes + " minute ago ";
-			}
-			else {
-				date = minutes + " minutes ago ";
-			}
-		}
-		else {
-			if (seconds == 1) {
-				date = seconds + " second ago ";
-			}
-			else {
-				date = seconds + " seconds ago ";
-			}
-		}
-		
-		*/
-		
-		
-		String source = " via " + item.source().toString();
-		
-		String metaString = date + source;
+        // 
+        Text.setText(item.text());
+        Text.setOpaque(false);
+        Text.setLineWrap(true);
+        Text.setWrapStyleWord(true);
+        Text.setEditable(false);
 
-		metadata = new JLabel(metaString);
+        Username = new JLabel(item.tweeter().getUserName());
+        Picture = new JLabel(item.tweeter().getUserPicture());
 
-		Text.setLineWrap(true);
-		Text.setEditable(false);
-		
-		setLayout(new BorderLayout());
-		
-		add(Username, BorderLayout.NORTH);
-		add(Picture, BorderLayout.WEST);
-		add(Text, BorderLayout.CENTER);
-		add(metadata, BorderLayout.SOUTH);
-	}
+        System.out.println(item.date());
+        String date = twitterHumanFriendlyDate(item.date().toString());
+
+        String source = " via " + item.source().toString();
+
+        String metaString = date + source;
+
+        metadata = new JLabel(metaString);
+
+        setLayout(new BorderLayout());
+
+        add(Username, BorderLayout.NORTH);
+        add(Picture, BorderLayout.WEST);
+        add(Text, BorderLayout.CENTER);
+        add(metadata, BorderLayout.SOUTH);
+    }
+
+    // This operation converts the UTC date string, from a displayItems' date();
+    // method, into a
+    // human-friendly date format (eg. 4 hours ago, 5 days ago, yesterday)
+    //	
+    // It is passed a date string and returns the string relating to the
+    // duration that has passed.
+    //
+    public String twitterHumanFriendlyDate(String dateStr) {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "EEE MMM dd HH:mm:ss z yyyy");
+        dateFormat.setLenient(false);
+        Date created = null;
+        try {
+            created = dateFormat.parse(dateStr);
+        }
+        catch (Exception e) {
+            return null;
+        }
+
+        Date today = new Date();
+
+        Long duration = today.getTime() - created.getTime();
+
+        long second = 1000;
+        long minute = second * 60;
+        long hour = minute * 60;
+        long day = hour * 24;
+        long week = day * 7;
+        long month = (week * 4) + (day * 2);
+        long year = month * 12;
+
+        if (duration < second * 7) {
+            return "right now";
+        }
+        else if ((duration > second * 7) && (duration < minute)) {
+            int n = (int) Math.floor(duration / second);
+            return n + " seconds ago";
+        }
+        else if ((duration > minute) && (duration < minute * 2)) {
+            return "about 1 minute ago";
+        }
+        else if ((duration > minute * 2) && (duration < hour)) {
+            int n = (int) Math.floor(duration / minute);
+            return "about " + n + " minutes ago";
+        }
+        if ((duration > hour) && (duration < hour * 2)) {
+            return "about 1 hour ago";
+        }
+        if ((duration > hour * 2) && (duration < day)) {
+            int n = (int) Math.floor(duration / hour);
+            return "about " + n + " hours ago";
+        }
+        if ((duration > day) && (duration < day * 2)) {
+            return "yesterday";
+        }
+        if ((duration > day * 2) && (duration < week)) {
+            int n = (int) Math.floor(duration / day);
+            return "about " + n + " days ago";
+        }
+        if ((duration > week) && (duration < week * 2)) {
+            return "about a week ago";
+        }
+        if ((duration > week * 2) && (duration < month)) {
+            int n = (int) Math.floor(duration / week);
+            return "about " + n + " weeks ago";
+        }
+        if ((duration > month) && (duration < month * 2)) {
+            return "about a month ago";
+        }
+        if ((duration > month * 2) && (duration < year)) {
+            int n = (int) Math.floor(duration / month);
+            return "about " + n + " months ago";
+        }
+        if ((duration > year) && (duration < year * 2)) {
+            return "about a year ago";
+        }
+        if (duration > year * 2) {
+            int n = (int) Math.floor(duration / year);
+            return "about " + n + " years ago";
+        }
+        else {
+            return "back in my day...";
+        }
+    }
 }

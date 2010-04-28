@@ -54,7 +54,7 @@ public class UserTimeline extends Timeline {
 		return temp;
 	}
 
-	private void parseXML() {
+	private void parseXML(){
 		System.out.println("Parsing UserTimeline XML");
 
 		Element statuses;
@@ -109,7 +109,7 @@ public class UserTimeline extends Timeline {
 
 			date = (Element) status.getElementsByTagName("created_at").item(0);
 			String tweetDate = date.getTextContent();
-
+			
 			Tweet tweet = new Tweet(tweeter, tweetID, tweetText, new Date(tweetDate), tweetMethod);
 
 			addDisplayItem(tweet);
