@@ -23,6 +23,7 @@ import backend.XMLHelper;
 public class UserTimeline extends Timeline {
 
 	private Tweeter tweeter = null;
+	Thread thread = null;
 
 	private UserTimeline()
 	{
@@ -117,13 +118,23 @@ public class UserTimeline extends Timeline {
 	}
 
 	public void downloadAndParse() {
-		try {
-			downloadXML();
-			if(timelineXML != null)
-				parseXML();
-		} catch (TweeterException e) {
-			System.out.println("Unable to refresh.");
-		}
+        thread = (new Thread() {
+            public void run() {
+                    do {
+                            try {
+                    			downloadXML();
+                    			if(timelineXML != null)
+                    				parseXML();
+                    			suspend();
+                            } catch (TweeterException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+                            
+                    } while (isAlive());
+            }
+    });
+        	thread.start();
 	}
 	/*
 	@Override

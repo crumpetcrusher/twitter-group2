@@ -1,7 +1,9 @@
 package backend;
 
+import java.awt.BorderLayout;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
@@ -20,9 +22,17 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
+import testing.ProgramState;
+import testing.ProgramStateEvent;
+import testing.ProgramStateListener;
+
 import Changes.OrganizeType;
+import Changes.SubscriptionItem;
 import Changes.Timeline;
 import Exceptions.TweeterException;
+import GUI.RootGUI;
+import GUI.SubscriptionsViewer;
+import GUI.T_Main;
 import Timelines.SearchTimeline;
 import backend.XMLHelper;
 import Twitter.Tweeter;
@@ -35,7 +45,8 @@ import Twitter.Tweeter;
  * @author Frappe051
  *
  */
-public class SubscriptionsManager {
+public class SubscriptionsManager implements ProgramStateListener
+{
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	//  Class Attributes
@@ -44,12 +55,14 @@ public class SubscriptionsManager {
 	/**
 	 * Stores the arraylist of Tweeters (people we are subscribing to)
 	 */
-	private ArrayList<Tweeter> subscribedTweeters = new ArrayList<Tweeter>();
+	private ArrayList<SubscriptionItem> _subscriptions = new ArrayList<SubscriptionItem>();
 	
 	/**
 	 * Stores the file location of the subscription list.
 	 */
 	private String subscriptionListLocation;
+	SubscriptionsViewer subscriptionVwr;
+	private ButtonManager buttonMgr;
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	//  Class Constructors
@@ -61,9 +74,11 @@ public class SubscriptionsManager {
 	 * @param Location 
 	 * @author Scott Smiesko
 	 */
-	public SubscriptionsManager(String Location)
+	public SubscriptionsManager(String Location, ButtonManager buttonMgrIn, RootGUI gui)
 	{
-		
+		buttonMgr = buttonMgrIn;
+		subscriptionVwr = new SubscriptionsViewer();
+		gui.add(subscriptionVwr, BorderLayout.WEST);
 		subscriptionListLocation = Location;
 		
 		Document subscriptionList = null;
@@ -93,7 +108,7 @@ public class SubscriptionsManager {
 		Element		tweeter;
 		String	 	name;
 		
-		subscribedTweeters = new ArrayList<Tweeter>();
+		_subscriptions = new ArrayList<SubscriptionItem>();
 		
 		subscriptions = (Element)(subscriptionList.getDocumentElement());
 		
@@ -103,12 +118,8 @@ public class SubscriptionsManager {
 		{
 			tweeter = (Element)(tweeters.item(t));
 			name = tweeter.getTextContent();
-			
-			addSubscription(name);
-				
+			addTweeterSubscription(name);
 		}
-		
-		
 		System.out.println("Array of tweeters is now constructed..");
 		
 	}
@@ -123,10 +134,10 @@ public class SubscriptionsManager {
 		if(subscriptionListLocation == null)
 			throw new NullPointerException("Subscription list location was not initialized!");
 		
-		for(Tweeter tweeter : subscribedTweeters)
-			if (tweeter.getUserName().equals(name))
+		for(SubscriptionItem subscriptItem : _subscriptions)
+			if (subscriptItem.text().equals(name))
 			{
-				subscribedTweeters.remove(tweeter);
+				_subscriptions.remove(subscriptItem);
 				
 				try {
 					writeDocument();
@@ -140,7 +151,7 @@ public class SubscriptionsManager {
 				}
 				break;
 			}
-			
+		subscriptionVwr.refresh(this, buttonMgr);
 	}
 	
 	/**
@@ -149,6 +160,62 @@ public class SubscriptionsManager {
 	 * @param name 
 	 * @throws NullPointerException 
 	 */
+	public void addTweeterSubscription(String name)
+	{
+		Tweeter tweeter;
+		try {
+			tweeter = new Tweeter(name);
+			tweeter.addProgramStateListener(this);
+		} catch (TweeterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		/*
+		tweeter
+		Thread         thread = (new Thread() {
+            public void run() {
+        		if(subscriptionListLocation == null)
+        			throw new NullPointerException("Subscription list was not initialized!");
+        		
+        		boolean exists = false;
+        			
+        		for(SubscriptionItem subscriptItem : _subscriptions)
+        			if (subscriptItem.text().equals(subscriptItem.text()))
+        				exists = true;
+        		
+        		if(!exists)
+        		{
+						_subscriptions.add(subscriptItem);
+						System.out.println("Subscription Added!");
+						subscriptionAdded();
+						suspend();
+        		}
+        }});
+    	thread.start(); */
+	}
+	
+	public void addSubscription(SubscriptionItem item)
+	{
+		_subscriptions.add(item);
+		subscriptionVwr.refresh(this, buttonMgr);
+	}
+	
+	@Override
+	public void stateReceived(ProgramStateEvent event) {
+		System.out.println("State Received: " + event.state());
+		if(event.state() == ProgramState.SUBSCRIPTION_ADDED)
+		{
+			System.out.println("Add Subscription");
+			addSubscription((SubscriptionItem)event.getSource());
+		}
+	}
+   
+	private synchronized void subscriptionAdded()
+	{
+		subscriptionVwr.refresh(this, buttonMgr);
+	}
+
+/*
 	public void addSubscription(String name) throws NullPointerException
 	{
 		if(subscriptionListLocation == null)
@@ -156,14 +223,14 @@ public class SubscriptionsManager {
 		
 		boolean exists = false;
 			
-		for(Tweeter tweeter : subscribedTweeters)
-			if (tweeter.getUserName().equals(name))
+		for(SubscriptionItem subscriptItem : _subscriptions)
+			if (subscriptItem.text().equals(name))
 				exists = true;
 		
 		if(!exists)
 		{
 			try{
-				subscribedTweeters.add(new Tweeter(name));
+				_subscriptions.add(new Tweeter(name));
 				writeDocument();
 			}
 			catch(TweeterException e)
@@ -180,23 +247,8 @@ public class SubscriptionsManager {
 		else {
 			System.out.println("User already exists");
 		}
-	}
-	
-	
-	public Element getData(Document doc)
-	{
-		Element subscriptions = doc.createElement("Subscriptions");
-		
-		for (Tweeter tweeter : subscribedTweeters)
-		{
-			Element text = doc.createElement("Text");
-			text.setAttribute("Type", "Tweeter");
-			text.setTextContent(tweeter.getUserName());
-			subscriptions.appendChild(text);
-		}
-		
-		return subscriptions;
-	}
+		subscriptionVwr.refresh(this, buttonMgr);
+	}*/
 	
 	/**
 	 * Processes the XML document and commits
@@ -216,12 +268,13 @@ public class SubscriptionsManager {
 		Element root = newSubscriptions.createElement("Subscriptions");
 		newSubscriptions.appendChild(root);
 		
-		for (Tweeter tweeter : subscribedTweeters)
+		for (SubscriptionItem subscriptItem : _subscriptions)
 		{
 			Element child = newSubscriptions.createElement("name");
 			root.appendChild(child);
+			child.setAttribute("Search", Boolean.toString(subscriptItem.isSearch()));
 			
-			Text text = newSubscriptions.createTextNode(tweeter.getUserName());
+			Text text = newSubscriptions.createTextNode(subscriptItem.text());
 			child.appendChild(text);
 		}
 
@@ -254,9 +307,8 @@ public class SubscriptionsManager {
 		
 	}
 	
-	public ArrayList<Tweeter> getSubscriptions(){
-		return subscribedTweeters;
+	public ArrayList<SubscriptionItem> getSubscriptions(){
+		return _subscriptions;
 	}
-
 
 }

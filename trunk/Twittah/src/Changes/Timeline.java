@@ -2,82 +2,42 @@ package Changes;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import testing.ProgramState;
+import testing.ProgramStateEvent;
+import testing.ProgramStateListener;
+
 import Timelines.CompositeTimeline;
 
 public abstract class Timeline {
 	
-	private List<Timeline> timelines = new ArrayList<Timeline>();
-	
 	protected List<DisplayItem> displayItems = new ArrayList<DisplayItem>();
+	
+	protected List _listeners = new ArrayList();
 	
 	private OrganizeType currentOrganize  = OrganizeType.JAN_DEC;
 	
 	protected Document timelineXML = null;
 	
-	
 	public DisplayItem[] displayItems()
 	{
-		DisplayItem[] temp = new DisplayItem[displayItems.size()];
-		
-		
-		return displayItems.toArray(temp);
+		return displayItems.toArray(new DisplayItem[displayItems.size()]);
 	}
-	
-	/*
-	public void addTimeline(Timeline timeline)
-	{
-		timelines.add(timeline);
-		for(DisplayItem item : timeline.displayItems())
-			System.out.println("Text: " + item.text());
-		fill();
-	}*/
 	
 	protected void addDisplayItem(DisplayItem newDisplayItem)
 	{
 		displayItems.add(newDisplayItem);
 	}
-	/*
-	public void clearAll()
-	{
-		clearItems();
-		timelines.clear();
-	}*/
 	
 	public void clearItems()
 	{
 		displayItems.clear();
 	}
-	
-	/*
-	public void refresh() {
-		for(Timeline timeline :  timelines)
-		{
-			timeline.clearItems();
-			timeline.downloadAndParse();
-		}
-		clearItems();
-		fill();
-		
-	}
-	
-	public void fill()
-	{
-		for(Timeline timeline : timelines)
-		{
-			//for(DisplayItem displayItem : ((UserTimeline)timeline).getUserTweets())
-			for(DisplayItem displayItem : timeline.displayItems())
-			{
-				
-				addDisplayItem(displayItem);
-			}
-		}
-		organize();
-	}*/
 	
 	public String toString()
 	{
@@ -85,36 +45,40 @@ public abstract class Timeline {
 		for(DisplayItem displayItem : displayItems)
 			value += "\t" + displayItem.toString() + "\r\n";
 		return value;
-		
+	}
+	
+	public OrganizeType getOrganizeType()
+	{
+		return currentOrganize;
 	}
 	
 	public void organize()
 	{
+		System.out.println("Sorting by: " + currentOrganize);
 		Collections.sort(displayItems, new DisplayItemOrganizer(currentOrganize));
 	}
 
-/*
-	public void removeTimeline(Timeline timeline) {
-
-		for(Timeline temp : timelines) {
-			if (temp.equals(timeline)){
-				timelines.remove(timeline);
-			}
-		}
-		fill();
-		
-	}
-*/
-
 	public void setOrganizeType(OrganizeType type) {
 		currentOrganize = type;
-		
 	}
 
 
 	public abstract void downloadAndParse();
 	
 	public abstract void saveTimeline();
+	
+	   @SuppressWarnings("unchecked")
+	public synchronized void addProgramStateListener( ProgramStateListener l ) {
+	        if(_listeners.add( l ))
+	 		   System.out.println("Listener Added");
+	        else
+	 		   System.out.println("Listener Not Added");
+	        	
+	    }
+	    
+	    public synchronized void removeProgramStateListener( ProgramStateListener l ) {
+	        _listeners.remove( l );
+	    }
 	
 }
 	

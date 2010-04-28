@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import Changes.SubscriptionItem;
 import Twitter.Tweeter;
 import backend.ButtonManager;
 
@@ -29,13 +30,13 @@ public class SubscriptionItemViewer extends JPanel {
 	private boolean itemIsSearch = false;
 
 	
-	SubscriptionItemViewer(Tweeter newTweeter, ButtonManager newButtonMgr) {
+	SubscriptionItemViewer(SubscriptionItem subscriptItem, ButtonManager newButtonMgr) {
 		
 		
 		buttonMgr = newButtonMgr;
 	
-		tweeterName = newTweeter.getUserName();
-		tweeterIcon = newTweeter.getUserPicture();
+		tweeterName = subscriptItem.text();
+		tweeterIcon = subscriptItem.icon();
 		
 		setPreferredSize(new Dimension(200, 40));
 

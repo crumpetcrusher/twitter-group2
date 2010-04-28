@@ -7,6 +7,10 @@ import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import testing.ProgramState;
+import testing.ProgramStateEvent;
+import testing.ProgramStateListener;
+
 import Changes.DisplayItem;
 import Changes.DisplayItemOrganizer;
 import Changes.OrganizeType;
@@ -19,19 +23,28 @@ public class CompositeTimeline extends Timeline{
 	
 	public void addTimeline(Timeline timeline)
 	{
+		System.out.println("Timeline Added");
 		timelines.add(timeline);
 		fill();
+		timelineAdded();
+	}
+	
+	private synchronized void timelineAdded()
+	{
+		ProgramStateEvent state = new ProgramStateEvent(this, ProgramState.TIMELINE_ADDED);
+		ProgramStateListener[] listeners = new ProgramStateListener[_listeners.size()];
+		_listeners.toArray(listeners);
+        for(ProgramStateListener listener : listeners)
+        {
+        	System.out.println("Sending state" + state.state() + " to" + listener);
+        	listener.stateReceived(state);
+        }
 	}
 	
 	public void clearAll()
 	{
 		clearItems();
 		timelines.clear();
-	}
-	
-	public void refresh() {
-
-		
 	}
 	
 	public void fill()
@@ -65,15 +78,6 @@ public class CompositeTimeline extends Timeline{
 		}
 		fill();
 	}
-/*
-	@Override
-	public Element toElement(Document doc) {
-		Element temp = doc.createElement("Timeline");
-		temp.setAttribute("Type", "Composite");
-		for(Timeline timeline : timelines)
-			temp.appendChild(timeline.toElement(doc));
-		return temp;
-	}*/
 
 	@Override
 	public void saveTimeline() {
