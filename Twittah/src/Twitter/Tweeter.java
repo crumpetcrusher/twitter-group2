@@ -2,6 +2,8 @@ package Twitter;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 
@@ -9,6 +11,11 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import testing.ProgramState;
+import testing.ProgramStateEvent;
+import testing.ProgramStateListener;
+
+import Changes.SubscriptionItem;
 import Changes.Timeline;
 import Exceptions.TweeterException;
 import Timelines.SearchTimeline;
@@ -26,7 +33,7 @@ import backend.XMLHelper;
  * @version 2/24/2009
  * 
  */
-public class Tweeter
+public class Tweeter implements SubscriptionItem
 {
 	
 	//Class Variables
@@ -44,10 +51,6 @@ public class Tweeter
      */
     private UserTimeline userTimeline = null;
     /**
-     * This user could also be a search user..
-     */
-    private SearchTimeline searchTimeline = null;
-    /**
      * Is the user protected?  Can we get their tweets?
      */
     private boolean userProtected = false;
@@ -55,6 +58,10 @@ public class Tweeter
      * document object for storing the XML
      */
     private Document tweeterXML = null;
+    
+    private Thread thread;
+    
+    private List _listeners = new ArrayList();
 
     //Constructors
     
@@ -70,9 +77,19 @@ public class Tweeter
     	System.out.println("Creating Tweeter Object for: " + name );
     	
     	userName = name;
-	    	getXML();
-	    	if(tweeterXML != null)
-	    	parseXML();
+        thread = (new Thread() {
+            public void run() {
+                    do {
+                            getXML();
+							if(tweeterXML != null)
+							parseXML();
+							suspend();
+                            
+                    } while (isAlive());
+            }
+    });
+        	thread.start();
+
 
     	userTimeline = new UserTimeline(this);
     	
@@ -91,7 +108,7 @@ public class Tweeter
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-    	
+			tweeterParsed();
     }
 
     // Methods
@@ -122,7 +139,7 @@ public class Tweeter
      */
     private void parseXML()
     {
-       	System.out.println("Parsing Tweeter XML");
+       	System.out.println("Parsing " + userName + " XML");
        	
        	Element user;
        	Element isProtected;
@@ -143,7 +160,7 @@ public class Tweeter
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		tweeterParsed();
        	
     }
     
@@ -185,6 +202,53 @@ public class Tweeter
 
 	{
 		return userProtected;
+	}
+
+	@Override
+	public ImageIcon icon() {
+		return userPicture;
+	}
+
+	@Override
+	public String text() {
+		return userName;
+	}
+
+	@Override
+	public boolean isSearch() {
+		return false;
+	}
+
+	@Override
+	public Timeline timeline() {
+		return userTimeline;
+	}
+	
+	   @SuppressWarnings("unchecked")
+	public synchronized void addProgramStateListener( ProgramStateListener l ) 
+   {
+        if(_listeners.add( l ))
+ 		   System.out.println("Listener Added");
+        else
+ 		   System.out.println("Listener Not Added");
+        	
+    }
+    
+    public synchronized void removeProgramStateListener( ProgramStateListener l ) {
+        _listeners.remove( l );
+    }
+    
+	private synchronized void tweeterParsed()
+	{
+		System.out.println(userName + " parsed! " + _listeners.size() + " objects listening!");
+		ProgramStateEvent state = new ProgramStateEvent(this, ProgramState.SUBSCRIPTION_ADDED);
+		ProgramStateListener[] listeners = new ProgramStateListener[_listeners.size()];
+		_listeners.toArray(listeners);
+        for(ProgramStateListener listener : listeners)
+        {
+        	System.out.println("Sending state" + state.state() + " to" + listener);
+        	listener.stateReceived(state);
+        }
 	}
 
 

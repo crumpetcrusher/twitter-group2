@@ -23,8 +23,9 @@ public class TimelinesViewer extends JPanel
 	private Container  timelineItemsPanel;
 	private JScrollPane timelineScrollPane;
 	
-	public TimelinesViewer() {
+	public TimelinesViewer(TimelinesManager newTimelinesMgr) {
 		
+		timelinesMgr = newTimelinesMgr;
 		setLayout(new BorderLayout());
 		timelineScrollPane = new JScrollPane();
 		
@@ -35,14 +36,11 @@ public class TimelinesViewer extends JPanel
 		
 		add(timelineScrollPane, BorderLayout.CENTER);
 		
-	}
-	
-	public void setTimelinesManager(TimelinesManager newTimelinesMgr) {
-		timelinesMgr = newTimelinesMgr;
+	    refresh();
 	}
 	
 	
-	public void refreshTimelinesViewer() {
+	public void refresh() {
 		
 		timelineItemsPanel.removeAll();
 	

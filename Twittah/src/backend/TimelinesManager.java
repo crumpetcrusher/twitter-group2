@@ -5,103 +5,98 @@ import java.io.File;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import testing.ProgramState;
+import testing.ProgramStateEvent;
+import testing.ProgramStateListener;
+
 import Changes.OrganizeType;
+import Changes.SubscriptionItem;
 import Changes.Timeline;
+import GUI.RootGUI;
+import GUI.TimelinesViewer;
 import Timelines.CompositeTimeline;
 import Timelines.SearchTimeline;
 import Timelines.UserTimeline;
 import Twitter.Tweeter;
 
-public class TimelinesManager {
+public class TimelinesManager implements ProgramStateListener {
 	
 	private SubscriptionsManager subscriptionsMgr;
-	//private Timeline compositeTimeline = new Timeline();
+	private TimelinesViewer		 timelinesVwr;
 	private CompositeTimeline compositeTimeline = new CompositeTimeline();
 
-	public TimelinesManager(SubscriptionsManager newSubscriptionsMgr) {
-
+	public TimelinesManager(SubscriptionsManager newSubscriptionsMgr, RootGUI gui) {
+		compositeTimeline.addProgramStateListener(this);
+		timelinesVwr = new TimelinesViewer(this);
 		subscriptionsMgr = newSubscriptionsMgr;
-		load();
-		//initialize();
-		
-	}
-	
-	private void load()
-	{
 		loadPreviousTimelines();
+		gui.add(timelinesVwr);
 	}
 	
 	protected void initialize() {
 		
-		for (Tweeter tweeter : subscriptionsMgr.getSubscriptions())
-		{
-			compositeTimeline.addTimeline(tweeter.getUserTimeline());
-		}
-		compositeTimeline.refresh();
-		
+		for (SubscriptionItem subscriptItem : subscriptionsMgr.getSubscriptions())
+			compositeTimeline.addTimeline(subscriptItem.timeline());
+		timelinesVwr.refresh();
 	}
-	
-	public void setSubscriptionsManager(SubscriptionsManager newSubscriptionsMgr) {
-		subscriptionsMgr = newSubscriptionsMgr;
-	}
-	
-	
-	
+
 	public Timeline getCompositeTimeline() {
 		return compositeTimeline;
 	}
 	
+	public void organize(OrganizeType type)
+	{
+		compositeTimeline.setOrganizeType(type);
+		compositeTimeline.organize();
+		timelinesVwr.refresh();
+		
+	}
 	public void setOrganizeType(OrganizeType type) {
 		compositeTimeline.setOrganizeType(type);
-		
 	}
 	
 	public void clearTimeline() {
-
 		compositeTimeline.clearAll();
-
+		timelinesVwr.refresh();
+	}
+	
+	public OrganizeType organizeType()
+	{
+		return compositeTimeline.getOrganizeType();
 	}
 	
 	public void addUserToTimeline(String name) {
-
-		for(Tweeter tweeter : subscriptionsMgr.getSubscriptions()){
-			if (tweeter.getUserName().equals(name)) {
-				compositeTimeline.addTimeline(tweeter.getUserTimeline());
-			}
-		}
-		//compositeTimeline.fill();
-		//compositeTimeline.organize();
-		
+		for(SubscriptionItem subscriptItem : subscriptionsMgr.getSubscriptions())
+			if (subscriptItem.text().equals(name)) 
+				compositeTimeline.addTimeline(subscriptItem.timeline());	
+		//timelinesVwr.refresh();
 	}
 
 	public void removeUserFromTimeline(String name) {
 
-		for(Tweeter tweeter : subscriptionsMgr.getSubscriptions()){
-			if (tweeter.getUserName().equals(name)) {
-				compositeTimeline.removeTimeline(tweeter.getUserTimeline());
-			}
-		}
-		//compositeTimeline.fill();
-		//compositeTimeline.organize();
-
+		for(SubscriptionItem subscriptItem : subscriptionsMgr.getSubscriptions())
+			if (subscriptItem.text().equals(name))
+				compositeTimeline.removeTimeline(subscriptItem.timeline());
+		timelinesVwr.refresh();
 	}
 
 	
 	public void refreshTimeline() {
 		compositeTimeline.downloadAndParse();
+		timelinesVwr.refresh();
 	}
 	
 	
 	public void addSearchToTimeline(String query) {
 		SearchTimeline searchTimeline = new SearchTimeline(query);
 		compositeTimeline.addTimeline(searchTimeline);
-		//compositeTimeline.fill();
-		//compositeTimeline.organize();
+		timelinesVwr.refresh();
 	}
 	
 	public void addTimeline(Timeline timeline)
 	{
 		compositeTimeline.addTimeline(timeline);
+		//timelinesVwr.refresh();
 	}
 	
 	public void saveTimelines()
@@ -111,6 +106,7 @@ public class TimelinesManager {
 	
 	public void loadPreviousTimelines()
 	{
+		System.out.println("Loading Previous Timelines");
 		File dir = new File("src");
 		String[] files = dir.list();
 		Document doc = null;
@@ -128,6 +124,7 @@ public class TimelinesManager {
 				else
 					addTimeline(SearchTimeline.parseFromDocument(doc));
 			}
+		timelinesVwr.refresh();
 	}
 	
 	public void deletePreviousTimelines()
@@ -145,6 +142,16 @@ public class TimelinesManager {
 				else
 					System.out.println(file + " not delteed!");
 			}
+	}
+
+	@Override
+	public void stateReceived(ProgramStateEvent event) {
+		System.out.println("State Received: " + event.state());
+		if(event.state() == ProgramState.TIMELINE_ADDED)
+		{
+			System.out.println("Refresh TimelineViewer!");
+			timelinesVwr.refresh();
+		}
 	}
 
 	

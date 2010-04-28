@@ -26,6 +26,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import Changes.*;
 
 import Timelines.SearchTimeline;
 import Timelines.UserTimeline;
@@ -35,86 +36,25 @@ import backend.TimelinesManager;
 import backend.XMLHelper;
 
 public class RootGUI extends JPanel{
-	
-
-    
-    private SubscriptionsViewer      subscriptionsVwr;
-    private TimelinesViewer          timelinesVwr;
-    
     private JPanel                   buttonPanel;
     private JButton                  addSubscriptionButton;
     private JButton                  deleteSubscriptionButton;
     private JButton                  refreshTimelineButton;
     private JButton                  searchButton;
     private JButton					 testButton;
-    private SubscriptionsManager 	 subscriptionsMgr;
-    private TimelinesManager         timelinesMgr;
     private ButtonManager            buttonMgr;
     JCheckBoxMenuItem refreshAuto;
 	
 	public RootGUI() {
 		
-	    subscriptionsMgr = new SubscriptionsManager("src/subscriptionlist.xml");
-	    timelinesMgr     = new TimelinesManager(subscriptionsMgr);
-	    buttonMgr        = new ButtonManager();
-	    subscriptionsVwr = new SubscriptionsViewer();
-	    timelinesVwr     = new TimelinesViewer();
-	    
-	    
-	    
-	    buttonMgr.setSubscriptionsManager(subscriptionsMgr);
-	    buttonMgr.setSubscriptionsViewer(subscriptionsVwr);
-	    buttonMgr.setTimelinesManager(timelinesMgr);
-	    buttonMgr.setTimelinesViewer(timelinesVwr);
-	    
-	    timelinesVwr.setTimelinesManager(timelinesMgr);
-	    
-	    subscriptionsVwr.setSubscriptionsManager(subscriptionsMgr);
-	    subscriptionsVwr.setButtonManager(buttonMgr);
-	
-	    subscriptionsVwr.refreshSubscriptionsViewer();
-	    timelinesVwr.refreshTimelinesViewer();
-	    
-	    
+	    buttonPanel = new JPanel();
+	    buttonPanel.setLayout(new GridLayout(1,0));
 	    setLayout(new BorderLayout());
 	    
+	    buttonMgr        = new ButtonManager(this);
+	    buttonMgr.loadPreviousTimelines();
 	    
-	    buttonPanel = new JPanel();
-	    
-	    buttonPanel.setLayout(new GridLayout(1,0));
-	    
-	    //Test BUTTON
-	    testButton = new JButton("Test");
-	    
-	    testButton.addActionListener(
-	                    new ActionListener() {
-	                            public void actionPerformed(ActionEvent e) {
-	                                    //String name = JOptionPane.showInputDialog("Query: ");
-	                            	/*
-	                        		DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
-	                        		DocumentBuilder docBuilder;
-									try {
-										
-										docBuilder = dbfac.newDocumentBuilder();
-	                            		Document document = docBuilder.newDocument();
-	                            		Element root = document.createElement("Settings");
-	                                	//subscriptionsMgr.writeData(root, document);
-	                                	writeSettings(root, document);
-	                            		document.appendChild(root);
-	                                	XMLHelper.writeDocument(document, "src/test.xml");
-	                                	timelinesMgr.saveTimelines();
-									} catch (ParserConfigurationException e1) {
-										// TODO Auto-generated catch block
-										e1.printStackTrace();
-									}*/
-		                            loadPreviousTimelines();
-	                            }
 
-	                    });
-	
-	    buttonPanel.add(testButton);
-	    
-	    
 	    addSubscriptionButton = new JButton("Add Subscription");
 	    
 	    addSubscriptionButton.addActionListener(
@@ -125,7 +65,7 @@ public class RootGUI extends JPanel{
 	                                            System.out.println("no user entered");
 	                                    }
 	                                    else{
-	                                            buttonMgr.doAddSubscription(name);
+	                                            buttonMgr.doAddSubscriptionTweeter(name);
 	                                            
 	                                    }
 	                            }
@@ -178,8 +118,6 @@ public class RootGUI extends JPanel{
 	
 	    buttonPanel.add(searchButton);
 	    
-	    add(subscriptionsVwr, BorderLayout.WEST);
-	    add(timelinesVwr, BorderLayout.CENTER);
 	    add(buttonPanel, BorderLayout.SOUTH);
 	    
         final Thread refreshThread = (new Thread() {
@@ -216,15 +154,15 @@ public class RootGUI extends JPanel{
     sortByDate.setMnemonic(KeyEvent.VK_R);
     sortGroup.add(sortByDate);
     sort.add(sortByDate);
-    
+
     sortByDate.addActionListener(
                     new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
-                                    buttonMgr.sortByDate();
+                            	buttonMgr.toggle(OrganizeType.JAN_DEC);
                             }
                     });
 
-    JRadioButtonMenuItem sortByAscend = new JRadioButtonMenuItem("Alphabetical Ascending");
+    JRadioButtonMenuItem sortByAscend = new JRadioButtonMenuItem("Alphabetical");
     sortByAscend.setMnemonic(KeyEvent.VK_O);
     sortGroup.add(sortByAscend);
     sort.add(sortByAscend);
@@ -232,10 +170,11 @@ public class RootGUI extends JPanel{
     sortByAscend.addActionListener(
                     new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
-                                     buttonMgr.sortByAscend();
+                            	buttonMgr.toggle(OrganizeType.A_Z);
                             }
-                    });
-
+                    }
+                    );
+/*
     JRadioButtonMenuItem sortByDescend = new JRadioButtonMenuItem("Alphabetical Descending");
     sortByAscend.setMnemonic(KeyEvent.VK_O);
     sortGroup.add(sortByDescend);
@@ -246,7 +185,7 @@ public class RootGUI extends JPanel{
                             public void actionPerformed(ActionEvent e) {
                                      buttonMgr.sortByDescend();
                             }
-                    });
+                    });*/
     
     refreshAuto = new JCheckBoxMenuItem("Refresh Automatically");
     refreshAuto.setSelected(false);
@@ -294,11 +233,7 @@ public class RootGUI extends JPanel{
     frame.setVisible(true);
     frame.addWindowListener(new java.awt.event.WindowAdapter() {
         public void windowClosing(WindowEvent winEvt) {
-            //String name = JOptionPane.showInputDialog("Query: ");
-        	
-        	timelinesMgr.deletePreviousTimelines();
-			writeSettings();
-			timelinesMgr.saveTimelines();
+        	buttonMgr.systemShutdown();
             System.exit(0); 
         }
     });
@@ -323,22 +258,5 @@ public class RootGUI extends JPanel{
 			e1.printStackTrace();
 		}
 
-	}
-	
-	public void loadPreviousTimelines()
-	{
-		File dir = new File("src");
-		String[] files = dir.list();
-		Document doc = null;
-		
-		for(String file : files)
-			if(file.contains("timeline") && file.contains(".xml"))
-			{
-				doc = XMLHelper.getDocumentByLocation("src/" + file);
-				if(file.contains("user"))
-					timelinesMgr.addTimeline(UserTimeline.parseFromDocument(doc));
-				else
-					timelinesMgr.addTimeline(SearchTimeline.parseFromDocument(doc));
-			}
 	}
 }
