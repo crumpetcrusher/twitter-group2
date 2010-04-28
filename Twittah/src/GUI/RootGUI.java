@@ -186,7 +186,8 @@ public class RootGUI extends JPanel{
             public void run() {
                     do {
                             try {
-                                    sleep(10000);
+                                    //sleep(10000);		// this does 10 seconds
+                                    sleep(60000);		// this does 60 seconds
                                     buttonMgr.doRefreshTimeline();
                             } catch (InterruptedException e) {
                                     // TODO Auto-generated catch block
