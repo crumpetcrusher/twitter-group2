@@ -38,7 +38,6 @@ public class DisplayItemViewer extends JPanel {
         Username = new JLabel(item.tweeter().getUserName());
         Picture = new JLabel(item.tweeter().getUserPicture());
 
-        System.out.println(item.date());
         String date = twitterHumanFriendlyDate(item.date().toString());
 
         String source = " via " + item.source().toString();
