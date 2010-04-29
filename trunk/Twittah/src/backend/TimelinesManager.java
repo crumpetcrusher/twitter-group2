@@ -116,14 +116,10 @@ public class TimelinesManager implements ProgramStateListener {
 				System.out.println("Loading " + file);
 				doc = XMLHelper.getDocumentByLocation("src/" + file);
 				if(file.contains("user"))
-				{
 					addTimeline(UserTimeline.parseFromDocument(doc));
-					System.out.println(UserTimeline.parseFromDocument(doc));
-				}
 				else
 					addTimeline(SearchTimeline.parseFromDocument(doc));
 			}
-		//timelinesVwr.refresh();
 	}
 	
 	public void deletePreviousTimelines()

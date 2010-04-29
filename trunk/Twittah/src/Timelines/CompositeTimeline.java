@@ -24,10 +24,10 @@ public class CompositeTimeline extends Timeline implements ProgramStateListener{
 	public void addTimeline(Timeline timeline)
 	{
 		System.out.println("Timeline Added");
-		timelines.add(timeline);
-		timeline.addProgramStateListener(this);
-		fill();
-		timelineAdded();
+		    timelines.add(timeline);
+    		    timeline.addProgramStateListener(this);
+    		    fill();
+    		    timelineAdded();
 	}
 	
 	private synchronized void timelineAdded()

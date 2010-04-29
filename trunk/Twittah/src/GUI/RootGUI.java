@@ -52,7 +52,7 @@ public class RootGUI extends JPanel{
 	    setLayout(new BorderLayout());
 	    
 	    buttonMgr        = new ButtonManager(this);
-	    buttonMgr.loadPreviousTimelines();
+	   // buttonMgr.loadPreviousTimelines();
 	    
 
 	    addSubscriptionButton = new JButton("Add Subscription");
@@ -157,18 +157,6 @@ public class RootGUI extends JPanel{
                             }
                     }
                     );
-/*
-    JRadioButtonMenuItem sortByDescend = new JRadioButtonMenuItem("Alphabetical Descending");
-    sortByAscend.setMnemonic(KeyEvent.VK_O);
-    sortGroup.add(sortByDescend);
-    sort.add(sortByDescend);
-    
-    sortByDescend.addActionListener(
-                    new ActionListener() {
-                            public void actionPerformed(ActionEvent e) {
-                                     buttonMgr.sortByDescend();
-                            }
-                    });*/
     
     refreshAuto = new JCheckBoxMenuItem("Refresh Automatically");
     refreshAuto.setSelected(false);

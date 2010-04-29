@@ -75,21 +75,5 @@ public class ButtonManager {
 		timelinesMgr.deletePreviousTimelines();
 		timelinesMgr.saveTimelines();
 	}
-	
-	public void loadPreviousTimelines()
-	{
-		File dir = new File("src");
-		String[] files = dir.list();
-		Document doc = null;
-		
-		for(String file : files)
-			if(file.contains("timeline") && file.contains(".xml"))
-			{
-				doc = XMLHelper.getDocumentByLocation("src/" + file);
-				if(file.contains("user"))
-					timelinesMgr.addTimeline(UserTimeline.parseFromDocument(doc));
-				else
-					timelinesMgr.addTimeline(SearchTimeline.parseFromDocument(doc));
-			}
-	}
+
 }
