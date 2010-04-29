@@ -8,6 +8,7 @@ import javax.swing.SwingUtilities;
 import org.w3c.dom.Document;
 
 import Changes.OrganizeType;
+import Changes.Search;
 import Changes.SubscriptionItem;
 import Exceptions.TweeterException;
 import GUI.RootGUI;
@@ -67,6 +68,7 @@ public class ButtonManager {
 		System.out.println("Searching for " + query);
 		//subscriptionsMgr.addSubscription(query);
 		timelinesMgr.clearTimeline();
+		subscriptionsMgr.addSubscription(new Search(query));
 		timelinesMgr.addSearchToTimeline(query);
 	}
 	

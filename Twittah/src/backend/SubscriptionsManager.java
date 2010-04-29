@@ -27,6 +27,7 @@ import testing.ProgramStateEvent;
 import testing.ProgramStateListener;
 
 import Changes.OrganizeType;
+import Changes.Search;
 import Changes.SubscriptionItem;
 import Changes.Timeline;
 import Exceptions.TweeterException;
@@ -104,21 +105,27 @@ public class SubscriptionsManager implements ProgramStateListener
 		//
 		Element 	subscriptions;
 		
-		NodeList	tweeters;
-		Element		tweeter;
-		String	 	name;
+		NodeList	subscripts;
+		Element		subscript;
+		Element         search;
+		String	 	text;
+		boolean         isSearch;
 		
 		_subscriptions = new ArrayList<SubscriptionItem>();
 		
 		subscriptions = (Element)(subscriptionList.getDocumentElement());
 		
-		tweeters = subscriptions.getElementsByTagName("name");
+		subscripts = subscriptions.getElementsByTagName("name");
 		
-		for (int t=0; t < tweeters.getLength(); ++t)
+		for (int t=0; t < subscripts.getLength(); ++t)
 		{
-			tweeter = (Element)(tweeters.item(t));
-			name = tweeter.getTextContent();
-			addTweeterSubscription(name);
+			subscript = (Element)(subscripts.item(t));
+			isSearch = Boolean.parseBoolean(subscript.getAttribute("Search"));
+			text = subscript.getTextContent();
+			if(!isSearch)
+			    addTweeterSubscription(text);
+			else
+			    addSubscription(new Search(text));
 		}
 		System.out.println("Array of tweeters is now constructed..");
 		
