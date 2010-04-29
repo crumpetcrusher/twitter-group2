@@ -1,5 +1,8 @@
 package Changes;
 
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -11,14 +14,18 @@ import Timelines.SearchTimeline;
 
 public class Search implements SubscriptionItem{
 
-	private String query;
+	private String _query;
 	private ImageIcon image;
 	private SearchTimeline timeline;
 	
 	public Search(String query)
 	{
+	    _query = query;
 		try {
-			image = new ImageIcon(new URL("http://s.twimg.com/a/1271891196/images/default_profile_5_normal.png"));
+			image = new ImageIcon(new URL("http://bimmershopper.com/wp-content/uploads/2009/11/Search-icon-256.png"));
+			Image test = image.getImage();
+			test = test.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
+			image = new ImageIcon(test);
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -32,7 +39,7 @@ public class Search implements SubscriptionItem{
 
 	@Override
 	public String text() {
-		return query;
+		return _query;
 	}
 
 	@Override
