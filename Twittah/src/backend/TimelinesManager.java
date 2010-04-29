@@ -5,17 +5,17 @@ import java.io.File;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import testing.ProgramState;
-import testing.ProgramStateEvent;
-import testing.ProgramStateListener;
 
 import Changes.OrganizeType;
 import Changes.SubscriptionItem;
-import Changes.Timeline;
 import GUI.RootGUI;
 import GUI.TimelinesViewer;
+import ThreadingHelpers.ProgramState;
+import ThreadingHelpers.ProgramStateEvent;
+import ThreadingHelpers.ProgramStateListener;
 import Timelines.CompositeTimeline;
 import Timelines.SearchTimeline;
+import Timelines.Timeline;
 import Timelines.UserTimeline;
 import Twitter.Tweeter;
 

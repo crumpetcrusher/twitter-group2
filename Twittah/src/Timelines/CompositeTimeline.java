@@ -7,14 +7,13 @@ import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import testing.ProgramState;
-import testing.ProgramStateEvent;
-import testing.ProgramStateListener;
 
 import Changes.DisplayItem;
 import Changes.DisplayItemOrganizer;
 import Changes.OrganizeType;
-import Changes.Timeline;
+import ThreadingHelpers.ProgramState;
+import ThreadingHelpers.ProgramStateEvent;
+import ThreadingHelpers.ProgramStateListener;
 import Twitter.Tweet;
 
 public class CompositeTimeline extends Timeline implements ProgramStateListener{

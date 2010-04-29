@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import Changes.Timeline;
 import Twitter.Tweet;
 import Twitter.Tweeter;
 import backend.XMLHelper;
@@ -64,54 +63,56 @@ public class SearchTimeline extends Timeline {
     //Parses the XML document
     private void parseXML()
     {
-        
-        Element entries;
-        Element entry;
-        Element id;
-        Element text;
-        Element method;
-        Element date;
-        Tweeter tweeter;
-        Matcher matcher;
-        
-        NodeList allEntries;
-        
-        entries = (Element)(timelineXML.getDocumentElement());
-        
-        allEntries = entries.getElementsByTagName("entry");
-        
-        for (int t=0; t < allEntries.getLength(); ++t)
+        if(timelineXML != null)
         {
-            entry = (Element)(allEntries.item(t));
+            Element entries;
+            Element entry;
+            Element id;
+            Element text;
+            Element method;
+            Element date;
+            Tweeter tweeter;
+            Matcher matcher;
             
-            id = (Element)entry.getElementsByTagName("name").item(0);
-            String tweetID = id.getTextContent();
-            tweeter = new Tweeter(tweetID, null, null);
+            NodeList allEntries;
             
-            text = (Element)entry.getElementsByTagName("title").item(0);
-            String tweetText = text.getTextContent();
+            entries = (Element)(timelineXML.getDocumentElement());
             
-            method = (Element)entry.getElementsByTagName("twitter:source").item(0);
-            String tweetMethod = method.getTextContent();
+            allEntries = entries.getElementsByTagName("entry");
             
-            matcher = Pattern.compile("</?.*?>").matcher(tweetMethod);
-            while (matcher.find())
-                    tweetMethod = matcher.replaceAll("");
-            
-            date = (Element)entry.getElementsByTagName("published").item(0);
-            String tweetDate = date.getTextContent();
-            
-            //Gets the username without the junk
-            matcher = Pattern.compile("T.+").matcher(tweetDate);
-            tweetDate = matcher.replaceAll("");
-            
-            //Gets the date without the junk
-            matcher = Pattern.compile("-").matcher(tweetDate);
-            tweetDate = matcher.replaceAll("/");
-            
-            Tweet tweet = new Tweet(tweeter, tweetText, new Date(tweetDate), tweetMethod);
-
-            addDisplayItem(tweet);
+            for (int t=0; t < allEntries.getLength(); ++t)
+            {
+                entry = (Element)(allEntries.item(t));
+                
+                id = (Element)entry.getElementsByTagName("name").item(0);
+                String tweetID = id.getTextContent();
+                tweeter = new Tweeter(tweetID, null, null);
+                
+                text = (Element)entry.getElementsByTagName("title").item(0);
+                String tweetText = text.getTextContent();
+                
+                method = (Element)entry.getElementsByTagName("twitter:source").item(0);
+                String tweetMethod = method.getTextContent();
+                
+                matcher = Pattern.compile("</?.*?>").matcher(tweetMethod);
+                while (matcher.find())
+                        tweetMethod = matcher.replaceAll("");
+                
+                date = (Element)entry.getElementsByTagName("published").item(0);
+                String tweetDate = date.getTextContent();
+                
+                //Gets the username without the junk
+                matcher = Pattern.compile("T.+").matcher(tweetDate);
+                tweetDate = matcher.replaceAll("");
+                
+                //Gets the date without the junk
+                matcher = Pattern.compile("-").matcher(tweetDate);
+                tweetDate = matcher.replaceAll("/");
+                
+                Tweet tweet = new Tweet(tweeter, tweetText, new Date(tweetDate), tweetMethod);
+    
+                addDisplayItem(tweet);
+            }
         }
     }
 

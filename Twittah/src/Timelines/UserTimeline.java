@@ -11,7 +11,6 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import Changes.Timeline;
 import Twitter.Tweet;
 import Twitter.Tweeter;
 import backend.XMLHelper;

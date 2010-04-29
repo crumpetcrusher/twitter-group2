@@ -43,6 +43,7 @@ public class RootGUI extends JPanel{
     private JButton                  searchButton;
     private JButton					 testButton;
     private ButtonManager            buttonMgr;
+    private int refreshTime = 30000;
     JCheckBoxMenuItem refreshAuto;
 	
 	public RootGUI() {
@@ -104,11 +105,12 @@ public class RootGUI extends JPanel{
 	    add(buttonPanel, BorderLayout.SOUTH);
 	    
         final Thread refreshThread = (new Thread() {
+
             public void run() {
                     do {
                             try {
                                     //sleep(10000);		// this does 10 seconds
-                                    sleep(60000);		// this does 60 seconds
+                                    sleep(refreshTime);		// this does 60 seconds
                                     buttonMgr.doRefreshTimeline();
                             } catch (InterruptedException e) {
                                     // TODO Auto-generated catch block
@@ -130,7 +132,9 @@ public class RootGUI extends JPanel{
     JMenu file              = new JMenu("File");
     JMenu sort              = new JMenu("Sort");
     JMenu options           = new JMenu("Options");
+    JMenu refreshOptions           =       new JMenu("Refresh every...");
     ButtonGroup sortGroup   = new ButtonGroup();
+    options.add(refreshOptions);
     
     
     JRadioButtonMenuItem sortByDate = new JRadioButtonMenuItem("Date");
@@ -159,10 +163,10 @@ public class RootGUI extends JPanel{
                     }
                     );
     
-    refreshAuto = new JCheckBoxMenuItem("Refresh Automatically");
+    refreshAuto = new JCheckBoxMenuItem("10 seconds");
     refreshAuto.setSelected(false);
     refreshAuto.setMnemonic(KeyEvent.VK_R);
-    options.add(refreshAuto);
+    refreshOptions.add(refreshAuto);
     
     
     refreshAuto.addItemListener(

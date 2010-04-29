@@ -35,8 +35,8 @@ public class DisplayItemViewer extends JPanel {
         Text.setWrapStyleWord(true);
         Text.setEditable(false);
 
-        Username = new JLabel(item.tweeter().getUserName());
-        Picture = new JLabel(item.tweeter().getUserPicture());
+        Username = new JLabel(item.text());
+        Picture = new JLabel(item.icon());
 
         String date = twitterHumanFriendlyDate(item.date().toString());
 

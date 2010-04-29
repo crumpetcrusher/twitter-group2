@@ -1,5 +1,7 @@
 package Changes;
 
+import Timelines.Timeline;
+
 public interface SubscriptionItem {
 
 	public String text();

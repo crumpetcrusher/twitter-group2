@@ -8,10 +8,9 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import testing.*;
 import Changes.SubscriptionItem;
-import Changes.Timeline;
-import Exceptions.TweeterException;
+import ThreadingHelpers.*;
+import Timelines.Timeline;
 import Timelines.UserTimeline;
 import backend.XMLHelper;
 
@@ -53,7 +52,7 @@ public class Tweeter implements SubscriptionItem
 //Class Constructors
     
     //Constructor method that requires a user name.  
-    public Tweeter(String userName) throws TweeterException
+    public Tweeter(String userName)
     {
         //Initializing all the variables
     	_userName = userName;
