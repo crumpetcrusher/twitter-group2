@@ -19,13 +19,15 @@ public class SearchTimeline extends Timeline {
     private String query;
     private Thread thread = (new Thread() {
         public void run() {
-            downloadXML();
-            if(timelineXML != null)
-                parseXML();
-            timelineRefreshed();
-            suspend();
-            }
-        });
+            do
+            {
+                downloadXML();
+                if(timelineXML != null)
+                    parseXML();
+                timelineRefreshed();
+                suspend();
+            }while(true);
+        }});
     
     
 //Class Constructors
