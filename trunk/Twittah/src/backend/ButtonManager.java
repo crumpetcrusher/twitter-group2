@@ -10,7 +10,6 @@ import org.w3c.dom.Document;
 import Changes.OrganizeType;
 import Changes.Search;
 import Changes.SubscriptionItem;
-import Exceptions.TweeterException;
 import GUI.RootGUI;
 import GUI.SubscriptionsViewer;
 import GUI.T_Main;

@@ -1,4 +1,4 @@
-package Changes;
+package Timelines;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,11 +8,14 @@ import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import testing.ProgramState;
-import testing.ProgramStateEvent;
-import testing.ProgramStateListener;
+import ThreadingHelpers.ProgramState;
+import ThreadingHelpers.ProgramStateEvent;
+import ThreadingHelpers.ProgramStateListener;
 
-import Timelines.CompositeTimeline;
+
+import Changes.DisplayItem;
+import Changes.DisplayItemOrganizer;
+import Changes.OrganizeType;
 
 public abstract class Timeline {
 	

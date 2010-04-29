@@ -22,20 +22,19 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
-import testing.ProgramState;
-import testing.ProgramStateEvent;
-import testing.ProgramStateListener;
 
 import Changes.OrganizeType;
 import Changes.Search;
 import Changes.SubscriptionItem;
-import Changes.Timeline;
-import Exceptions.TweeterException;
 import GUI.RootGUI;
 import GUI.SubscriptViewer;
 import GUI.SubscriptionsViewer;
 import GUI.T_Main;
+import ThreadingHelpers.ProgramState;
+import ThreadingHelpers.ProgramStateEvent;
+import ThreadingHelpers.ProgramStateListener;
 import Timelines.SearchTimeline;
+import Timelines.Timeline;
 import backend.XMLHelper;
 import Twitter.Tweeter;
 
@@ -177,14 +176,8 @@ public class SubscriptionsManager implements ProgramStateListener
 	 */
 	public void addTweeterSubscription(String name)
 	{
-		Tweeter tweeter;
-		try {
-			tweeter = new Tweeter(name);
-			tweeter.addProgramStateListener(this);
-		} catch (TweeterException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Tweeter tweeter = new Tweeter(name);
+	tweeter.addProgramStateListener(this);
 	}
 	
 	public void addSubscription(SubscriptionItem item)
@@ -237,6 +230,7 @@ public class SubscriptionsManager implements ProgramStateListener
 		Document newSubscriptions = docBuilder.newDocument();
 		
 		Element root = newSubscriptions.createElement("Subscriptions");
+		//root.setAttribute("Sort")
 		newSubscriptions.appendChild(root);
 		
 		for (SubscriptionItem subscriptItem : _subscriptions)

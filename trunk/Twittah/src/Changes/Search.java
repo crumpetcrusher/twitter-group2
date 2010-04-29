@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import backend.XMLHelper;
 
 import Timelines.SearchTimeline;
+import Timelines.Timeline;
 
 public class Search implements SubscriptionItem{
 
