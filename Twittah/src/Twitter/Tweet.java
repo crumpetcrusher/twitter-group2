@@ -1,173 +1,73 @@
 package Twitter;
-import java.net.URI;
-import java.util.*;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
+//Import statements
+import java.util.Date;
+import javax.swing.ImageIcon;
 import Changes.DisplayItem;
 
 
-/**
- * This is the tweet object.
- */
+//This is the tweet object!
+
 public class Tweet implements DisplayItem
 {
 	
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Class Attributes
-	//
-	private Tweeter tweeter 	= null;
-	/**
-	 * {@code tweetID} - Unique ID number of the tweet
-	 */
-    private String tweetID 		= null;
-    /**
-     * {@code tweetDate} Date in which the tweet was posted
-     */
-    private Date tweetDate 		= null;
-    /**
-     * {@code tweetText} Message that was posted
-     */
-    private String tweetText 	= null;
-    /**
-     * {@code tweetMethod} - Method used to post the tweet
-     */
-    private String tweetMethod 	= null;
+// Class Variables
+    
+    //The tweeter that did the tweeting
+    private Tweeter tweeter = null;
+    
+    //Tweet date
+    private Date tweetDate = null;
+
+    //Tweet text
+    private String tweetText = null;
+    
+    //How the tweet was tweeted
+    private String tweetMethod = null;
     
     
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Class Constructors
-	//
-    /**
-     * This is a constructor method that will take a full tweet input.
-     * @param newID The unique ID of the tweet.
-     * @param newText Message of the tweet.
-     * @param newDate The date the tweet was posted.
-     * @param newMethod The source from which the tweet came.
-     */
-    public Tweet(Tweeter newTweeter, String newID, String newText, Date newDate, String newMethod)
+// Class Constructors
+    
+    
+    //This class constructor allows for creation of a tweet, passing in all data.
+    public Tweet(Tweeter newTweeter, String newText, Date newDate, String newMethod)
     {
+        //The setting of the variables
     	tweeter = newTweeter;
-    	tweetID = newID;
     	tweetText = newText;
     	tweetDate = newDate;
     	tweetMethod = newMethod;
     }
     
-    /**
-     * This is a constructor method that will take a tweet object
-     * @param tweet - tweet object
-     */
-    public Tweet(Tweet tweet)
-    {
-    	this(tweet.tweeter, tweet.tweetID, tweet.tweetText, tweet.tweetDate, tweet.tweetMethod);
-    }
+
+//Class Methods
     
+    //The following method override DisplayItem
     
-    
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Class Methods
-	//
-    public Tweeter getTweeter()
-    {
-    	return tweeter;
-    }
-    /**
-     * This will get the ID of the tweet
-     * @return ID The unique ID of the tweet.
-     */
-    public String getID()
-    {
-    	return tweetID;
-    }
-    
-    /**
-     * This will get the date the tweet was posted.
-     * @return Date Returns that date in which this tweet was posted.
-     * @see Date
-     */
-    public Date getDate()
+    //Returns the date at which this tweet was tweeted
+    @Override
+    public Date date() 
     {
         return tweetDate;
     }
-
-    /**
-     * This will get the text of the tweet.
-     * @return text The text of this tweet.
-     */
-    public String getText()
+    
+    //Returns the method by which the tweet was made
+    @Override
+    public String source()
+    {
+        return tweetMethod;
+    }
+    
+    //Returns the text of the tweet
+    @Override
+    public String text()
     {
         return tweetText;
     }
-   
-    /**
-     * This will get the method used to post the tweet.
-     * @return source The source from which this tweet came.
-     */
-    public String getMethod()
-    {
-    	return tweetMethod;
-    }
 
-    /**
-     * This will clone the tweet for a duplicate tweet object
-     * @return Tweet - tweet object that has been cloned
-     */
-    public Tweet clone()
-    {
-    	return new Tweet(this);
-    }
-    
-    public String toString()
-    {
-    	return tweetDate + " - " + tweetText;
-    }
-
-    
-    //Added By Rick Humes 
-    //April 29, 2010
-    //Implementing DisplayItem for TweetViewer (to be renamed DisplayViewer)
-    
+    //Returns the tweeter's icon
     @Override
-	public Date date() {
-    	return tweetDate;
-	}
-
-	@Override
-	public String source() {
-		return tweetMethod;
-	}
-
-	@Override
-	public String text() {
-		 return tweetText;
-	}
-
-	@Override
-	public Tweeter tweeter() {
-		return tweeter;
-	}
-
-	@Override
-	public Element toElement(Document doc) {
-		Element tweet = doc.createElement("status");
-		Element tweetTweeterIDEle = doc.createElement("screen_name");
-		tweetTweeterIDEle.setTextContent(tweeter.getUserName());
-		tweet.appendChild(tweetTweeterIDEle);
-		Element tweetDateEle = doc.createElement("created_at");
-		tweetDateEle.setTextContent(tweetDate.toString());
-		tweet.appendChild(tweetDateEle);
-		Element tweetTextEle = doc.createElement("text");
-		tweetTextEle.setTextContent(tweetText);
-		tweet.appendChild(tweetTextEle);
-		Element tweetSourceEle = doc.createElement("source");
-		tweetSourceEle.setTextContent(tweetMethod);
-		tweet.appendChild(tweetSourceEle);
-		return tweet;
-		
-		
-	}
-    
- 
+    public ImageIcon icon() {
+        return tweeter.icon();
+    }
 }
