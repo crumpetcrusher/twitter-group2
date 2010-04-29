@@ -53,13 +53,13 @@ public class SearchTimeline extends Timeline {
             return temp;
     }
     
-    //Sets the users unique Timeline URL
+    //Downloads the XML for the timeline
     private void downloadXML()
     {
         timelineXML = XMLHelper.getTweetsByKeywords(query);
     }
     
-    //Method to populate our ArrayList of tweets with the tweets from a user
+    //Parses the XML document
     private void parseXML()
     {
         
