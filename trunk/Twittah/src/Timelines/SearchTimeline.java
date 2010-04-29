@@ -24,7 +24,7 @@ public class SearchTimeline extends Timeline {
 
 		private final String searchURL = "http://search.twitter.com/search.atom?q=";
 		private String query;
-		
+		Thread thread = null;
 		
 		public SearchTimeline(String newQuery)
 		{
@@ -33,7 +33,7 @@ public class SearchTimeline extends Timeline {
 			reload();
 		}
 		
-		public SearchTimeline() {
+		private SearchTimeline() {
 			
 		}
 		
@@ -43,7 +43,7 @@ public class SearchTimeline extends Timeline {
 		 */
 		private void downloadXML() throws TweeterException
 		{
-			System.out.println("Downloading Search Timeline.");
+			System.out.println("Downloading Search " + query + " Timeline.");
 			
 			timelineXML = XMLHelper.getTweetsByKeywords(query);
 		}
@@ -126,27 +126,22 @@ public class SearchTimeline extends Timeline {
 
 		@Override
 		public void downloadAndParse() {
-			// TODO Auto-generated method stub
-			try
-			{
-				downloadXML();
-				if(timelineXML != null)
-					parseXML();
-				timelineRefreshed();
-			}
-			catch(TweeterException e) 
-			{
-				System.out.println("Unable to refresh.");
-			}
+		        thread = (new Thread() {
+		            public void run() {
+		                            try {
+		                                        downloadXML();
+		                                        if(timelineXML != null)
+		                                                parseXML();
+		                                        timelineRefreshed();
+		                                        suspend();
+		                            } catch (TweeterException e) {
+		                                                                // TODO Auto-generated catch block
+		                                                                e.printStackTrace();
+		                                                        }
+		            }
+		    });
+		                thread.start();
 		}
-/*
-		@Override
-		public Element toElement(Document doc) {
-			Element temp = doc.createElement("Owner");
-			temp.setAttribute("Type", "Search");
-			temp.setTextContent(query);
-			return temp;
-		}*/
 
 		@Override
 		public void saveTimeline() {

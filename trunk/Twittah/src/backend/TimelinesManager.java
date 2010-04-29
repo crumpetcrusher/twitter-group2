@@ -67,7 +67,7 @@ public class TimelinesManager implements ProgramStateListener {
 	
 	public void addToTimeline(SubscriptionItem subscriptItemToAdd) {
 		for(SubscriptionItem subscriptItem : subscriptionsMgr.getSubscriptions())
-			if (subscriptItem.equals(subscriptItemToAdd)) 
+			if (!subscriptItem.equals(subscriptItemToAdd)) 
 				compositeTimeline.addTimeline(subscriptItem.timeline());
 	}
 
