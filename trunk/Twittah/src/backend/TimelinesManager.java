@@ -67,8 +67,13 @@ public class TimelinesManager implements ProgramStateListener {
 	
 	public void addToTimeline(SubscriptionItem subscriptItemToAdd) {
 		for(SubscriptionItem subscriptItem : subscriptionsMgr.getSubscriptions())
-			if (!subscriptItem.equals(subscriptItemToAdd)) 
+			if (subscriptItem.equals(subscriptItemToAdd))
 				compositeTimeline.addTimeline(subscriptItem.timeline());
+	}
+	
+	public void removeFromTimeline(SubscriptionItem item)
+	{
+	    compositeTimeline.removeTimeline(item.timeline());
 	}
 
 	public void removeUserFromTimeline(String name) {
@@ -118,7 +123,7 @@ public class TimelinesManager implements ProgramStateListener {
 				if(file.contains("user"))
 					addTimeline(UserTimeline.parseFromDocument(doc));
 				else
-					addTimeline(SearchTimeline.parseFromDocument(doc));
+					addTimeline(SearchTimeline.parseFromDocument(doc, "test"));
 			}
 	}
 	

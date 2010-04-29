@@ -32,6 +32,7 @@ import Changes.SubscriptionItem;
 import Changes.Timeline;
 import Exceptions.TweeterException;
 import GUI.RootGUI;
+import GUI.SubscriptViewer;
 import GUI.SubscriptionsViewer;
 import GUI.T_Main;
 import Timelines.SearchTimeline;
@@ -63,6 +64,7 @@ public class SubscriptionsManager implements ProgramStateListener
 	 */
 	private String subscriptionListLocation;
 	SubscriptionsViewer subscriptionVwr;
+	//SubscriptViewer        subscriptVwer;
 	private ButtonManager buttonMgr;
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,8 +81,13 @@ public class SubscriptionsManager implements ProgramStateListener
 	{
 		buttonMgr = buttonMgrIn;
 		subscriptionVwr = new SubscriptionsViewer();
+		//subscriptVwer = new SubscriptViewer();
+		//subscriptVwer.setVisible(false);
+		//subscriptVwer.setVisible(true);
 		gui.add(subscriptionVwr, BorderLayout.WEST);
+		//gui.add(subscriptVwer, BorderLayout.WEST);
 		subscriptionListLocation = Location;
+		
 		
 		Document subscriptionList = null;
 		subscriptionList = XMLHelper.getDocumentByLocation(subscriptionListLocation);
@@ -159,6 +166,7 @@ public class SubscriptionsManager implements ProgramStateListener
 				break;
 			}
 		subscriptionVwr.refresh(this, buttonMgr);
+		//subscriptVwer.refresh(this, buttonMgr);
 	}
 	
 	/**
@@ -183,6 +191,7 @@ public class SubscriptionsManager implements ProgramStateListener
 	{
 		_subscriptions.add(item);
 		subscriptionVwr.refresh(this, buttonMgr);
+		//subscriptVwer.refresh(this, buttonMgr);
 		try {
             writeDocument();
         }
@@ -208,7 +217,8 @@ public class SubscriptionsManager implements ProgramStateListener
    
 	private synchronized void subscriptionAdded()
 	{
-		subscriptionVwr.refresh(this, buttonMgr);
+	    subscriptionVwr.refresh(this, buttonMgr);
+	    //subscriptVwer.refresh(this, buttonMgr);
 	}
 	
 	/**

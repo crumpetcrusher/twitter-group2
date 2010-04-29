@@ -30,7 +30,7 @@ public class Search implements SubscriptionItem{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		timeline = SearchTimeline.parseFromDocument(XMLHelper.getTweetsByKeywords(query));
+		timeline = SearchTimeline.parseFromDocument(XMLHelper.getTweetsByKeywords(query), query);
 	}
 	@Override
 	public ImageIcon icon() {

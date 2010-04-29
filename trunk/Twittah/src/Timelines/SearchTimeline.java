@@ -149,9 +149,10 @@ public class SearchTimeline extends Timeline {
 			
 		}
 		
-		public static SearchTimeline parseFromDocument(Document doc)
+		public static SearchTimeline parseFromDocument(Document doc, String queryIn)
 		{
 			SearchTimeline temp = new SearchTimeline();
+			temp.query = queryIn;
 			temp.timelineXML = doc;
 			temp.parseXML();
 			return temp;

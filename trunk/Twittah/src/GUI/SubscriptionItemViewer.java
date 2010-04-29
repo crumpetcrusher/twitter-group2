@@ -42,6 +42,7 @@ public class SubscriptionItemViewer extends JPanel {
             ButtonManager newButtonMgr) {
 
         _subscriptItem = subscriptItem;
+        System.out.println(subscriptItem.timeline());
         buttonMgr = newButtonMgr;
         icon = subscriptItem.icon();
         id = "  " + subscriptItem.text();
@@ -49,7 +50,8 @@ public class SubscriptionItemViewer extends JPanel {
         iconAndName.setIcon(icon);
         iconAndName.setIconTextGap(2);
 
-        setPreferredSize(new Dimension(220, 80));
+        setPreferredSize(new Dimension(200, 80));
+        setMaximumSize(new Dimension(200,80));
 
         JPanel buttonHolder = new JPanel();
         JPanel infoHolder   = new JPanel(new BorderLayout());
@@ -73,6 +75,7 @@ public class SubscriptionItemViewer extends JPanel {
         viewButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
+                System.out.println(_subscriptItem.text());
                 buttonMgr.doSelectSubscription(_subscriptItem);
             }
         });
@@ -88,10 +91,10 @@ public class SubscriptionItemViewer extends JPanel {
 
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
-                    // buttonMgr.doAddToComposite();
+                    buttonMgr.addDisplaySubscription(_subscriptItem);
                 }
                 if (e.getStateChange() == ItemEvent.DESELECTED) {
-                    // buttonMgr.doRemoveFromComposite();
+                    buttonMgr.removeDiaplySubscription(_subscriptItem);
                 }
             }
         });
@@ -99,9 +102,10 @@ public class SubscriptionItemViewer extends JPanel {
         setLayout(new BorderLayout());
         add(infoHolder, BorderLayout.CENTER);
     }
-
-    public boolean isSearch() {
-        return itemIsSearch;
+    
+    public void unCheck()
+    {
+        selectSubscriptionCheckBox.setSelected(false);
     }
 
 }

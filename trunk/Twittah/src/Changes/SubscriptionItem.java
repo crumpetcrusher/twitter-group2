@@ -9,4 +9,5 @@ public interface SubscriptionItem {
 	public boolean isSearch();
 	
 	public Timeline timeline();
+	
 }

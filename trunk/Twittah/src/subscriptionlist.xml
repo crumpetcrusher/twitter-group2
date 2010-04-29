@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Subscriptions>
-<name>Frappe051</name>
-<name>Soljia</name>
-<name>TheOprahShow</name>
-<name>engadget</name>
+<name Search="false">profhal</name>
+<name Search="false">Frappe051</name>
+<name Search="false">Soljia</name>
+<name Search="true">htht</name>
 </Subscriptions>

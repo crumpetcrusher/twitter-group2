@@ -1,7 +1,9 @@
 package GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -38,15 +40,19 @@ public class SubscriptionsViewer extends JPanel {
 						buttonMgr.doShowCompositeTimeline();
 					}
 				});
-		
+		                      subscriptionItemsPanel.add(Box.createVerticalGlue());
+                        subscriptionItemsPanel.add(Box.createVerticalStrut(1));
 		add(compositeTimelineButton, BorderLayout.NORTH);*/
 		
 		subscriptionItemsPanel = Box.createVerticalBox();
 		subscriptionsScrollPane = new JScrollPane(subscriptionItemsPanel);
+		setBackground(Color.red);
 		
-		subscriptionsScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		
-		add(subscriptionsScrollPane, BorderLayout.CENTER);
+		    final JScrollPane scrollPane = new JScrollPane(subscriptionItemsPanel);   
+		    setLayout(new BorderLayout());  
+		    scrollPane.setViewportView(subscriptionItemsPanel);
+		    scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		    add(scrollPane, BorderLayout.WEST);
 	}
 	
 	public void refresh(SubscriptionsManager subscriptionsMgr, ButtonManager buttonMgr) {
@@ -54,8 +60,7 @@ public class SubscriptionsViewer extends JPanel {
 		for(SubscriptionItem subscriptItem : subscriptionsMgr.getSubscriptions()) {
 			SubscriptionItemViewer subscriptionItem = new SubscriptionItemViewer(subscriptItem, buttonMgr);
 			subscriptionItemsPanel.add(subscriptionItem);
-			subscriptionItemsPanel.add(Box.createVerticalGlue());
-			subscriptionItemsPanel.add(Box.createVerticalStrut(1));
+
 		}
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
