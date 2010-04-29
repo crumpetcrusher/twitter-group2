@@ -119,7 +119,9 @@ public class SearchTimeline extends Timeline {
     @Override
     public void downloadAndParse() 
     {
-        thread.start();
+        if(!thread.isAlive())
+            thread.start();
+        thread.resume();
     }
 
     //Saves the timeline locally
