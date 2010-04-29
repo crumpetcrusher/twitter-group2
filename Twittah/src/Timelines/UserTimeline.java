@@ -84,6 +84,7 @@ public class UserTimeline extends Timeline {
 				tweeterIcon = (Element) tweeterEle.getElementsByTagName("profile_image_url").item(0);
 				try {
 					tweeter = new Tweeter(tweeterName.getTextContent(), new ImageIcon(new URL(tweeterIcon.getTextContent())), this);
+					while(tweeter == null) {}
 				} catch (DOMException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -120,7 +121,6 @@ public class UserTimeline extends Timeline {
 	public void downloadAndParse() {
         thread = (new Thread() {
             public void run() {
-                    do {
                             try {
                     			downloadXML();
                     			if(timelineXML != null)
@@ -131,8 +131,6 @@ public class UserTimeline extends Timeline {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-                            
-                    } while (isAlive());
             }
     });
         	thread.start();

@@ -192,41 +192,6 @@ public class SubscriptionsManager implements ProgramStateListener
 	{
 		subscriptionVwr.refresh(this, buttonMgr);
 	}
-
-/*
-	public void addSubscription(String name) throws NullPointerException
-	{
-		if(subscriptionListLocation == null)
-			throw new NullPointerException("Subscription list was not initialized!");
-		
-		boolean exists = false;
-			
-		for(SubscriptionItem subscriptItem : _subscriptions)
-			if (subscriptItem.text().equals(name))
-				exists = true;
-		
-		if(!exists)
-		{
-			try{
-				_subscriptions.add(new Tweeter(name));
-				writeDocument();
-			}
-			catch(TweeterException e)
-			{
-				e.printStackTrace();
-			} catch (ParserConfigurationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (TransformerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		else {
-			System.out.println("User already exists");
-		}
-		subscriptionVwr.refresh(this, buttonMgr);
-	}*/
 	
 	/**
 	 * Processes the XML document and commits
