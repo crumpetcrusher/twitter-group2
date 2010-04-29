@@ -176,6 +176,17 @@ public class SubscriptionsManager implements ProgramStateListener
 	{
 		_subscriptions.add(item);
 		subscriptionVwr.refresh(this, buttonMgr);
+		try {
+            writeDocument();
+        }
+        catch (ParserConfigurationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (TransformerException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 	}
 	
 	@Override
