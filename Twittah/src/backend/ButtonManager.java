@@ -33,6 +33,16 @@ public class ButtonManager {
 			subscriptionsMgr.addTweeterSubscription(newName);
 	}
 	
+	public void addDisplaySubscription(SubscriptionItem item)
+	{
+	    timelinesMgr.addToTimeline(item);
+	}
+	
+	public void removeDiaplySubscription(SubscriptionItem item)
+	{
+	    timelinesMgr.removeFromTimeline(item);
+	}
+	
 	public void doDeleteSubscription(SubscriptionItem item) {
 		subscriptionsMgr.removeSubscription(item);
 		timelinesMgr.clearTimeline();

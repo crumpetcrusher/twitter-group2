@@ -122,6 +122,7 @@ public class RootGUI extends JPanel{
     refreshThread.suspend();
     
     JFrame frame = new JFrame("Twittah!");
+    frame.setResizable(false);
 
     // Menubar
     //
