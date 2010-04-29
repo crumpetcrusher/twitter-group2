@@ -1,256 +1,176 @@
 package Twitter;
 
+//Import Statements
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.ImageIcon;
-
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
-import testing.ProgramState;
-import testing.ProgramStateEvent;
-import testing.ProgramStateListener;
-
+import testing.*;
 import Changes.SubscriptionItem;
 import Changes.Timeline;
 import Exceptions.TweeterException;
-import Timelines.SearchTimeline;
 import Timelines.UserTimeline;
 import backend.XMLHelper;
 
 
-/**
- * This is the user object.
- * 
- * @author Rick
- * @version 2/2/2009
- * 
- * @author Scott Smiesko
- * @version 2/24/2009
- * 
- */
+//The tweeter class!
 public class Tweeter implements SubscriptionItem
 {
 	
-	//Class Variables
+//Class Variables
 
-    /**
-     * Stores the real name of the user
-     */
-    private String userName = null;
-    /**
-     * Stores the tweeter's profile picture.
-     */
-    private ImageIcon userPicture = null;
-    /**
-     * Stores the timeline for this user.
-     */
-    private UserTimeline userTimeline = null;
-    /**
-     * Is the user protected?  Can we get their tweets?
-     */
-    private boolean userProtected = false;
-    /**
-     * document object for storing the XML
-     */
-    private Document tweeterXML = null;
+    //Stores the real name of the user
+    private String _userName = null;
     
-    private Thread thread;
+    //Stores the tweeter's profile picture.
+    private ImageIcon _userPicture = null;
     
+    //Stores the timeline for this user.
+    private UserTimeline _userTimeline = null;
+    
+    //Document object for storing the XML
+    private Document _tweeterXML = null;
+    
+    //This thread is used to download and parse the tweeter data, without interrupting the program
+    private Thread thread = (new Thread() {
+        @SuppressWarnings("deprecation")
+        public void run() {
+            getXML();
+            if(_tweeterXML != null)
+                parseXML();
+            suspend();
+        }
+    });
+    
+    //This is for the ProgramStateListener, it holds every object that is listening for the tweeter parsing complete event.
+    @SuppressWarnings("unchecked")
     private List _listeners = new ArrayList();
 
-    //Constructors
     
-    /**
-     * Constructor method that requires a UserID.  
-     *  uses the userID to get the twitter Info XML File of that user
-     * 
-     * @author Scott Smiesko
-     * @param  newUserID - userID used to get twitter feed
-     */
-    public Tweeter(String name) throws TweeterException
+//Class Constructors
+    
+    //Constructor method that requires a user name.  
+    public Tweeter(String userName) throws TweeterException
     {
-    	System.out.println("Creating Tweeter Object for: " + name );
+        //Initializing all the variables
+    	_userName = userName;
     	
-    	userName = name;
-        thread = (new Thread() {
-            public void run() {
-                    do {
-                            getXML();
-							if(tweeterXML != null)
-							parseXML();
-							suspend();
-                            
-                    } while (isAlive());
-            }
-    });
-        	thread.start();
-
-
-    	userTimeline = new UserTimeline(this);
-    	
+        //Creates the user's timeline
+        _userTimeline = new UserTimeline(this);
+    
+    	//Starts the thread which downloads and parses the information
+    	thread.start();
     }
     
-    public Tweeter(String name, ImageIcon image, Timeline timeline)
+    //This constructor allows for the creation of a user without having to download the user's information.
+    public Tweeter(String userName, ImageIcon userPicture, Timeline userTimeline)
     {
-    	userName = name;
-    	userPicture = image;
-    	userTimeline = (UserTimeline)timeline;
+        //Assigning the inputed variables
+    	_userName = userName;
+    	_userPicture = userPicture;
+    	_userTimeline = (UserTimeline)userTimeline;
     	
-    	if(userPicture == null)
-			try {
-				userPicture = new ImageIcon(new URL("http://s.twimg.com/a/1271891196/images/default_profile_5_normal.png"));
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			tweeterParsed();
+    	
+    	//Assign a default picture if none is specified
+    	if(_userPicture == null)
+    	{
+    	    try 
+    	    {
+    	        _userPicture = new ImageIcon(new URL("http://s.twimg.com/a/1271891196/images/default_profile_5_normal.png"));
+	    } 
+	    catch (MalformedURLException e) 
+	    {
+	        e.printStackTrace();
+	    }
+    	}
+    	
+    	//Let the listeners know that the Tweeter object is completed.
+    	tweeterParsed();
     }
 
-    // Methods
+//Class Methods
 
-    public boolean validName(String newUserName)
-    {
-    	boolean value = false;
-    	
-    	if(newUserName != null)
-    		value = true;
-    	
-    	return value;
-    }
-    
-    
+    //Get the XML associated to the userName provided
     private void getXML()
     {
-		System.out.println("Downloading Tweeter Information.");
-		
-		tweeterXML = XMLHelper.getUserInfoByUserSN(userName);	
-		
+        _tweeterXML = XMLHelper.getUserInfoByUserSN(_userName);		
     }
-    /**
-     * Populates the rest of a tweeter object with data from the XML feed
-     * 
-     * @author Scott Smiesko
-     * @param xmlFile
-     */
+    
+    //Populates the rest of a tweeter object with data from the XML feed
     private void parseXML()
     {
-       	System.out.println("Parsing " + userName + " XML");
+       	Element user = (Element)(_tweeterXML.getFirstChild());
+       	Element picture = (Element)(user.getElementsByTagName("profile_image_url").item(0));
        	
-       	Element user;
-       	Element isProtected;
-       	Element picture;
-       	
-       	user = (Element)(tweeterXML.getFirstChild());
-        
-        isProtected = (Element)(user.getElementsByTagName("protected").item(0));
-        userProtected = Boolean.parseBoolean(isProtected.getTextContent());
-        
-        picture = (Element)(user.getElementsByTagName("profile_image_url").item(0));
-        try {
-			userPicture = new ImageIcon(new URL(picture.getTextContent()));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DOMException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		tweeterParsed();
-       	
-    }
-    
-/* 
-    **
-     * This gets the person's unique id.
-     *
-     * @author Rick Humes
-     * @return userID Person's unique id.
-     *
-    public String getUserID()
-    {
-        return userID;
-    }
-*/
-    
-    /**
-     * This gets the person's username
-     *
-     * @author Rick Humes
-     * @return userName Person's username
-     */
-    public String getUserName()
-    {
-        return userName;
-    }
-
-	public ImageIcon getUserPicture()
-	{
-		return userPicture;
-	}
-	
-	public UserTimeline getUserTimeline()
-	{
-		return userTimeline;
-	}
-	
-	public boolean isProtected()
-
-	{
-		return userProtected;
-	}
-
-	@Override
-	public ImageIcon icon() {
-		return userPicture;
-	}
-
-	@Override
-	public String text() {
-		return userName;
-	}
-
-	@Override
-	public boolean isSearch() {
-		return false;
-	}
-
-	@Override
-	public Timeline timeline() {
-		return userTimeline;
-	}
-	
-	   @SuppressWarnings("unchecked")
-	public synchronized void addProgramStateListener( ProgramStateListener l ) 
-   {
-        if(_listeners.add( l ))
- 		   System.out.println("Listener Added");
-        else
- 		   System.out.println("Listener Not Added");
-        	
-    }
-    
-    public synchronized void removeProgramStateListener( ProgramStateListener l ) {
-        _listeners.remove( l );
-    }
-    
-	private synchronized void tweeterParsed()
-	{
-		System.out.println(userName + " parsed! " + _listeners.size() + " objects listening!");
-		ProgramStateEvent state = new ProgramStateEvent(this, ProgramState.SUBSCRIPTION_ADDED);
-		ProgramStateListener[] listeners = new ProgramStateListener[_listeners.size()];
-		_listeners.toArray(listeners);
-        for(ProgramStateListener listener : listeners)
+       	//Try to download and set the user's picture
+        try 
         {
-        	System.out.println("Sending state" + state.state() + " to" + listener);
-        	listener.stateReceived(state);
+            _userPicture = new ImageIcon(new URL(picture.getTextContent()));
+        } 
+        catch (MalformedURLException e) 
+        {
+            e.printStackTrace();
         }
-	}
+        
+        //Let the listeners know that the Tweeter object is completed.
+        tweeterParsed();
+       	
+    }
+    
+    //Returns the user's picture
+    @Override
+    public ImageIcon icon() 
+    {
+        return _userPicture;
+    }
 
+    //Returns the user's name
+    @Override
+    public String text() {
+        return _userName;
+    }
 
+    //Returns that this DisplayItem is not a search
+    @Override
+    public boolean isSearch() {
+        return false;
+    }
+
+    //Return the user's timeline
+    @Override
+    public Timeline timeline() {
+        return _userTimeline;
+    }
+
+    
+    //This is for threading
+    
+    //Adds a listener
+    @SuppressWarnings("unchecked")
+    public synchronized void addProgramStateListener( ProgramStateListener l ) 
+    {
+        _listeners.add(l);
+    }
+    
+    //Removes a listener
+    public synchronized void removeProgramStateListener( ProgramStateListener l ) 
+    {
+        _listeners.remove(l);
+    }
+    
+    //Informs listeners that the tweeter object is completed.
+    @SuppressWarnings("unchecked")
+    private synchronized void tweeterParsed()
+    {
+        ProgramStateEvent state = new ProgramStateEvent(this, ProgramState.SUBSCRIPTION_ADDED);
+        ProgramStateListener[] listeners = new ProgramStateListener[_listeners.size()];
+        _listeners.toArray(listeners);
+        
+        for(ProgramStateListener listener : listeners)
+        	listener.stateReceived(state);
+    }
     
 }
