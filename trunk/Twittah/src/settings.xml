@@ -1,22 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Settings>
-
-
-	<Subscriptions>
-		<user name="profhal">
-			<tweets>
-				<tweet>
-					<text></text>
-					<date></date>
-					<source></source>
-				</tweet>
-			</tweets>
-			<picture></picture>
-		</user>
-		<user name="Frappe051">
-			<tweets></tweets>
-			<picture></picture>
-		</user>
-	</Subscriptions>
-	<Sort></Sort>
-</Settings>
+<Subscriptions Sort="JAN_DEC">
+<name Search="false">Soljia</name>
+<name Search="false">profhal</name>
+</Subscriptions>
