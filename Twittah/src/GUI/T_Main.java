@@ -19,15 +19,26 @@ package GUI;
 
 public class T_Main {
 
-	public static void main(String[] args) throws Exception {
-		init();
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class main
+    //
+    public static void main(String[] args) throws Exception {
+        
+        // Call initialize to start our GUI
+        //
+        init();
 
-	}
+    }
 
-	public static void init() {
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class initialize
+    //
+    public static void init() {
 
-		new RootGUI();
+        // Creates a new RootGUI, the main JFrame and JPanel holding the rest of the GUI objects
+        // inside that JFrame.
+        //
+        new RootGUI();
 
-	}
-
+    }
 }

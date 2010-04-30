@@ -35,6 +35,10 @@ import backend.SubscriptionsManager;
 
 public class SubscriptionsViewer extends JPanel {
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Attributes
+    //
+    
     // There are four objects used to display the Subscriptions information to the user
     //
     // _subscriptMgr            : A reference to a SubscriptionsManager object we pass to this class to keep track
@@ -56,6 +60,14 @@ public class SubscriptionsViewer extends JPanel {
     private Container                         subscriptionItemsPanel;
     private ArrayList<SubscriptionItemViewer> subscriptionItems = new ArrayList<SubscriptionItemViewer>();
 
+    
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Constructors
+    //
+    
+    // This constructor is passed in a subscriptionManager and a buttonManager to handle the changes a user 
+    // wants to make.  It creates the subscriptions viewer items for the GUI to view.
+    //
     public SubscriptionsViewer(SubscriptionsManager subscriptMgr, ButtonManager buttonMgr) {
         
         // Assign the local values to their incoming counterparts.
@@ -77,6 +89,10 @@ public class SubscriptionsViewer extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Methods
+    //
+    
     // Method to retrieve which SubscriptionItemViewers are selected when we are building a 
     // composite timeline.  Iterates through the array of Subscriptions and finds which ones are selected.
     // 

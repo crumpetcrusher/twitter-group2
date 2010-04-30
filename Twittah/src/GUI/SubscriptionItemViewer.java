@@ -41,7 +41,11 @@ import backend.ButtonManager;
 
 public class SubscriptionItemViewer extends JPanel {
 
-    // There are eleven objects used to display the SubscriptionItem information to the user
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Attributes
+    //
+    
+    // There are eleven attributes used to display the SubscriptionItem information to the user
     //
     // buttonMgr                 : A reference to a ButtonManager object we pass to this class to allow
     //                            manipulation of the GUI.
@@ -84,6 +88,13 @@ public class SubscriptionItemViewer extends JPanel {
     private SubscriptionItem  _subscriptItem;
     private JCheckBox         selectSubscriptionCheckBox;
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Constructors
+    //
+    
+    // This constructor takes in a subscriptionItem to display to the GUI, and a buttonManager to handle
+    // user requests when they select a subscriptionItem for viewing, deleting, or adding to a composite timeline.
+    //
     SubscriptionItemViewer(SubscriptionItem subscriptItem, ButtonManager newButtonMgr) {
 
         // Set the incoming items to their respectful variables above for usage.
@@ -155,6 +166,10 @@ public class SubscriptionItemViewer extends JPanel {
         add(infoHolder, BorderLayout.CENTER);
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Methods
+    //
+    
     // Method to retrieve the state of the select subscription checkbox for
     // creating a compositeTimeline based on who is selected
     //

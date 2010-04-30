@@ -46,6 +46,10 @@ import backend.ButtonManager;
 
 public class RootGUI extends JPanel {
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Attributes
+    //
+    
     // There are Seven objects used to store/display the data for the RootGUI class
     //
     // buttonPanel              : 
@@ -76,6 +80,13 @@ public class RootGUI extends JPanel {
     private int               refreshTime = 30000;
     private JCheckBoxMenuItem refreshAuto;
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Constructor
+    //
+    
+    // No need for much explination, this is where the RootGUI object is created and passed along to other 
+    // _Managers for manipulation of the GUI objects.
+    //
     public RootGUI() {
 
         // Pass this RootGUI reference into ButtonManager and create a reference to buttonManager for the

@@ -33,7 +33,11 @@ import Changes.DisplayItem;
 
 public class DisplayItemViewer extends JPanel {
 
-    // There are four components used to show the individual tweet information to the user.
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Attributes
+    //
+    
+    // This class has four attributes used to aid in displaying the individual tweet information to the user.
     //
     // Username                 : A JLabel to show the Username of the tweeter.
     //
@@ -43,12 +47,18 @@ public class DisplayItemViewer extends JPanel {
     //
     // metadata                 : A JLabel used to show the date and method used to post the tweet.
     //
+    //
     private static final long serialVersionUID = 4089145031957417967L;
     JLabel                    Username         = null;
     JLabel                    Picture          = null;
     JTextArea                 Text             = new JTextArea();
     JLabel                    metadata         = null;
 
+    
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Constructors
+    //
+    
     // This is the constructor for the DisplayItemViewer class.
     //
     // item : The specific DisplayItem that is to be shown inside our JPanel.
@@ -89,6 +99,10 @@ public class DisplayItemViewer extends JPanel {
         add(metadata, BorderLayout.SOUTH);
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Methods
+    //
+    
     // This operation converts the UTC date string from a displayItems' date() method into a
     // human-friendly date format (eg. 4 hours ago, 5 days ago, yesterday.)
     //	
@@ -180,6 +194,8 @@ public class DisplayItemViewer extends JPanel {
             return "about " + n + " years ago";
         }
         else {
+            // Easter egg..
+            //
             return "back in my day...";
         }
     }
