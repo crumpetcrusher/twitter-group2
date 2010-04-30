@@ -127,18 +127,10 @@ public class ButtonManager {
         timelinesMgr.addToTimeline(item);
     }
 
-    // Remove a display subscription from the timeline 
-    //
-    public void removeDiaplySubscription(SubscriptionItem item) {
-        timelinesMgr.removeFromTimeline(item);
-    }
-
     // Delete a subscription from the subscriptionsManager when the user selects the Delete button on a user
     //
     public void doDeleteSubscription(SubscriptionItem item) {
         subscriptionsMgr.removeSubscription(item);
-        timelinesMgr.clearTimeline();
-        timelinesMgr.initialize();
     }
 
     // Refresh the timeline to show the newest information when a user selects the Refresh button
