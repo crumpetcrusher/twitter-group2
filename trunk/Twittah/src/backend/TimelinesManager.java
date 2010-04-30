@@ -1,6 +1,7 @@
 package backend;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -66,9 +67,13 @@ public class TimelinesManager implements ProgramStateListener {
 	}
 	
 	public void addToTimeline(SubscriptionItem subscriptItemToAdd) {
-		for(SubscriptionItem subscriptItem : subscriptionsMgr.getSubscriptions())
+	    ArrayList<SubscriptionItem> subscriptItems = subscriptionsMgr.getSubscriptions();
+		for(SubscriptionItem subscriptItem : subscriptItems)
 			if (subscriptItem.equals(subscriptItemToAdd))
-				compositeTimeline.addTimeline(subscriptItem.timeline());
+			{
+			    Timeline subscriptTimeline = subscriptItem.timeline();
+			    compositeTimeline.addTimeline(subscriptTimeline);
+			}
 	}
 	
 	public void removeFromTimeline(SubscriptionItem item)
