@@ -28,7 +28,7 @@ public class DisplayItemOrganizer implements Comparator<DisplayItem>{
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Class Attributes
     //
-    // This class has 1 component. Stored for information on how to organize the list.
+    // This class has 1 attribute. Stored for information on how to organize the list.
     //
     // type             : The type of organization used for a list.
     //
@@ -52,6 +52,7 @@ public class DisplayItemOrganizer implements Comparator<DisplayItem>{
     
     // This method must be overridden due to Comparator implementation. This method actually does the comparing,
     // returning if the one is greater, equal, or less than the other.
+    //
     @Override
     public int compare(DisplayItem item1, DisplayItem item2) {
         int result = 0;

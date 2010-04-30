@@ -1,11 +1,11 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// Project      : IST240 - Twitter Application
+// Project              : IST240 - Twitter Application
 //
-// Class Name   : ButtonManager
+// Class Name           : ButtonManager
 //    
-// Authors      : Scott Smiesko, Rick Humes
-// Date         : 2010-30-04
+// Authors              : Scott Smiesko, Rick Humes
+// Date                 : 2010-30-04
 //
 //
 // DESCRIPTION
@@ -50,7 +50,7 @@ public class ButtonManager {
     // Class Attributes
     //
     
-    // This class has 3 components used to manage all the requests
+    // This class has 3 attributes used to manage all the requests
     // 
     // subscriptionsMgr         :  The class that handles all of our subscription items.
     //
@@ -96,6 +96,7 @@ public class ButtonManager {
             boolean isSearch;
 
             // Get subscriptions from our XML files and parse for information.
+            //
             subscriptions = (Element) (doc.getDocumentElement());
             timelinesMgr.organize(OrganizeType.valueOf(subscriptions.getAttribute("Sort")));
 
@@ -178,7 +179,6 @@ public class ButtonManager {
     // selects the Search button
     //
     public void doSearch(String query) {
-        System.out.println("Searching for " + query);
         timelinesMgr.clearTimeline();
         subscriptionsMgr.addSubscription(new Search(query));
         timelinesMgr.addSearchToTimeline(query);
