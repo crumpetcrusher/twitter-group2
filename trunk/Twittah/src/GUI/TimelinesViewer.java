@@ -31,6 +31,10 @@ import backend.TimelinesManager;
 
 public class TimelinesViewer extends JPanel {
     
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Attributes
+    //
+    
     // There are three objects used to display the Timeline information to the user
     //
     // TimelinesMgr             : A reference to a TimelinesManager object we pass to this class to keep track
@@ -46,6 +50,14 @@ public class TimelinesViewer extends JPanel {
     private JScrollPane       timelineScrollPane        = new JScrollPane();
     private Container         timelineItemsPanel;
 	
+    
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Constructors
+    //
+    
+    // This constructor takes in a TimelinesManager and creates the layout for the viewer to store all the
+    // DisplayItemViewers.
+    //
     public TimelinesViewer(TimelinesManager newTimelinesMgr) {
         
         // Assign this class a TimelinesManager so it can get any new tweet information when requested
@@ -57,6 +69,7 @@ public class TimelinesViewer extends JPanel {
 	timelineItemsPanel = Box.createVerticalBox();
 
 	// Add the Items Panel to the Scroll Pane
+	//
 	timelineScrollPane.setViewportView(timelineItemsPanel);
 
 	// Add the scroll pane to this JPanel with a BorderLayout and center it. This helped in making sure
@@ -70,6 +83,11 @@ public class TimelinesViewer extends JPanel {
 	refresh();
     }
 
+    
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Methods
+    //
+    
     // Method to refresh the timelines viewer with any changes happening in the backend of things
     //
     public void refresh() {

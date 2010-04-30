@@ -46,6 +46,10 @@ import GUI.SubscriptionItemViewer;
 
 public class ButtonManager {
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Attributes
+    //
+    
     // This class has 3 components used to manage all the requests
     // 
     // subscriptionsMgr         :  The class that handles all of our subscription items.
@@ -60,6 +64,11 @@ public class ButtonManager {
     private TimelinesManager     timelinesMgr;
     private String               settingsLocation = "src/settings.xml";
 
+    
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Constructors
+    //
+    
     // This is the constructor for the class.  It takes in our root GUI to pass along to subscriptionsManager
     // and timelinesManager so they can manipulate the GUI when called to do so through this class.
     //
@@ -69,6 +78,11 @@ public class ButtonManager {
         init(XMLHelper.getDocumentByLocation(settingsLocation));
     }
 
+    
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Methods
+    
+    //
     // This is the initialize method that parses the settings.xml file passed to it from our constructor
     //  If there are no settings, then the program runs as if it was first loaded.
     //
