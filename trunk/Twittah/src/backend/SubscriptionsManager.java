@@ -78,7 +78,7 @@ public class SubscriptionsManager implements ProgramStateListener {
         subscriptionVwr = new SubscriptionsViewer(this, buttonMgr);
         gui.add(subscriptionVwr, BorderLayout.WEST);
         subscriptionListLocation = Location;
-        Document subscriptionList = null;
+        // Document subscriptionList = null;
 
     }
 

@@ -1,11 +1,11 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// Project      : IST240 - Twitter Application
+// Project              : IST240 - Twitter Application
 //
-// Class Name   : Search
+// Class Name           : Search
 //    
-// Authors      : Scott Smiesko, Rick Humes
-// Date         : 2010-30-04
+// Authors              : Scott Smiesko, Rick Humes
+// Date                 : 2010-30-04
 //
 //
 // DESCRIPTION
@@ -31,7 +31,7 @@ public class Search implements SubscriptionItem{
     // Class Attributes
     //
     
-    // This class has 3 components used to store information about the search term.
+    // This class has 3 attributes used to store information about the search term.
     //
     // _query           : The query that was submitted.
     //

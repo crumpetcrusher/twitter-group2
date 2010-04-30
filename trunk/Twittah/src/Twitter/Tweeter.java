@@ -24,11 +24,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.ImageIcon;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
 import Changes.SubscriptionItem;
-import ThreadingHelpers.*;
+import ThreadingHelpers.ProgramState;
+import ThreadingHelpers.ProgramStateEvent;
+import ThreadingHelpers.ProgramStateListener;
 import Timelines.Timeline;
 import Timelines.UserTimeline;
 import backend.XMLHelper;
