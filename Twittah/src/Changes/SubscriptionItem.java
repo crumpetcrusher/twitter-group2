@@ -1,11 +1,11 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// Project      : IST240 - Twitter Application
+// Project              : IST240 - Twitter Application
 //
-// Interface Name   : SubscriptionItem
+// Interface Name       : SubscriptionItem
 //    
-// Authors      : Scott Smiesko, Rick Humes
-// Date         : 2010-30-04
+// Authors              : Scott Smiesko, Rick Humes
+// Date                 : 2010-30-04
 //
 //
 // DESCRIPTION
@@ -21,7 +21,11 @@ import Timelines.Timeline;
 
 public interface SubscriptionItem {
 
-    // This class has 3 components used to store information about the search term.
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Interface
+    //
+    
+    // This class has 3 interface methods used to store information about the search term.
     //
     // text()           : The identifier, usually the search term or a tweeters name.
     //
@@ -30,6 +34,7 @@ public interface SubscriptionItem {
     // isSearch()       : Whether or not this item is a search. Search - True, Tweeter - False
     //
     // timeline()       : The timeline associated with this item.
+    //
     //
     public String text();
     
