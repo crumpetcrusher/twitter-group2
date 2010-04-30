@@ -27,16 +27,28 @@ import ThreadingHelpers.ProgramStateListener;
 
 public class CompositeTimeline extends Timeline implements ProgramStateListener{
 	
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Attributes
+    //
+    
     // This class has 1 component used to store timelines.
     //
     // timelines        : Stores the timelines.
     //
+    //
     private List<Timeline> timelines = new ArrayList<Timeline>();
     
+    
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Methods
+    //
+    
     // This method allows a timeline to be passed in and added to our list.
+    //
     public void addTimeline(Timeline timeline)
     {
         // Won't add the timeline if it exists
+        //
         if(!timelines.contains(timeline))
         {
             timelines.add(timeline);
@@ -47,6 +59,7 @@ public class CompositeTimeline extends Timeline implements ProgramStateListener{
     }
 
     // Clears all display items and timelines stored.
+    //
     public void clearAll()
     {
         clearItems();
@@ -54,6 +67,7 @@ public class CompositeTimeline extends Timeline implements ProgramStateListener{
     }
     
     // Clears the display items and fills in according to what's in the timelines
+    //
     public void fill()
     {
         clearItems();
@@ -64,6 +78,7 @@ public class CompositeTimeline extends Timeline implements ProgramStateListener{
     }
 
     // Removes a timeline from our list
+    //
     public void removeTimeline(Timeline timeline) 
     {
         for(Timeline temp : timelines) 
@@ -74,6 +89,7 @@ public class CompositeTimeline extends Timeline implements ProgramStateListener{
 
     // An override, meant to download and parse the timeline
     // As this timeline has multiple, it'll refresh them.
+    // 
     @Override
     public void downloadAndParse() 
     {
@@ -85,16 +101,22 @@ public class CompositeTimeline extends Timeline implements ProgramStateListener{
     }
 
     // Saves the timelines stored, to their respective files.
+    //
     @Override
     public void saveTimeline() {
             for(Timeline timeline : timelines)
                     timeline.saveTimeline();
     }
     
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Threading
+    //
+    
     protected void reload() {}
 
     // This method is called be the listenee, aka timeline, when it is done downloading and parsing.
     // Which when this is called, it will fill the displayitems in and refresh the timeline.
+    //
     @Override
     public void stateReceived(ProgramStateEvent event) 
     {
@@ -106,6 +128,8 @@ public class CompositeTimeline extends Timeline implements ProgramStateListener{
     }
     
     // Called when a timeline is added, which will inform all listeners of this action has happened.
+    //
+    @SuppressWarnings("unchecked")
     private synchronized void timelineAdded()
     {
         ProgramStateEvent state = new ProgramStateEvent(this, ProgramState.TIMELINE_ADDED);
