@@ -25,17 +25,30 @@ import java.util.Date;
 
 public class DisplayItemOrganizer implements Comparator<DisplayItem>{
     
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Attributes
+    //
     // This class has 1 component. Stored for information on how to organize the list.
     //
     // type             : The type of organization used for a list.
-	
+    //
+    //
     private OrganizeType type;
     
-    //The constructor method, which will take a OrganizeType in.
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Constructors
+    //
+    
+    // The constructor method, which will take a OrganizeType in.
+    //
     public DisplayItemOrganizer(OrganizeType typeIN)
     {
         type = typeIN;
     }
+    
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Methods
+    //
     
     // This method must be overridden due to Comparator implementation. This method actually does the comparing,
     // returning if the one is greater, equal, or less than the other.

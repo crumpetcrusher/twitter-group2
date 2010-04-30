@@ -1,11 +1,11 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// Project      : IST240 - Twitter Application
+// Project              : IST240 - Twitter Application
 //
-// Interface Name   : DisplayItem
+// Interface Name       : DisplayItem
 //    
-// Authors      : Scott Smiesko, Rick Humes
-// Date         : 2010-30-04
+// Authors              : Scott Smiesko, Rick Humes
+// Date                 : 2010-30-04
 //
 //
 // DESCRIPTION
@@ -20,7 +20,11 @@ package Changes;
 
 public interface DisplayItem {
     
-    // This class has 5 components used to relay information about a item to be displayer in a timeline:
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Interface
+    //
+    
+    // This class has 5 interface methods used to relay information about a item to be displayer in a timeline:
     //
     // owner()          : The owner of this display item, usually a tweeter.
     //
@@ -31,7 +35,8 @@ public interface DisplayItem {
     // date()           : The date this item was created.
     //
     // icon()           : The icon associated with this item, usually a tweeters user picture.
-    
+    //
+    //
     public String owner();
 		
     public String source();

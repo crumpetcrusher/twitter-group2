@@ -27,6 +27,10 @@ import Timelines.Timeline;
 
 public class Search implements SubscriptionItem{
     
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Attributes
+    //
+    
     // This class has 3 components used to store information about the search term.
     //
     // _query           : The query that was submitted.
@@ -40,7 +44,13 @@ public class Search implements SubscriptionItem{
     private ImageIcon image;
     private SearchTimeline timeline;
     
-    //The class constructor that will take in a query and automatically go to work downloading and parsing the timeline.
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Attributes
+    //
+    
+    // The class constructor that will take in a query and automatically go to work downloading and parsing
+    // the timeline.
+    //
     public Search(String query)
     {
         _query = query;
@@ -55,29 +65,39 @@ public class Search implements SubscriptionItem{
         {
             e.printStackTrace();
         }
-        //Does the actual downloading and parsing.
+        
+        // Does the actual downloading and parsing.
+        //
         timeline = SearchTimeline.parseFromDocument(XMLHelper.getTweetsByKeywords(query), query);
     }
     
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Methods
+    //
+    
     // This method will return the items icon.
+    //
     @Override
     public ImageIcon icon() {
             return image;
     }
 
     // This method will return the items identifier, in this case the query.
+    //
     @Override
     public String text() {
             return _query;
     }
 
     // This method will return whether or not this item is a search, which it is! So, true always.
+    //
     @Override
     public boolean isSearch() {
             return true;
     }
     
     // This method will return the timeline associated with this item.
+    //
     @Override
     public Timeline timeline() {
             return timeline;

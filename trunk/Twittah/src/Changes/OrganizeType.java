@@ -9,7 +9,7 @@
 //
 //
 // DESCRIPTION
-// This is just a enum that is used for the DisplayItemOrganizer.
+// This is an enum that is used for the DisplayItemOrganizer.
 //
 // KNOWN LIMITATIONS
 // None.
@@ -17,7 +17,11 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 package Changes;
 
-//Description of the 4 types
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Enum Types
+//
+
+// Description of the 4 types
 //
 // A_Z          : Will sort A to Z
 //
@@ -27,5 +31,5 @@ package Changes;
 //
 // DEC_JAN      : Will sort December to January
 //
-
+//
 public enum OrganizeType {A_Z, Z_A, JAN_DEC, DEC_JAN}
