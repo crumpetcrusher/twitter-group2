@@ -146,7 +146,6 @@ public class SubscriptionItemViewer extends JPanel {
         //
         viewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.out.println(_subscriptItem.text());
                 buttonMgr.doSelectSubscription(_subscriptItem);
             }
         });
