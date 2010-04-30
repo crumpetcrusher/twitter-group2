@@ -53,20 +53,13 @@ public class SubscriptionsManager implements ProgramStateListener {
     // Class Attributes
     //
 
-    /**
-     * Stores the arraylist of Tweeters (people we are subscribing to)
-     */
-    private ArrayList<SubscriptionItem> _subscriptions = new ArrayList<SubscriptionItem>();
 
-    /**
-     * Stores the file location of the subscription list.
-     */
+    private ArrayList<SubscriptionItem> _subscriptions = new ArrayList<SubscriptionItem>();
     private String                      subscriptionListLocation;
-    SubscriptionsViewer                 subscriptionVwr;
-    // SubscriptViewer subscriptVwer;
+    private SubscriptionsViewer         subscriptionVwr;
     private ButtonManager               buttonMgr;
 
-    // ////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////
     // Class Constructors
     //
 
@@ -77,34 +70,24 @@ public class SubscriptionsManager implements ProgramStateListener {
      * @param Location
      * @author Scott Smiesko
      */
-    public SubscriptionsManager(String Location, ButtonManager buttonMgrIn,
-            RootGUI gui) {
+    public SubscriptionsManager(String Location, ButtonManager buttonMgrIn, RootGUI gui) {
+        
+        // Set attributes with passed in objects
+        //
         buttonMgr = buttonMgrIn;
         subscriptionVwr = new SubscriptionsViewer(this, buttonMgr);
-        // subscriptVwer = new SubscriptViewer();
-        // subscriptVwer.setVisible(false);
-        // subscriptVwer.setVisible(true);
         gui.add(subscriptionVwr, BorderLayout.WEST);
-        // gui.add(subscriptVwer, BorderLayout.WEST);
         subscriptionListLocation = Location;
-
         Document subscriptionList = null;
-        // subscriptionList = XMLHelper.getDocumentByLocation(subscriptionListLocation);
-
-        // if(subscriptionList != null)
-        // initializeTweeters(subscriptionList);
 
     }
 
-    // ////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////
     // Class Methods
     //
 
-    /**
-     * Fills the subscribed tweeters based on the subscription document
-     * 
-     * @param subscriptionList
-     */
+    // Fills the subscribedTweeters list with the subscriptionList document
+    // 
     private void initializeTweeters(Document subscriptionList) {
 
         // First, we fill our tweeters
@@ -123,34 +106,44 @@ public class SubscriptionsManager implements ProgramStateListener {
 
         subscripts = subscriptions.getElementsByTagName("name");
 
+        // Parse all subscriptions found in the XML
+        //
         for (int t = 0; t < subscripts.getLength(); ++t) {
             subscript = (Element) (subscripts.item(t));
             isSearch = Boolean.parseBoolean(subscript.getAttribute("Search"));
             text = subscript.getTextContent();
             if (!isSearch)
+                // Add Tweeter
+                //
                 addTweeterSubscription(text);
             else
+                // Add Search
+                //
                 addSubscription(new Search(text));
         }
         System.out.println("Array of tweeters is now constructed..");
 
     }
 
-    /**
-     * Removes user from the subscription list (removes from ArrayList and saves to XML)
-     * 
-     * @param name
-     */
+    // Removes user from the subscription list (removes from ArrayList and saves to XML)
+    //
     public void removeSubscription(SubscriptionItem item) {
+        
+        // What if our subscriptionList is not loaded?
+        //
         if (subscriptionListLocation == null)
             throw new NullPointerException(
                     "Subscription list location was not initialized!");
 
+        // Check item we want to delete with all items in the subscriptionsList to make sure it's there
+        //
         for (SubscriptionItem subscriptItem : _subscriptions)
             if (subscriptItem.equals(item)) {
                 _subscriptions.remove(subscriptItem);
-
                 try {
+                    
+                    // Commit changes
+                    //
                     writeDocument();
                     System.out.println("Subscription Removed");
                 }
@@ -162,49 +155,33 @@ public class SubscriptionsManager implements ProgramStateListener {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
+                
+                // Break if we found one
+                //
                 break;
             }
+        
+        // Refresh our subscriptionsViewer with the updated information
+        //
         subscriptionVwr.refresh();
-        // subscriptVwer.refresh(this, buttonMgr);
     }
 
-    /**
-     * Add new user to the subscription list (adds to ArrayList and saves to XML)
-     * Checks for duplicates
-     * 
-     * @param name
-     * @throws NullPointerException
-     */
+    // Adds new user to the subscription list (adds to ArrayList and saves to XML)
+    //
     public void addTweeterSubscription(String name) {
         Tweeter tweeter = new Tweeter(name);
         tweeter.addProgramStateListener(this);
     }
 
+    // Add subscription to our array list and refresh the subscriptionsViewer for updated info.
+    // 
     public void addSubscription(SubscriptionItem item) {
         _subscriptions.add(item);
         subscriptionVwr.refresh();
     }
-
-    @Override
-    public void stateReceived(ProgramStateEvent event) {
-        System.out.println("State Received: " + event.state());
-        if (event.state() == ProgramState.SUBSCRIPTION_ADDED) {
-            System.out.println("Add Subscription");
-            addSubscription((SubscriptionItem) event.getSource());
-        }
-    }
-
-    private synchronized void subscriptionAdded() {
-        subscriptionVwr.refresh();
-        // subscriptVwer.refresh(this, buttonMgr);
-    }
-
-    /**
-     * Processes the XML document and commits
-     * 
-     * @throws ParserConfigurationException
-     * @throws TransformerException
-     */
+    
+    // Processes the XML and readies it for a commit to file
+    //
     public void writeDocument() throws ParserConfigurationException,
             TransformerException {
         if (subscriptionListLocation == null) {
@@ -217,7 +194,6 @@ public class SubscriptionsManager implements ProgramStateListener {
         Document newSubscriptions = docBuilder.newDocument();
 
         Element root = newSubscriptions.createElement("Subscriptions");
-        // root.setAttribute("Sort")
         newSubscriptions.appendChild(root);
 
         for (SubscriptionItem subscriptItem : _subscriptions) {
@@ -234,12 +210,8 @@ public class SubscriptionsManager implements ProgramStateListener {
 
     }
 
-    /**
-     * Physically commits the information to a XML file.
-     * 
-     * @param newSubscriptions
-     * @throws TransformerException
-     */
+    // Physically commits the information from WriteDocument() to a XML file.
+    //
     private void commitSubscriptions(Document newSubscriptions)
             throws TransformerException {
 
@@ -258,12 +230,39 @@ public class SubscriptionsManager implements ProgramStateListener {
 
     }
 
+    // Returns all subscriptions in the ArrayList
+    //
     public ArrayList<SubscriptionItem> getSubscriptions() {
         return _subscriptions;
     }
 
+    // Method to get all subscriptionItemViewers that are currently selected for use 
+    // in a composite timeline
+    //
     public SubscriptionItemViewer[] getSelected() {
         return subscriptionVwr.getSelected();
     }
 
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Class Threading
+    //
+    
+    // Method to tell SubscriptionsManager an executed event has been received
+    //
+    @Override
+    public void stateReceived(ProgramStateEvent event) {
+        System.out.println("State Received: " + event.state());
+        if (event.state() == ProgramState.SUBSCRIPTION_ADDED) {
+            System.out.println("Add Subscription");
+            addSubscription((SubscriptionItem) event.getSource());
+        }
+    }
+
+    // Method to tell all listeners of SubscriptionsManager that a subscription has been added
+    //
+    private synchronized void subscriptionAdded() {
+        subscriptionVwr.refresh();
+        // subscriptVwer.refresh(this, buttonMgr);
+    }
 }
