@@ -28,6 +28,8 @@ public interface DisplayItem {
     //
     // text()           : The body, if you will, of the item.
     //
+    // date()           : The date this item was created.
+    //
     // icon()           : The icon associated with this item, usually a tweeters user picture.
     
     public String owner();
