@@ -173,7 +173,7 @@ public class RootGUI extends JPanel{
                     }
                     );
     
-    refreshAuto = new JCheckBoxMenuItem("10 seconds");
+    refreshAuto = new JCheckBoxMenuItem("30 seconds");
     refreshAuto.setSelected(false);
     refreshAuto.setMnemonic(KeyEvent.VK_R);
     refreshOptions.add(refreshAuto);
