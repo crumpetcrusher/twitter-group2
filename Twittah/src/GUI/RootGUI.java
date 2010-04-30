@@ -17,6 +17,7 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
@@ -129,16 +130,25 @@ public class RootGUI extends JPanel{
     // Menubar
     //
     JMenuBar menubar        = new JMenuBar();
-    JMenu file              = new JMenu("File");
+    JMenu view              = new JMenu("View");
     JMenu sort              = new JMenu("Sort");
     JMenu options           = new JMenu("Options");
     JMenu refreshOptions           =       new JMenu("Refresh every...");
     ButtonGroup sortGroup   = new ButtonGroup();
     options.add(refreshOptions);
     
+    JMenuItem viewComposite = new JMenuItem("Composite Timeline");
+    viewComposite.addActionListener(
+            new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        buttonMgr.doShowCompositeTimeline();
+                    }
+            });
+    view.add(viewComposite);
+    
     
     JRadioButtonMenuItem sortByDate = new JRadioButtonMenuItem("Date");
-    sortByDate.setSelected(true);
+    //sortByDate.setSelected(true);
     sortByDate.setMnemonic(KeyEvent.VK_R);
     sortGroup.add(sortByDate);
     sort.add(sortByDate);
@@ -194,7 +204,7 @@ public class RootGUI extends JPanel{
                             }
                     });
     
-    menubar.add(file);
+    menubar.add(view);
     menubar.add(sort);
     menubar.add(options);
 

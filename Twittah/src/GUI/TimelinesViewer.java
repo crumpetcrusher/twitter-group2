@@ -45,6 +45,7 @@ public class TimelinesViewer extends JPanel
 		timelineItemsPanel.removeAll();
 	
 		for(DisplayItem tweet : timelinesMgr.getCompositeTimeline().displayItems()) {
+		    //System.out.println(tweet.)
 			DisplayItemViewer displayItem = new DisplayItemViewer(tweet);
 			timelineItemsPanel.add(Box.createVerticalGlue());
 			timelineItemsPanel.add(displayItem);

@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import Changes.SubscriptionItem;
+import Timelines.Timeline;
 import backend.ButtonManager;
 
 public class SubscriptionItemViewer extends JPanel {
@@ -86,7 +87,7 @@ public class SubscriptionItemViewer extends JPanel {
                 buttonMgr.doDeleteSubscription(_subscriptItem);
             }
         });
-
+/*
         selectSubscriptionCheckBox.addItemListener(new ItemListener() {
 
             public void itemStateChanged(ItemEvent e) {
@@ -97,10 +98,20 @@ public class SubscriptionItemViewer extends JPanel {
                     buttonMgr.removeDiaplySubscription(_subscriptItem);
                 }
             }
-        });
+        });*/
 
         setLayout(new BorderLayout());
         add(infoHolder, BorderLayout.CENTER);
+    }
+    
+    public boolean isSelected()
+    {
+        return selectSubscriptionCheckBox.isSelected();
+    }
+    
+    public Timeline timeline()
+    {
+        return _subscriptItem.timeline();
     }
     
     public void unCheck()

@@ -70,4 +70,10 @@ public class Tweet implements DisplayItem
     public ImageIcon icon() {
         return tweeter.icon();
     }
+
+    //Returns the user's screen name
+    @Override
+    public String owner() {
+        return tweeter.text();
+    }
 }

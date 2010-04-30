@@ -25,12 +25,15 @@ public class UserTimeline extends Timeline {
     //Thread that will download and parse xml seperately from the main thread
     Thread thread = (new Thread() {
         public void run() {
+            do
+            {
                 downloadXML();
                 if(timelineXML != null)
                     parseXML();
                 timelineRefreshed();
                 suspend();
-                }
+            }while(true);
+        }
         });
     
     //This constructor allows for the creation of a UserTimeline via parseFromDocument
@@ -119,7 +122,9 @@ public class UserTimeline extends Timeline {
     //Downloads and Parses the user's timeline
     public void downloadAndParse() 
     {
-        thread.start();
+        if(!thread.isAlive())
+            thread.start();
+        thread.resume();
     }
 
     //Saves the user's timeline to a local XML file

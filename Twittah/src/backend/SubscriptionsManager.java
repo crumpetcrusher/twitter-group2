@@ -27,7 +27,7 @@ import Changes.OrganizeType;
 import Changes.Search;
 import Changes.SubscriptionItem;
 import GUI.RootGUI;
-import GUI.SubscriptViewer;
+import GUI.SubscriptionItemViewer;
 import GUI.SubscriptionsViewer;
 import GUI.T_Main;
 import ThreadingHelpers.ProgramState;
@@ -79,7 +79,7 @@ public class SubscriptionsManager implements ProgramStateListener
 	public SubscriptionsManager(String Location, ButtonManager buttonMgrIn, RootGUI gui)
 	{
 		buttonMgr = buttonMgrIn;
-		subscriptionVwr = new SubscriptionsViewer();
+		subscriptionVwr = new SubscriptionsViewer(this, buttonMgr);
 		//subscriptVwer = new SubscriptViewer();
 		//subscriptVwer.setVisible(false);
 		//subscriptVwer.setVisible(true);
@@ -89,9 +89,10 @@ public class SubscriptionsManager implements ProgramStateListener
 		
 		
 		Document subscriptionList = null;
-		subscriptionList = XMLHelper.getDocumentByLocation(subscriptionListLocation);
+		//subscriptionList = XMLHelper.getDocumentByLocation(subscriptionListLocation);
 		
-		initializeTweeters(subscriptionList);
+		//if(subscriptionList != null)
+		    //initializeTweeters(subscriptionList);
 		
 	}
 	
@@ -164,7 +165,7 @@ public class SubscriptionsManager implements ProgramStateListener
 				}
 				break;
 			}
-		subscriptionVwr.refresh(this, buttonMgr);
+		subscriptionVwr.refresh();
 		//subscriptVwer.refresh(this, buttonMgr);
 	}
 	
@@ -177,25 +178,13 @@ public class SubscriptionsManager implements ProgramStateListener
 	public void addTweeterSubscription(String name)
 	{
 		Tweeter tweeter = new Tweeter(name);
-	tweeter.addProgramStateListener(this);
+		tweeter.addProgramStateListener(this);
 	}
 	
 	public void addSubscription(SubscriptionItem item)
 	{
 		_subscriptions.add(item);
-		subscriptionVwr.refresh(this, buttonMgr);
-		//subscriptVwer.refresh(this, buttonMgr);
-		try {
-            writeDocument();
-        }
-        catch (ParserConfigurationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (TransformerException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+		subscriptionVwr.refresh();
 	}
 	
 	@Override
@@ -210,43 +199,43 @@ public class SubscriptionsManager implements ProgramStateListener
    
 	private synchronized void subscriptionAdded()
 	{
-	    subscriptionVwr.refresh(this, buttonMgr);
+	    subscriptionVwr.refresh();
 	    //subscriptVwer.refresh(this, buttonMgr);
 	}
 	
-	/**
-	 * Processes the XML document and commits
-	 * @throws ParserConfigurationException 
-	 * @throws TransformerException 
-	 */
-	public void writeDocument() throws ParserConfigurationException, TransformerException
-	{
-		if(subscriptionListLocation == null) {
-			throw new NullPointerException("Subscription list was not initialized!");
-		}
-		
-		DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
-		Document newSubscriptions = docBuilder.newDocument();
-		
-		Element root = newSubscriptions.createElement("Subscriptions");
-		//root.setAttribute("Sort")
-		newSubscriptions.appendChild(root);
-		
-		for (SubscriptionItem subscriptItem : _subscriptions)
-		{
-			Element child = newSubscriptions.createElement("name");
-			root.appendChild(child);
-			child.setAttribute("Search", Boolean.toString(subscriptItem.isSearch()));
-			
-			Text text = newSubscriptions.createTextNode(subscriptItem.text());
-			child.appendChild(text);
-		}
+        /**
+         * Processes the XML document and commits
+         * @throws ParserConfigurationException 
+         * @throws TransformerException 
+         */
+        public void writeDocument() throws ParserConfigurationException, TransformerException
+        {
+                if(subscriptionListLocation == null) {
+                        throw new NullPointerException("Subscription list was not initialized!");
+                }
+                
+                DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
+                DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
+                Document newSubscriptions = docBuilder.newDocument();
+                
+                Element root = newSubscriptions.createElement("Subscriptions");
+                //root.setAttribute("Sort")
+                newSubscriptions.appendChild(root);
+                
+                for (SubscriptionItem subscriptItem : _subscriptions)
+                {
+                        Element child = newSubscriptions.createElement("name");
+                        root.appendChild(child);
+                        child.setAttribute("Search", Boolean.toString(subscriptItem.isSearch()));
+                        
+                        Text text = newSubscriptions.createTextNode(subscriptItem.text());
+                        child.appendChild(text);
+                }
 
-		
-		commitSubscriptions(newSubscriptions);
-		
-	}
+                
+                commitSubscriptions(newSubscriptions);
+                
+        }
 	
 	/**
 	 * Physically commits the information to a XML file.
@@ -274,6 +263,11 @@ public class SubscriptionsManager implements ProgramStateListener
 	
 	public ArrayList<SubscriptionItem> getSubscriptions(){
 		return _subscriptions;
+	}
+	
+	public SubscriptionItemViewer[] getSelected()
+	{
+	    return subscriptionVwr.getSelected();
 	}
 
 }

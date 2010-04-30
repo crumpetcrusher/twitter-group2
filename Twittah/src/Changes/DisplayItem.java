@@ -3,6 +3,8 @@ package Changes;
 public interface DisplayItem {
 
     //public Twitter.Tweeter tweeter();
+    
+    public String owner();
 		
     public String source();
     
