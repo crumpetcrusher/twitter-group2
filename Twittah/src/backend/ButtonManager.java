@@ -49,7 +49,6 @@ public class ButtonManager {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Class Attributes
     //
-    
     // This class has 3 attributes used to manage all the requests
     // 
     // subscriptionsMgr         :  The class that handles all of our subscription items.

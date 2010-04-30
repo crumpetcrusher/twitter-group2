@@ -89,17 +89,18 @@ public class RootGUI extends JPanel {
     //
     public RootGUI() {
 
-        // Pass this RootGUI reference into ButtonManager and create a reference to buttonManager for the
-        // menu options we have on the RootGUI pane.  Passing a reference of the RootGUI to ButtonManager
-        // allows for it to create/refresh/delete objects from the RootGUI whenever it's called.
-        //
-        buttonMgr = new ButtonManager(this);
-
         // Create a JPanel for housing all of our buttons.  Set it to a gridlayout of one row, infinite columns.
         // (just in case we would ever add another button)
         //
         buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(1, 0));
+        setLayout(new BorderLayout());
+        
+        // Pass this RootGUI reference into ButtonManager and create a reference to buttonManager for the
+        // menu options we have on the RootGUI pane.  Passing a reference of the RootGUI to ButtonManager
+        // allows for it to create/refresh/delete objects from the RootGUI whenever it's called.
+        //
+        buttonMgr = new ButtonManager(this);
         
         // JButton for adding a new subscription.
         //
