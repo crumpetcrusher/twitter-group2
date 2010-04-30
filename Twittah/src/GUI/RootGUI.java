@@ -1,3 +1,23 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Project      : IST240 - Twitter Application
+//
+// Class Name   : RootGUI
+//    
+// Authors      : Scott Smiesko, Rick Humes
+// Date         : 2010-30-04
+//
+//
+// DESCRIPTION
+// This class displays the entire GUI and is the true starting point for the application.  A JMenubar,
+// SubscriptionsViewer, TimelinesViewer, and ButtonPanel are loaded into a BorderLayout so you can view 
+// Subscriptions on the left, see your Timelines on the right, and perform options with the buttons at 
+// the bottom of the program and with each subscription you see in your Subscriptions List.  
+//
+// KNOWN LIMITATIONS
+// Swing.
+//
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 package GUI;
 
 import java.awt.BorderLayout;
@@ -7,9 +27,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
-import java.io.File;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -22,227 +40,263 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.SwingUtilities;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import Changes.*;
 
-import Timelines.SearchTimeline;
-import Timelines.UserTimeline;
+import Changes.OrganizeType;
 import backend.ButtonManager;
-import backend.SubscriptionsManager;
-import backend.TimelinesManager;
-import backend.XMLHelper;
 
-public class RootGUI extends JPanel{
-    private JPanel                   buttonPanel;
-    private JButton                  addSubscriptionButton;
-    private JButton                  deleteSubscriptionButton;
-    private JButton                  refreshTimelineButton;
-    private JButton                  searchButton;
-    private JButton					 testButton;
-    private ButtonManager            buttonMgr;
-    private int refreshTime = 30000;
-    JCheckBoxMenuItem refreshAuto;
-	
-	public RootGUI() {
-		
-	    buttonPanel = new JPanel();
-	    buttonPanel.setLayout(new GridLayout(1,0));
-	    setLayout(new BorderLayout());
-	    
-	    buttonMgr        = new ButtonManager(this);
-	   // buttonMgr.loadPreviousTimelines();
-	    
+public class RootGUI extends JPanel {
 
-	    addSubscriptionButton = new JButton("Add Subscription");
-	    
-	    addSubscriptionButton.addActionListener(
-	                    new ActionListener() {
-	                            public void actionPerformed(ActionEvent e) {
-	                                    String name = JOptionPane.showInputDialog("Enter Username:");
-	                                    if ((name == null) || (name == "")) {
-	                                            System.out.println("no user entered");
-	                                    }
-	                                    else{
-	                                            buttonMgr.doAddSubscriptionTweeter(name);
-	                                            
-	                                    }
-	                            }
-	                    });
-	    
-	    buttonPanel.add(addSubscriptionButton);
-	    
-	    refreshTimelineButton = new JButton("Refresh Timeline");
-	    
-	    refreshTimelineButton.addActionListener(
-	                    new ActionListener() {
-	                            public void actionPerformed(ActionEvent e) {
-	                                            buttonMgr.doRefreshTimeline();
-	                            }
-	                    });
-	    
-	    buttonPanel.add(refreshTimelineButton);
-	    
-	    searchButton = new JButton("Search");
-	    
-	    searchButton.addActionListener(
-	                    new ActionListener() {
-	                            public void actionPerformed(ActionEvent e) {
-	                                    String name = JOptionPane.showInputDialog("Query: ");
-	                                    if ((name == null) || (name == "")) {
-	                                            System.out.println("No text to search for");
-	                                    }
-	                                    else{
-	                                            buttonMgr.doSearch(name);
-	                                    }
-	                            }
-	                    });
-	
-	    buttonPanel.add(searchButton);
-	    
-	    add(buttonPanel, BorderLayout.SOUTH);
-	    
-        final Thread refreshThread = (new Thread() {
+    // There are Seven objects used to store/display the data for the RootGUI class
+    //
+    // buttonPanel              : 
+    //
+    // addSubscriptionButton    : A JButton that deals with adding a new subscription to our subscriptions list
+    //
+    // refreshTimelineButton    : A JButton that deals with refreshing the current timeline(s) that is(are) 
+    //                            being displayed in the Timelines Viewer.
+    //
+    // searchButton             : A JButton that deals with searching twitter for tweets pertaining to the query
+    //                          : that a user enters.
+    //
+    // buttonMgr                : A reference to a new ButtonManager that handles all the actions a 
+    //                            user can perform.
+    //
+    // refreshTime              : The duration that the refreshTimeline thread should wait before the next
+    //                          : refresh of the timeline.
+    //
+    // refreshAuto              : A JCheckBoxMenuItem for displaying the method to turn on/off the automatic
+    //                          : refresh thread in the program.
+    //
+    private static final long serialVersionUID = 299968885467711950L;
+    private JPanel            buttonPanel;
+    private JButton           addSubscriptionButton;
+    private JButton           refreshTimelineButton;
+    private JButton           searchButton;
+    private ButtonManager     buttonMgr;
+    private int               refreshTime = 30000;
+    private JCheckBoxMenuItem refreshAuto;
 
-            public void run() {
-                    do {
-                            try {
-                                    //sleep(10000);		// this does 10 seconds
-                                    sleep(refreshTime);		// this does 60 seconds
-                                    buttonMgr.doRefreshTimeline();
-                            } catch (InterruptedException e) {
-                                    // TODO Auto-generated catch block
-                                    e.printStackTrace();
-                            }
-                            
-                    } while (isAlive());
+    public RootGUI() {
+
+        // Pass this RootGUI reference into ButtonManager and create a reference to buttonManager for the
+        // menu options we have on the RootGUI pane.  Passing a reference of the RootGUI to ButtonManager
+        // allows for it to create/refresh/delete objects from the RootGUI whenever it's called.
+        //
+        buttonMgr = new ButtonManager(this);
+
+        // Create a JPanel for housing all of our buttons.  Set it to a gridlayout of one row, infinite columns.
+        // (just in case we would ever add another button)
+        //
+        buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(1, 0));
+        
+        // JButton for adding a new subscription.
+        //
+        addSubscriptionButton = new JButton("Add Subscription");
+        buttonPanel.add(addSubscriptionButton);
+        
+        // ActionListener for our add subscription button.  Calls ButtonManager to add a subscription based on
+        // the username entered through a JDialog.  If no information is entered, return back to the main screen.
+        //
+        addSubscriptionButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String name = JOptionPane.showInputDialog("Enter Username:");
+                if ((name == null) || (name == "")) {
+                    System.out.println("no user entered");
+                }
+                else {
+                    buttonMgr.doAddSubscriptionTweeter(name);
+
+                }
             }
-    });
-    refreshThread.start();
-    refreshThread.suspend();
-    
-    JFrame frame = new JFrame("Twittah!");
-    frame.setResizable(false);
+        });
+        
+        // JButton for refreshing.  One-click, and away it goes.  Refreshes whatever subscriptions are
+        // selected for viewing at the current time.
+        //
+        refreshTimelineButton = new JButton("Refresh Timeline");
+        buttonPanel.add(refreshTimelineButton);
+        
+        // ActionListener for our refresh timeline button.  Calls ButtonManager to refresh the timeline(s)
+        // currently being displayed through TimelinesViewer
+        //
+        refreshTimelineButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                buttonMgr.doRefreshTimeline();
+            }
+        });
+        
+        // JButton for Searching.  Ask the user through a dialog what the query is they would like to
+        // serach for.  If nothing is entered, or the user presses cancel, then no action has been made at all.
+        //
+        searchButton = new JButton("Search");
+        buttonPanel.add(searchButton);
+        
+        // ActionListener for our Search button.  Shows JDialog to query user for an input, then either calls
+        // ButtonManager to serach for that query or closes back to the main program screen.
+        //
+        searchButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String query = JOptionPane.showInputDialog("Query: ");
+                if ((query == null) || (query == "")) {
+                    System.out.println("No text to search for");
+                }
+                else {
+                    buttonMgr.doSearch(query);
+                }
+            }
+        });
+        
+        // Add the buttonPanel to the bottom of the program
+        //
+        add(buttonPanel, BorderLayout.SOUTH);
 
-    // Menubar
-    //
-    JMenuBar menubar        = new JMenuBar();
-    JMenu view              = new JMenu("View");
-    JMenu sort              = new JMenu("Sort");
-    JMenu options           = new JMenu("Options");
-    JMenu refreshOptions           =       new JMenu("Refresh every...");
-    ButtonGroup sortGroup   = new ButtonGroup();
-    options.add(refreshOptions);
-    
-    JMenuItem viewComposite = new JMenuItem("Composite Timeline");
-    viewComposite.addActionListener(
-            new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        buttonMgr.doShowCompositeTimeline();
+        // The thread used to refresh the timeline every x seconds.  Sleeps for x seconds, then refreshes
+        // the timeline again. 
+        //
+        // (the duration to wait before refreshing is defined in the variables list at the head of this document)
+        //
+        final Thread refreshThread = (new Thread() {
+            public void run() {
+                do {
+                    try {
+                        sleep(refreshTime);
+                        buttonMgr.doRefreshTimeline();
                     }
-            });
-    view.add(viewComposite);
-    
-    
-    JRadioButtonMenuItem sortByDate = new JRadioButtonMenuItem("Date");
-    //sortByDate.setSelected(true);
-    sortByDate.setMnemonic(KeyEvent.VK_R);
-    sortGroup.add(sortByDate);
-    sort.add(sortByDate);
-
-    sortByDate.addActionListener(
-                    new ActionListener() {
-                            public void actionPerformed(ActionEvent e) {
-                            	buttonMgr.toggle(OrganizeType.JAN_DEC);
-                            }
-                    });
-
-    JRadioButtonMenuItem sortByAscend = new JRadioButtonMenuItem("Alphabetical");
-    sortByAscend.setMnemonic(KeyEvent.VK_O);
-    sortGroup.add(sortByAscend);
-    sort.add(sortByAscend);
-    
-    sortByAscend.addActionListener(
-                    new ActionListener() {
-                            public void actionPerformed(ActionEvent e) {
-                            	buttonMgr.toggle(OrganizeType.A_Z);
-                            }
+                    catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                    );
-    
-    refreshAuto = new JCheckBoxMenuItem("30 seconds");
-    refreshAuto.setSelected(false);
-    refreshAuto.setMnemonic(KeyEvent.VK_R);
-    refreshOptions.add(refreshAuto);
-    
-    
-    refreshAuto.addItemListener(
-                    new ItemListener() {
-                            public void itemStateChanged(ItemEvent e) {
-                                    JCheckBoxMenuItem item = ((JCheckBoxMenuItem) e.getSource());
-                                    if(e.getStateChange() == ItemEvent.SELECTED)
-                                    {
-                                            System.out.println("Start");
-                                            SwingUtilities.invokeLater(new Runnable() {
-                                                public void run() {
-                                                    refreshThread.resume();
-                                                }
-                                            });
-                                    }
-                                    if(e.getStateChange() == ItemEvent.DESELECTED)
-                                    {
-                                            System.out.println("Stop");
-                                            SwingUtilities.invokeLater(new Runnable() {
-                                                public void run() {
-                                                    refreshThread.suspend();
-                                                }
-                                            });
-                                    }
-                            }
+
+                }
+                while (isAlive());
+            }
+        });
+        refreshThread.start();
+        refreshThread.suspend();
+
+        // The main JFrame we will be using to add this RootGUI JPanel to and display our program with.
+        //
+        JFrame frame = new JFrame("Twittah!");
+        frame.setResizable(false);
+
+        // Creating our menubar for view, sorting, and refreshing options.
+        //
+        JMenuBar menubar = new JMenuBar();
+        JMenu view = new JMenu("View");
+        JMenu sort = new JMenu("Sort");
+        JMenu options = new JMenu("Options");
+        JMenu refreshOptions = new JMenu("Refresh every...");
+        ButtonGroup sortGroup = new ButtonGroup();
+        options.add(refreshOptions);
+
+        // JMenuItem for a selectable action of viewing the composite timeline.
+        // Used to show all the timelines (sorted properly) of subscribers that have a checkmark by 
+        // their name on the SubscriptionsViewer list.
+        //
+        JMenuItem viewComposite = new JMenuItem("Composite Timeline");
+        view.add(viewComposite);
+        
+        // ActionListener for selection of the View Composite Timeline menu item.
+        // Calls ButtonManager to do the showing of a composite timeline
+        //
+        viewComposite.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                buttonMgr.doShowCompositeTimeline();
+            }
+        });
+
+        // JRadioButton for sorting the timeline by Date.  Toggles between Ascending and Descending order.
+        //
+        JRadioButtonMenuItem sortByDate = new JRadioButtonMenuItem("Date");
+        sortGroup.add(sortByDate);
+        sort.add(sortByDate);
+        
+        // ActionListener for selection of the SortByDate menu item
+        // Calls ButtonManager to apply the timeline sorting
+        //
+        sortByDate.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                buttonMgr.toggle(OrganizeType.JAN_DEC);
+            }
+        });
+
+        // JRadioButton for sorting the timeline alphabetically.  Toggles between Ascending and Descending order.
+        // Used to sort how tweets are displayed 
+        //
+        JRadioButtonMenuItem sortByAlphabetical = new JRadioButtonMenuItem("Alphabetical");
+        sortGroup.add(sortByAlphabetical);
+        sort.add(sortByAlphabetical);
+        
+        // ActionListener for selection of the SortByAlphabetical menu item.
+        // Calls ButtonManager to apply the timeline sorting
+        //
+        sortByAlphabetical.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                buttonMgr.toggle(OrganizeType.A_Z);
+            }
+        });
+
+        // JCheckBox for our Options menu to allow selection of refreshing the timeline automatically
+        //
+        refreshAuto = new JCheckBoxMenuItem("30 seconds");
+        refreshAuto.setSelected(false);
+        refreshOptions.add(refreshAuto);
+
+        // ItemListener for selection of the Refresh Automatically menu item.  Used to resume and suspend the
+        // thread created earlier that automatically refreshes the timelines currently being viewed.
+        //
+        refreshAuto.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+                
+                // If the user has selected this menu item, the thread is resumed.
+                //
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    System.out.println("Start");
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            refreshThread.resume();
+                        }
                     });
-    
-    menubar.add(view);
-    menubar.add(sort);
-    menubar.add(options);
+                }
+                
+                // If the user has deselected this menu item, the thread is suspended.
+                //
+                if (e.getStateChange() == ItemEvent.DESELECTED) {
+                    System.out.println("Stop");
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            refreshThread.suspend();
+                        }
+                    });
+                }
+            }
+        });
 
-    // TwitterApp Properties
-    //
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setJMenuBar(menubar);
-    frame.getContentPane().add(this);
-    frame.setPreferredSize(new Dimension(700, 500));
-    frame.pack();
-    frame.setResizable(true);
-    frame.setVisible(true);
-    frame.addWindowListener(new java.awt.event.WindowAdapter() {
-        public void windowClosing(WindowEvent winEvt) {
-        	buttonMgr.systemShutdown();
-            System.exit(0); 
-        }
-    });
-    
-	}
-	
-	public void writeSettings()
-	{
-		DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBuilder;
-		try {
-			
-			docBuilder = dbfac.newDocumentBuilder();
-    		Document document = docBuilder.newDocument();
-    		Element root = document.createElement("Settings");
-        	//subscriptionsMgr.writeData(root, document);
-    		//root.appendChild(subscriptionsMgr.getData(doc));
-    		document.appendChild(root);
-        	XMLHelper.writeDocument(document, "src/test.xml");
-		} catch (ParserConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+        // Add the dropdown objects to the actual menubar.
+        //
+        menubar.add(view);
+        menubar.add(sort);
+        menubar.add(options);
 
-	}
+        // Main properties for our JFrame.  Add the menubar, this JPanel for displaying all our objects,
+        // and pack everything together.
+        //
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setJMenuBar(menubar);
+        frame.getContentPane().add(this);
+        frame.setPreferredSize(new Dimension(700, 500));
+        frame.pack();
+        frame.setResizable(true);
+        frame.setVisible(true);
+        
+        // Adding a window listener so we can save previous tweets/subscriptions and the previous sorting style
+        // to disk.
+        
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(WindowEvent winEvt) {
+                buttonMgr.systemShutdown();
+                System.exit(0);
+            }
+        });
+    }
 }
