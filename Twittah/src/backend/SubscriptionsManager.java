@@ -128,36 +128,12 @@ public class SubscriptionsManager implements ProgramStateListener {
     // Removes user from the subscription list (removes from ArrayList and saves to XML)
     //
     public void removeSubscription(SubscriptionItem item) {
-        
-        // What if our subscriptionList is not loaded?
-        //
-        if (subscriptionListLocation == null)
-            throw new NullPointerException(
-                    "Subscription list location was not initialized!");
 
         // Check item we want to delete with all items in the subscriptionsList to make sure it's there
         //
         for (SubscriptionItem subscriptItem : _subscriptions)
             if (subscriptItem.equals(item)) {
                 _subscriptions.remove(subscriptItem);
-                try {
-                    
-                    // Commit changes
-                    //
-                    writeDocument();
-                    System.out.println("Subscription Removed");
-                }
-                catch (ParserConfigurationException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                catch (TransformerException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                
-                // Break if we found one
-                //
                 break;
             }
         
@@ -178,56 +154,6 @@ public class SubscriptionsManager implements ProgramStateListener {
     public void addSubscription(SubscriptionItem item) {
         _subscriptions.add(item);
         subscriptionVwr.refresh();
-    }
-    
-    // Processes the XML and readies it for a commit to file
-    //
-    public void writeDocument() throws ParserConfigurationException,
-            TransformerException {
-        if (subscriptionListLocation == null) {
-            throw new NullPointerException(
-                    "Subscription list was not initialized!");
-        }
-
-        DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
-        DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
-        Document newSubscriptions = docBuilder.newDocument();
-
-        Element root = newSubscriptions.createElement("Subscriptions");
-        newSubscriptions.appendChild(root);
-
-        for (SubscriptionItem subscriptItem : _subscriptions) {
-            Element child = newSubscriptions.createElement("name");
-            root.appendChild(child);
-            child.setAttribute("Search", Boolean.toString(subscriptItem
-                    .isSearch()));
-
-            Text text = newSubscriptions.createTextNode(subscriptItem.text());
-            child.appendChild(text);
-        }
-
-        commitSubscriptions(newSubscriptions);
-
-    }
-
-    // Physically commits the information from WriteDocument() to a XML file.
-    //
-    private void commitSubscriptions(Document newSubscriptions)
-            throws TransformerException {
-
-        DOMSource source = new DOMSource(newSubscriptions);
-
-        File file = new File(subscriptionListLocation);
-        Result result = new StreamResult(file);
-
-        Transformer xformer = TransformerFactory.newInstance().newTransformer();
-
-        xformer.setOutputProperty(OutputKeys.INDENT, "yes");
-        xformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-        xformer.setOutputProperty(OutputKeys.METHOD, "xml");
-
-        xformer.transform(source, result);
-
     }
 
     // Returns all subscriptions in the ArrayList
