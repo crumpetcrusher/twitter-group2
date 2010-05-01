@@ -163,7 +163,7 @@ public class ButtonManager {
 
     // Toggle the type of sorting we will be using when a user selects the sorting style in the menubar
     //
-    public void toggle(OrganizeType type) {
+    public void toggleOrganize(OrganizeType type) {
         OrganizeType current = timelinesMgr.organizeType();
         if (type == OrganizeType.A_Z || type == OrganizeType.Z_A)
             type = (current == OrganizeType.A_Z ? OrganizeType.Z_A : OrganizeType.A_Z);

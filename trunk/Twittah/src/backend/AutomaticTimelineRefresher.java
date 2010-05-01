@@ -2,17 +2,14 @@
 //
 // Project              : IST240 - Twitter Application
 //
-// Class Name           : ButtonManager
+// Class Name           : AutomaticTimelineRefresher
 //    
 // Authors              : Scott Smiesko, Rick Humes
 // Date                 : 2010-30-04
 //
 //
 // DESCRIPTION
-// This class handles all requests to view/update/delete/parse xml/write xml/search/sort/and shutdown. 
-// The RootGUI object is passed to it upon creation, which is passed along to SubscriptionsManager and
-// TimelinesManager to be able to handle all above-mentioned requests. An init() function is passed a document
-// containing the settings for the program that are saved when the program last exits.
+// HEY PUT A GODDAMN DESCRIPTION IN HERE!!!!!!!!!!!!!!!!!!!!!!
 //
 // KNOWN LIMITATIONS
 // None.

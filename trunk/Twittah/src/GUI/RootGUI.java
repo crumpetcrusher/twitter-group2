@@ -204,7 +204,7 @@ public class RootGUI extends JPanel {
         //
         sortByDate.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                buttonMgr.toggle(OrganizeType.JAN_DEC);
+                buttonMgr.toggleOrganize(OrganizeType.JAN_DEC);
             }
         });
 
@@ -220,7 +220,7 @@ public class RootGUI extends JPanel {
         //
         sortByAlphabetical.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                buttonMgr.toggle(OrganizeType.A_Z);
+                buttonMgr.toggleOrganize(OrganizeType.A_Z);
             }
         });
 
