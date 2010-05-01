@@ -44,7 +44,7 @@ public class TimelinesManager implements ProgramStateListener {
     // Class Attributes
     //
     
-    // This class holds 4 attributes which aid in the viewing of a composite timeline in the GUI
+    // This class holds 4 attributes which aid in the viewing of a composite timeline in the GUI:
     // 
     // subscriptionsMgr                 :  The reference for our subscriptions manager; this class uses it to 
     //                                     pull subscriptions from our database of subscriptions and update the
