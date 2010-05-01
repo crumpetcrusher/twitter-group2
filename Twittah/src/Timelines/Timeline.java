@@ -60,7 +60,6 @@ public abstract class Timeline {
 	
 	public void organize()
 	{
-		System.out.println("Sorting by: " + currentOrganize);
 		Collections.sort(displayItems, new DisplayItemOrganizer(currentOrganize));
 		timelineModified();
 	}

@@ -128,14 +128,8 @@ public class SubscriptionsManager implements ProgramStateListener {
     // Removes user from the subscription list (removes from ArrayList and saves to XML)
     //
     public void removeSubscription(SubscriptionItem item) {
-
-        // Check item we want to delete with all items in the subscriptionsList to make sure it's there
-        //
-        for (SubscriptionItem subscriptItem : _subscriptions)
-            if (subscriptItem.equals(item)) {
-                _subscriptions.remove(subscriptItem);
-                break;
-            }
+        
+        _subscriptions.remove(item);
         
         // Refresh our subscriptionsViewer with the updated information
         //
