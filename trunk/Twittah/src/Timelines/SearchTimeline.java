@@ -69,7 +69,7 @@ public class SearchTimeline extends Timeline {
 
     // Returns a SearchTimeline based off a document
     //
-    public static SearchTimeline parseFromDocument(Document doc, String queryIn) {
+    public static SearchTimeline parseFromDocument(String queryIn, Document doc) {
         SearchTimeline temp = new SearchTimeline();
         temp.query = queryIn;
         temp.timelineXML = doc;

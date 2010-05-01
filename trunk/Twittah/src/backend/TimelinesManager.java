@@ -2,6 +2,8 @@ package backend;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -57,15 +59,10 @@ public class TimelinesManager implements ProgramStateListener {
 	{
 		compositeTimeline.setOrganizeType(type);
 		compositeTimeline.organize();
-		
-	}
-	public void setOrganizeType(OrganizeType type) {
-		compositeTimeline.setOrganizeType(type);
 	}
 	
 	public void clearTimeline() {
 		compositeTimeline.clearAll();
-		timelinesVwr.refresh();
 	}
 	
 	public OrganizeType organizeType()
@@ -74,29 +71,8 @@ public class TimelinesManager implements ProgramStateListener {
 	}
 	
 	public void addToTimeline(SubscriptionItem subscriptItemToAdd) {
-	    ArrayList<SubscriptionItem> subscriptItems = subscriptionsMgr.getSubscriptions();
-		for(SubscriptionItem subscriptItem : subscriptItems)
-		{
-			if (subscriptItem.equals(subscriptItemToAdd))
-			{
-			    Timeline subscriptTimeline = subscriptItem.timeline();
-			    //subscriptTimeline.addProgramStateListener(this);
-			    compositeTimeline.addTimeline(subscriptTimeline);
-			}
-		}
-	}
-	
-	public void removeFromTimeline(SubscriptionItem item)
-	{
-	    compositeTimeline.removeTimeline(item.timeline());
-	    timelinesVwr.refresh();
-	}
-
-	public void removeUserFromTimeline(String name) {
-
-		for(SubscriptionItem subscriptItem : subscriptionsMgr.getSubscriptions())
-			if (subscriptItem.text().equals(name))
-			    removeFromTimeline(subscriptItem);
+	    Timeline subscriptTimeline = subscriptItemToAdd.timeline();
+            compositeTimeline.addTimeline(subscriptTimeline);
 	}
 	
 	public void refreshTimeline() 
@@ -120,16 +96,29 @@ public class TimelinesManager implements ProgramStateListener {
 		File dir = new File("src");
 		String[] files = dir.list();
 		Document doc = null;
+	        Matcher matcher;
+	        Timeline timeline = null;
+	        SubscriptionItem sub = null;
 		
 		for(String file : files)
 			if(file.contains("timeline") && file.contains(".xml"))
 			{
-				System.out.println("Loading " + file);
-				doc = XMLHelper.getDocumentByLocation("src/" + file);
-				if(file.contains("user"))
-					addTimeline(UserTimeline.parseFromDocument(doc));
-				else
-					addTimeline(SearchTimeline.parseFromDocument(doc, "test"));
+		                matcher = Pattern.compile("(?<=\\_).+?(?=\\.xml)").matcher(file);
+		                if(matcher.find())
+		                {
+        		                System.out.println("Loading " + matcher.group(0));
+        				doc = XMLHelper.getDocumentByLocation("src/" + file);
+        				if(file.contains("user"))
+        				    //timeline = UserTimeline.parseFromDocument(matcher.group(0), doc);
+        				    sub = Tweeter.getTweeterFromDoc(doc);
+        				else
+        				    timeline = SearchTimeline.parseFromDocument(matcher.group(0), doc);
+        				
+        				if(timeline != null)
+        				    addTimeline(timeline);
+        				if(sub  != null)
+        				    addToTimeline(sub);
+		                }
 			}
 	}
 	
@@ -152,11 +141,7 @@ public class TimelinesManager implements ProgramStateListener {
 
 	@Override
 	public void stateReceived(ProgramStateEvent event) {
-	    System.out.println("State Received: " + event.state() );
 	    if(event.state() == ProgramState.TIMELINE_MODIFIED || event.state() == ProgramState.TIMELINE_REFRESHED)
-	    {
-	        System.out.println("Refresh TimelineViewer!");
 	        timelinesVwr.refresh();
-	    }
 	}
 }

@@ -63,6 +63,7 @@ public class CompositeTimeline extends Timeline  implements ProgramStateListener
     {
         clearItems();
         timelines.clear();
+        timelineModified();
     }
     
     // Clears the display items and fills in according to what's in the timelines
