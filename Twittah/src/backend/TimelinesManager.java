@@ -8,6 +8,7 @@ import org.w3c.dom.Element;
 
 
 import Changes.OrganizeType;
+import Changes.Search;
 import Changes.SubscriptionItem;
 import GUI.RootGUI;
 import GUI.TimelinesViewer;
@@ -25,6 +26,7 @@ public class TimelinesManager implements ProgramStateListener {
 	private SubscriptionsManager subscriptionsMgr;
 	private TimelinesViewer		 timelinesVwr;
 	private CompositeTimeline compositeTimeline = new CompositeTimeline();
+	private AutomaticTimelineRefresher refresher = new AutomaticTimelineRefresher(compositeTimeline, 30);
 
 	public TimelinesManager(SubscriptionsManager newSubscriptionsMgr, RootGUI gui) {
 		compositeTimeline.addProgramStateListener(this);
@@ -35,10 +37,16 @@ public class TimelinesManager implements ProgramStateListener {
 	}
 	
 	protected void initialize() {
-		
-		for (SubscriptionItem subscriptItem : subscriptionsMgr.getSubscriptions())
-			compositeTimeline.addTimeline(subscriptItem.timeline());
-		timelinesVwr.refresh();
+		for (SubscriptionItem subscriptItem : subscriptionsMgr.getSubscriptions())     
+	            addToTimeline(subscriptItem);
+	}
+	
+	public void toggleAutomaticRefresh()
+	{
+            if(refresher.isPaused())
+                refresher.Resume();
+            else
+                refresher.Suspend();
 	}
 
 	public Timeline getCompositeTimeline() {
@@ -49,7 +57,6 @@ public class TimelinesManager implements ProgramStateListener {
 	{
 		compositeTimeline.setOrganizeType(type);
 		compositeTimeline.organize();
-		timelinesVwr.refresh();
 		
 	}
 	public void setOrganizeType(OrganizeType type) {
@@ -69,48 +76,42 @@ public class TimelinesManager implements ProgramStateListener {
 	public void addToTimeline(SubscriptionItem subscriptItemToAdd) {
 	    ArrayList<SubscriptionItem> subscriptItems = subscriptionsMgr.getSubscriptions();
 		for(SubscriptionItem subscriptItem : subscriptItems)
+		{
 			if (subscriptItem.equals(subscriptItemToAdd))
 			{
 			    Timeline subscriptTimeline = subscriptItem.timeline();
+			    //subscriptTimeline.addProgramStateListener(this);
 			    compositeTimeline.addTimeline(subscriptTimeline);
 			}
+		}
 	}
 	
 	public void removeFromTimeline(SubscriptionItem item)
 	{
 	    compositeTimeline.removeTimeline(item.timeline());
+	    timelinesVwr.refresh();
 	}
 
 	public void removeUserFromTimeline(String name) {
 
 		for(SubscriptionItem subscriptItem : subscriptionsMgr.getSubscriptions())
 			if (subscriptItem.text().equals(name))
-				compositeTimeline.removeTimeline(subscriptItem.timeline());
-		timelinesVwr.refresh();
-	}
-
-	
-	public void refreshTimeline() {
-		compositeTimeline.downloadAndParse();
-		timelinesVwr.refresh();
+			    removeFromTimeline(subscriptItem);
 	}
 	
-	
-	public void addSearchToTimeline(String query) {
-		SearchTimeline searchTimeline = new SearchTimeline(query);
-		compositeTimeline.addTimeline(searchTimeline);
-		timelinesVwr.refresh();
+	public void refreshTimeline() 
+	{
+            compositeTimeline.downloadAndParse();
 	}
 	
 	public void addTimeline(Timeline timeline)
 	{
-		compositeTimeline.addTimeline(timeline);
-		//timelinesVwr.refresh();
+	    compositeTimeline.addTimeline(timeline);
 	}
 	
 	public void saveTimelines()
 	{
-		compositeTimeline.saveTimeline();
+	    compositeTimeline.saveTimeline();
 	}
 	
 	public void loadPreviousTimelines()
@@ -152,7 +153,7 @@ public class TimelinesManager implements ProgramStateListener {
 	@Override
 	public void stateReceived(ProgramStateEvent event) {
 	    System.out.println("State Received: " + event.state() );
-	    if(event.state() == ProgramState.TIMELINE_ADDED || event.state() == ProgramState.TIMELINE_REFRESHED)
+	    if(event.state() == ProgramState.TIMELINE_MODIFIED || event.state() == ProgramState.TIMELINE_REFRESHED)
 	    {
 	        System.out.println("Refresh TimelineViewer!");
 	        timelinesVwr.refresh();

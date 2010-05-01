@@ -56,7 +56,7 @@ public class UserTimeline extends Timeline {
                 downloadXML();
                 if(timelineXML != null)
                     parseXML();
-                timelineRefreshed();
+                //timelineRefreshed();
                 suspend();
             }while(true);
         }

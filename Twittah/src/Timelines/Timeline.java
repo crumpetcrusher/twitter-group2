@@ -8,6 +8,8 @@ import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import backend.AutomaticTimelineRefresher;
+
 import ThreadingHelpers.ProgramState;
 import ThreadingHelpers.ProgramStateEvent;
 import ThreadingHelpers.ProgramStateListener;
@@ -35,6 +37,7 @@ public abstract class Timeline {
 	protected void addDisplayItem(DisplayItem newDisplayItem)
 	{
 		displayItems.add(newDisplayItem);
+		timelineModified();
 	}
 	
 	public void clearItems()
@@ -59,23 +62,24 @@ public abstract class Timeline {
 	{
 		System.out.println("Sorting by: " + currentOrganize);
 		Collections.sort(displayItems, new DisplayItemOrganizer(currentOrganize));
+		timelineModified();
 	}
 
 	public void setOrganizeType(OrganizeType type) {
 		currentOrganize = type;
 	}
-	
-	protected synchronized void timelineRefreshed()
-	{
-	    ProgramStateEvent state = new ProgramStateEvent(this, ProgramState.TIMELINE_REFRESHED);
-	    ProgramStateListener[] listeners = new ProgramStateListener[_listeners.size()];
-	    _listeners.toArray(listeners);
-	    for(ProgramStateListener listener : listeners)
-	    {
-	        System.out.println("Sending state" + state.state() + " to" + listener);
-	        listener.stateReceived(state);
-	        }
-	}
+        
+        // Called when a timeline is added, which will inform all listeners of this action has happened.
+        //
+        @SuppressWarnings("unchecked")
+        protected synchronized void timelineModified()
+        {
+            ProgramStateEvent state = new ProgramStateEvent(this, ProgramState.TIMELINE_MODIFIED);
+            ProgramStateListener[] listeners = new ProgramStateListener[_listeners.size()];
+            _listeners.toArray(listeners);
+            for(ProgramStateListener listener : listeners)
+                listener.stateReceived(state);
+        }
 
 
 	public abstract void downloadAndParse();

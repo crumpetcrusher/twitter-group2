@@ -114,6 +114,17 @@ public class ButtonManager {
             }
         }
     }
+    
+    // The thread used to refresh the timeline every x seconds.  Sleeps for x seconds, then refreshes
+    // the timeline again. 
+    //
+    // (the duration to wait before refreshing is defined in the variables list at the head of this document)
+    //
+    
+    public void toggleAutomaticRefresh()
+    {
+        timelinesMgr.toggleAutomaticRefresh();
+    }
 
     // Add a subscription passed in by name to our subscriptionsManager when the user selects add subscription
     //
@@ -171,8 +182,9 @@ public class ButtonManager {
     //
     public void doSearch(String query) {
         timelinesMgr.clearTimeline();
-        subscriptionsMgr.addSubscription(new Search(query));
-        timelinesMgr.addSearchToTimeline(query);
+        Search newSearch = new Search(query);
+        subscriptionsMgr.addSubscription(newSearch);
+        timelinesMgr.addToTimeline(newSearch);
     }
 
     // Delete previous timelines in the view and save timelines currently in view for the next program load
