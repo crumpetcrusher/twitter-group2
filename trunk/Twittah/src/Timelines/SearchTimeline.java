@@ -41,7 +41,6 @@ public class SearchTimeline extends Timeline {
                                       downloadXML();
                                       if (timelineXML != null)
                                           parseXML();
-                                      timelineRefreshed();
                                       suspend();
                                   }
                                   while (true);

@@ -25,7 +25,7 @@ import ThreadingHelpers.ProgramState;
 import ThreadingHelpers.ProgramStateEvent;
 import ThreadingHelpers.ProgramStateListener;
 
-public class CompositeTimeline extends Timeline implements ProgramStateListener{
+public class CompositeTimeline extends Timeline  implements ProgramStateListener{
 	
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Class Attributes
@@ -54,7 +54,6 @@ public class CompositeTimeline extends Timeline implements ProgramStateListener{
             timelines.add(timeline);
             timeline.addProgramStateListener(this);
             fill();
-            timelineAdded();
         }
     }
 
@@ -84,7 +83,7 @@ public class CompositeTimeline extends Timeline implements ProgramStateListener{
         for(Timeline temp : timelines) 
             if (temp.equals(timeline))
                 timelines.remove(timeline);
-        fill();   
+        fill();
     }
 
     // An override, meant to download and parse the timeline
@@ -113,31 +112,15 @@ public class CompositeTimeline extends Timeline implements ProgramStateListener{
     //
     
     protected void reload() {}
-
+    
+    
     // This method is called be the listenee, aka timeline, when it is done downloading and parsing.
-    // Which when this is called, it will fill the displayitems in and refresh the timeline.
+    // Which when this is called, it will fill the displayitems
     //
-    @Override
     public void stateReceived(ProgramStateEvent event) 
     {
-        if(event.state() == ProgramState.TIMELINE_ADDED || event.state() == ProgramState.TIMELINE_REFRESHED)
-        {
+        if(event.state() == ProgramState.TIMELINE_MODIFIED || event.state() == ProgramState.TIMELINE_REFRESHED)
             fill();
-            timelineRefreshed();
-        }
     }
-    
-    // Called when a timeline is added, which will inform all listeners of this action has happened.
-    //
-    @SuppressWarnings("unchecked")
-    private synchronized void timelineAdded()
-    {
-        ProgramStateEvent state = new ProgramStateEvent(this, ProgramState.TIMELINE_ADDED);
-        ProgramStateListener[] listeners = new ProgramStateListener[_listeners.size()];
-        _listeners.toArray(listeners);
-        for(ProgramStateListener listener : listeners)
-            listener.stateReceived(state);
-    }
-
 	
 }

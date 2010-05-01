@@ -77,7 +77,6 @@ public class RootGUI extends JPanel {
     private JButton           refreshTimelineButton;
     private JButton           searchButton;
     private ButtonManager     buttonMgr;
-    private int               refreshTime = 30000;
     private JCheckBoxMenuItem refreshAuto;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -163,29 +162,6 @@ public class RootGUI extends JPanel {
         //
         add(buttonPanel, BorderLayout.SOUTH);
 
-        // The thread used to refresh the timeline every x seconds.  Sleeps for x seconds, then refreshes
-        // the timeline again. 
-        //
-        // (the duration to wait before refreshing is defined in the variables list at the head of this document)
-        //
-        final Thread refreshThread = (new Thread() {
-            public void run() {
-                do {
-                    try {
-                        sleep(refreshTime);
-                        buttonMgr.doRefreshTimeline();
-                    }
-                    catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-                while (isAlive());
-            }
-        });
-        refreshThread.start();
-        refreshThread.suspend();
-
         // The main JFrame we will be using to add this RootGUI JPanel to and display our program with.
         //
         JFrame frame = new JFrame("Twittah!");
@@ -259,28 +235,7 @@ public class RootGUI extends JPanel {
         //
         refreshAuto.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
-                
-                // If the user has selected this menu item, the thread is resumed.
-                //
-                if (e.getStateChange() == ItemEvent.SELECTED) {
-                    System.out.println("Start");
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            refreshThread.resume();
-                        }
-                    });
-                }
-                
-                // If the user has deselected this menu item, the thread is suspended.
-                //
-                if (e.getStateChange() == ItemEvent.DESELECTED) {
-                    System.out.println("Stop");
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            refreshThread.suspend();
-                        }
-                    });
-                }
+                buttonMgr.toggleAutomaticRefresh();
             }
         });
 
