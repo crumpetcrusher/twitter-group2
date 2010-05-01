@@ -39,7 +39,7 @@ public abstract class Timeline {
     // Abstract Class Attributes
     //
     
-    // This class has 4 attributes used by a timeline
+    // This class has 4 attributes used by a timeline:
     // 
     // displayItems             :  Stores the tweet messages that would go into a timeline
     //

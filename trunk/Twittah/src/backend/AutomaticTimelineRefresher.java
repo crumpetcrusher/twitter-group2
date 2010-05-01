@@ -36,7 +36,7 @@ public class AutomaticTimelineRefresher extends Thread {
     //
     // counter          :  This will count down from the _refreshRate, as per run()
     //
-    
+    //
     private volatile boolean paused       = true;
     private int              _refreshRate = 30000;
     private Timeline         _timeline    = null;

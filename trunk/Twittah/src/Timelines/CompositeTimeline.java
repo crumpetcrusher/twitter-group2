@@ -31,7 +31,7 @@ public class CompositeTimeline extends Timeline  implements ProgramStateListener
     // Class Attributes
     //
     
-    // This class has 1 component used to store timelines.
+    // This class has 1 component used to store timelines:
     //
     // timelines        : Stores the timelines.
     //
