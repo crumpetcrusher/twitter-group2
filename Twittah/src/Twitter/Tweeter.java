@@ -64,13 +64,14 @@ public class Tweeter implements SubscriptionItem {
     //
     private String       _userName     = null;
     private ImageIcon    _userPicture  = null;
-    private UserTimeline _userTimeline = null;
+    private Timeline     _userTimeline = null;
     private Document     _tweeterXML   = null;
     private List         _listeners    = new ArrayList();
     private Thread thread = (new Thread() {
         @SuppressWarnings("deprecation")
         public void run() {
-            getXML();
+            if(_tweeterXML == null)
+                getXML();
             if (_tweeterXML != null)
                 parseXML();
             suspend();
@@ -81,6 +82,10 @@ public class Tweeter implements SubscriptionItem {
     // Class Constructors
     //
     
+    
+    // Constructor that is private, allowing this class to make itself with no input
+    private Tweeter(){}
+    
     // A constructor method that only requires a username to download and parse a tweeter
     //
     public Tweeter(String userName) {
@@ -88,10 +93,10 @@ public class Tweeter implements SubscriptionItem {
         // Initializing all the variables
         //
         _userName = userName;
-
+        
         // Creates the user's timeline
         //
-        _userTimeline = new UserTimeline(this);
+        //_userTimeline = timeline;
 
         // Starts the thread which downloads and parses the information
         //
@@ -128,20 +133,30 @@ public class Tweeter implements SubscriptionItem {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Class Methods
     //
+    
+    public static Tweeter getTweeterFromDoc(Document doc)
+    {
+        Tweeter temp = new Tweeter();
+        temp._tweeterXML = doc;
+        temp.parseXML();
+        return temp;
+    }
 
     // Get the XML associated to the userName provided
     //
     private void getXML() {
-        _tweeterXML = XMLHelper.getUserInfoByUserSN(_userName);
+        _tweeterXML = XMLHelper.getTweetsByScreenName(_userName);
     }
 
     // This method populates the rest of a tweeter object with data from the XML feed
     //
     private void parseXML() {
-        Element user = (Element) (_tweeterXML.getFirstChild());
-        Element picture = (Element) (user
-                .getElementsByTagName("profile_image_url").item(0));
+        Element root = (Element) (_tweeterXML.getFirstChild());
+        Element status = (Element) (root.getElementsByTagName("status").item(0));
+        Element user = (Element) (status.getElementsByTagName("user").item(0));
+        Element picture = (Element) (user.getElementsByTagName("profile_image_url").item(0));
 
+        _userName = user.getElementsByTagName("screen_name").item(0).getTextContent();
         // Try to download and set the user's picture
         //
         try {
@@ -151,6 +166,7 @@ public class Tweeter implements SubscriptionItem {
             e.printStackTrace();
         }
 
+        _userTimeline = UserTimeline.parseFromDocument(this, _tweeterXML);
         // Let the listeners know that the Tweeter object is completed.
         //
         tweeterParsed();

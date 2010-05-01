@@ -56,7 +56,6 @@ public class UserTimeline extends Timeline {
                 downloadXML();
                 if(timelineXML != null)
                     parseXML();
-                //timelineRefreshed();
                 suspend();
             }while(true);
         }
@@ -69,27 +68,19 @@ public class UserTimeline extends Timeline {
     
     // This constructor allows for the creation of a UserTimeline via parseFromDocument
     //
-    private UserTimeline(){}
-    
-    
-    // This constructor allows you to pass in a tweeter and get his/her timeline
-    //
-    public UserTimeline(Tweeter newTweeter)
-    {
-        tweeter = newTweeter;
-        downloadAndParse();
-    }
-    
+    private UserTimeline(){} 
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Class Methods
     //
     
-    // Returns a UserTimeline based off of a timeline XML document
+    // Returns a UserTimeline based off of a XML document
     //
-    public static UserTimeline parseFromDocument(Document doc)
+    public static UserTimeline parseFromDocument(Tweeter tweeter, Document doc)
     {
         UserTimeline temp = new UserTimeline();
+        temp.tweeter = tweeter;
+        while(temp.tweeter.icon() == null){}
         temp.timelineXML = doc;
         temp.parseXML();
         return temp;

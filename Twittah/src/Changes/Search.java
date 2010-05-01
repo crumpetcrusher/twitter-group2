@@ -68,7 +68,7 @@ public class Search implements SubscriptionItem{
         
         // Does the actual downloading and parsing.
         //
-        timeline = SearchTimeline.parseFromDocument(XMLHelper.getTweetsByKeywords(query), query);
+        timeline = SearchTimeline.parseFromDocument(query, XMLHelper.getTweetsByKeywords(query));
     }
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -115,12 +115,8 @@ public class ButtonManager {
         }
     }
     
-    // The thread used to refresh the timeline every x seconds.  Sleeps for x seconds, then refreshes
-    // the timeline again. 
+    // This will toggle the automatic refresh thread for the composite timeline in timelineMgr
     //
-    // (the duration to wait before refreshing is defined in the variables list at the head of this document)
-    //
-    
     public void toggleAutomaticRefresh()
     {
         timelinesMgr.toggleAutomaticRefresh();
