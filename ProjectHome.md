@@ -1,0 +1,1 @@
+This is group 2's twitter project for Hal Smiths IST240 class.
